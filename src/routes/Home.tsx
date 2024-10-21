@@ -1,14 +1,28 @@
+import LoginForm from '@/components/forms/LoginForm';
+import SignUpForm from '@/components/forms/SignUpForm';
+import { useState } from 'react';
+
 const Home = () => {
+  const [formType, setFormType] = useState<'signup' | 'login'>('login');
+
   return (
-    <div className='flex flex-col mx-4 lg:mx-0'>
-      <header className='max-w-screen-xl mx-auto text-center mt-10'>
-        <h1 className='text-4xl font-bold'>Welcome to Lost & Found HQ</h1>
-        <h2 className='text-lg mt-2'>
-          Lost & Found HQ is a platform that helps companies manage lost and
-          found items.
+    <div className='max-w-screen-xl mx-auto'>
+      <header className='text-center max-w-xl mx-auto mt-10 px-4 sm:px-0'>
+        <h1 className='text-xl font-bold sm:text-3xl'>
+          Effortlessly Reunite Customers with Their Lost Items
+        </h1>
+        <h2 className='mt-2 sm:text-lg'>
+          Simplify your lost and found process to quickly reconnect customers
+          with their belongings.
         </h2>
       </header>
-      <main className='max-w-screen-xl mx-auto mt-10'>hello</main>
+      <main className='mt-10 px-4 sm:px-0'>
+        {formType === 'signup' ? (
+          <SignUpForm setFormType={setFormType} />
+        ) : (
+          <LoginForm setFormType={setFormType} />
+        )}
+      </main>
     </div>
   );
 };
