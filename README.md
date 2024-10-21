@@ -1,70 +1,61 @@
-# Welcome to Lost and Found HQ
+# Welcome to Lost and Found HQ for Businesses
 
-We will build the fuck out of this app in record time.
+The headquarters for companies to manage customer lost and found items.
 
 ## How It Works
 
-- A visitor lands on the main page and they see the feed of everything reported lost or found.
-- They can then filter by state, allowing them to see everything reported lost in that state.
-- In the navbar are two buttons: login and join
+- A company representative logs in to their dashboard.
+- They see a feed of all items reported lost or found within their business locations.
+- They can filter by location, date, or item type.
 
 ## Authentication
 
-- There should be a login and join page for simplicity.
-- Usual email and password flow, with confirmation sent to their email address.
-- Once the user has confirmed their email address, they get back to the main screen, but this time, they can see the button to add a post in the navbar.
-- The user is now logged in.
+- Company accounts are created by the Lost and Found HQ team upon contract signing.
+- Each company can create multiple user accounts for their staff.
+- Users have different permission levels (e.g., admin, manager, staff).
 
-## Credits and Payments
+## Logging Found Items
 
-- Users can purchase credits using Stripe Checkout
-- Credits are used to create posts (1 credit = 1 post)
-- Users can view their credit balance in their account dashboard.
-
-## Posting Lost Items
-
-- Once the user has purchased a credit, they should be able to add a post with an enabled button in the navbar.
-- Posts cost 1 credit ($2 value)
-- The user is sent to the /create route.
-- Here, they have a form where they can fill out the information.
-- Before submission, users must acknowledge that post creation is non-refundable.
-- After completing the form, users are prompted to use a credit or purchase credits if needed
-- If credits are needed, users are redirected to Stripe Checkout
-- Upon successful payment or credit use, the post is created and published
-- Once published, the post cannot be refunded or deleted
-
-## Reporting an Item Found
-
-- Users can report found items without using credits.
-- A "Report Found" button is available on the post, which then prompts the user claiming to have found it to join.
-- The user goes through authentication flow, returning to the /report-found/{postId} route to fill out the form.
-- They fill out the form with the following required information:
-  - Date and approximate time the item was found
-  - Location where the item was found (as specific as possible)
+- Staff members can easily log found items through a simple form.
+- Required information includes:
+  - Date and time the item was found
+  - Location where the item was found
   - Brief description of the item
   - Condition of the item
   - Any identifying marks or features
   - At least one clear photo of the item (MANDATORY)
-  - Contact information for the finder (email and/or phone number)
-  - Optional: Any additional notes or comments
-- A "Mark as Returned" option is available once the item has been claimed by its owner
+  - Staff member who logged the item
 
-## Recovery Tracking
+## Customer Claims
 
-- When an owner identifies their lost item, they can initiate a recovery process
-- A public "Recovery Log" is created for each item recovery attempt
-- The Recovery Log includes:
-  - Anonymized identifiers for both the finder and the owner
-  - Date and time of the recovery initiation
-  - General location of the proposed meetup (city/area, not exact address)
-  - Current status of the recovery (e.g., "Initiated", "In Progress", "Completed", "Cancelled")
-- Users can update the status of the recovery as it progresses
-- The community can view all active Recovery Logs
-- Users are encouraged to meet in safe, public locations for item exchanges
-- After a successful recovery, both parties can confirm the transaction and leave feedback
-- The Recovery Log remains public as a record of successful returns and community trust-building
+- Customers can search for their lost items on a public-facing portal.
+- They can filter by business, location, date, and item type.
+- To claim an item, customers fill out a form describing the lost item in detail.
+- Staff review claims and can approve or request more information.
+
+## Item Return Process
+
+- When a claim is approved, the system generates a unique code for the customer.
+- The customer presents this code when picking up the item.
+- Staff can easily mark items as returned in the system.
+
+## Analytics and Reporting
+
+- Companies can view analytics on lost item trends, return rates, and staff performance.
+- Regular reports can be generated for management review.
+
+## Integration Features
+
+- API access for companies to integrate the system with their existing customer service platforms.
+- Optional kiosk mode for self-service lost and found stations in high-traffic areas.
+
+## Subscription Tiers
+
+- Basic: For small businesses with a single location
+- Professional: For businesses with multiple locations
+- Enterprise: For large corporations with advanced integration needs and dedicated support
 
 ## Community Features
 
-- Featured stories highlight successful reunions between owners and their lost items
-- Local community boards for specific areas or events (e.g., music festivals, airports)
+- Inter-company item transfer for multi-tenant buildings or shopping centers
+- Best practices forum for lost and found management
