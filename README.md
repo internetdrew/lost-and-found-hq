@@ -1,50 +1,61 @@
-# React + TypeScript + Vite
+# Welcome to Lost and Found HQ for Businesses
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+The headquarters for companies to manage customer lost and found items.
 
-Currently, two official plugins are available:
+## How It Works
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- A company representative logs in to their dashboard.
+- They see a feed of all items reported lost or found within their business locations.
+- They can filter by location, date, or item type.
 
-## Expanding the ESLint configuration
+## Authentication
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+- Company accounts are created by the Lost and Found HQ team upon contract signing.
+- Each company can create multiple user accounts for their staff.
+- Users have different permission levels (e.g., admin, manager, staff).
 
-- Configure the top-level `parserOptions` property like this:
+## Logging Found Items
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+- Staff members can easily log found items through a simple form.
+- Required information includes:
+  - Date and time the item was found
+  - Location where the item was found
+  - Brief description of the item
+  - Condition of the item
+  - Any identifying marks or features
+  - At least one clear photo of the item (MANDATORY)
+  - Staff member who logged the item
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+## Customer Claims
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+- Customers can search for their lost items on a public-facing portal.
+- They can filter by business, location, date, and item type.
+- To claim an item, customers fill out a form describing the lost item in detail.
+- Staff review claims and can approve or request more information.
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+## Item Return Process
+
+- When a claim is approved, the system generates a unique code for the customer.
+- The customer presents this code when picking up the item.
+- Staff can easily mark items as returned in the system.
+
+## Analytics and Reporting
+
+- Companies can view analytics on lost item trends, return rates, and staff performance.
+- Regular reports can be generated for management review.
+
+## Integration Features
+
+- API access for companies to integrate the system with their existing customer service platforms.
+- Optional kiosk mode for self-service lost and found stations in high-traffic areas.
+
+## Subscription Tiers
+
+- Basic: For small businesses with a single location
+- Professional: For businesses with multiple locations
+- Enterprise: For large corporations with advanced integration needs and dedicated support
+
+## Community Features
+
+- Inter-company item transfer for multi-tenant buildings or shopping centers
+- Best practices forum for lost and found management
