@@ -1,8 +1,8 @@
 const Navbar = () => {
   return (
-    <nav className='flex justify-between items-center py-4 px-8'>
-      <div className='text-xl font-semibold'>Lost & Found HQ</div>
-      <div>menu coming soon</div>
+    <nav className='flex justify-between items-center p-4 sm:px-8'>
+      <div className='font-semibold text-lg sm:text-xl'>Lost & Found HQ</div>
+      <div>menu</div>
     </nav>
   );
 };
