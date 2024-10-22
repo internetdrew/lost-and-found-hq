@@ -13,7 +13,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '../ui/button';
 
 interface SignUpFormProps {
-  setFormType: (formType: 'signup' | 'login') => void;
+  setRenderType: (renderType: 'signup' | 'login' | 'greetings') => void;
 }
 
 const formSchema = z
@@ -31,7 +31,7 @@ const formSchema = z
     path: ['confirmPassword'],
   });
 
-const SignUpForm = ({ setFormType }: SignUpFormProps) => {
+const SignUpForm = ({ setRenderType }: SignUpFormProps) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -43,6 +43,7 @@ const SignUpForm = ({ setFormType }: SignUpFormProps) => {
 
   const onSubmit = (data: z.infer<typeof formSchema>) => {
     console.log(data);
+    setRenderType('greetings');
   };
 
   return (
@@ -95,14 +96,16 @@ const SignUpForm = ({ setFormType }: SignUpFormProps) => {
               </FormItem>
             )}
           />
+
           <Button type='submit' className='w-full'>
             Sign up
           </Button>
+
           <Button
             type='button'
             variant='link'
             className='mx-auto'
-            onClick={() => setFormType('login')}
+            onClick={() => setRenderType('login')}
           >
             Already have an account?
           </Button>
