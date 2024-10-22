@@ -9,11 +9,10 @@ const Home = () => {
     <div className='max-w-screen-xl mx-auto'>
       <header className='text-center max-w-xl mx-auto mt-10 px-4 sm:px-0'>
         <h1 className='text-xl font-bold sm:text-3xl'>
-          Effortlessly Reunite Customers with Their Lost Items
+          Reconnect Customers with Their Lost Items in No Time
         </h1>
         <h2 className='mt-2 sm:text-lg'>
-          Simplify your lost and found process to quickly reconnect customers
-          with their belongings.
+          Streamline your lost and found process for fast, hassle-free reunions.
         </h2>
       </header>
       <main className='mt-10 px-4 sm:px-0'>
