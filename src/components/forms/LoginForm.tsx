@@ -13,7 +13,7 @@ import { Input } from '../ui/input';
 import { Button } from '../ui/button';
 
 interface LoginFormProps {
-  setFormType: (formType: 'signup' | 'login') => void;
+  setRenderType: (renderType: 'signup' | 'login' | 'greetings') => void;
 }
 
 const formSchema = z.object({
@@ -23,7 +23,7 @@ const formSchema = z.object({
     .min(8, { message: 'Password must be at least 8 characters long' }),
 });
 
-const LoginForm = ({ setFormType }: LoginFormProps) => {
+const LoginForm = ({ setRenderType }: LoginFormProps) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -34,6 +34,7 @@ const LoginForm = ({ setFormType }: LoginFormProps) => {
 
   const onSubmit = (data: z.infer<typeof formSchema>) => {
     console.log(data);
+    setRenderType('greetings');
   };
 
   return (
@@ -80,7 +81,7 @@ const LoginForm = ({ setFormType }: LoginFormProps) => {
             type='button'
             variant='link'
             className='mx-auto'
-            onClick={() => setFormType('signup')}
+            onClick={() => setRenderType('signup')}
           >
             Don't have an account yet?
           </Button>
