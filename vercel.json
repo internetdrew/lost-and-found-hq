@@ -5,7 +5,7 @@
       "src": "server/api/index.ts",
       "use": "@vercel/node",
       "config": {
-        "distDir": "dist"
+        "distDir": "server/dist"
       }
     },
     {
