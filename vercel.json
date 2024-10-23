@@ -9,7 +9,7 @@
     }
   ],
   "routes": [
-    { "source": "/api/(.*)", "dest": "/server/api/index.ts" },
-    { "source": "/(.*)", "dest": "/index.html" }
+    { "src": "/api/(.*)", "dest": "/server/api/index.ts" },
+    { "src": "/(.*)", "dest": "/index.html" }
   ]
 }
