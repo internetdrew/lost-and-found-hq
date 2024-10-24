@@ -8,7 +8,12 @@
     {
       "src": "package.json",
       "use": "@vercel/static-build",
-      "config": { "distDir": "dist", "buildCommand": "npm run build" }
+      "config": { "distDir": "dist" }
+    },
+    {
+      "src": "server/package.json",
+      "use": "@vercel/static-build",
+      "config": { "distDir": "server/dist" }
     }
   ],
   "rewrites": [
