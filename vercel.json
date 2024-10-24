@@ -11,7 +11,6 @@
       "config": { "distDir": "dist" }
     }
   ],
-  "framework": "vite",
   "rewrites": [
     { "source": "/api/:path*", "destination": "/server/api/index.ts" },
     { "source": "/(.*)", "destination": "/index.html" }
