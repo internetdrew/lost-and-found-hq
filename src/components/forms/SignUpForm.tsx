@@ -11,6 +11,7 @@ import {
 } from '../ui/form';
 import { Input } from '@/components/ui/input';
 import { Button } from '../ui/button';
+import axios from 'axios';
 
 interface SignUpFormProps {
   setRenderType: (renderType: 'signup' | 'login' | 'greetings') => void;
@@ -41,9 +42,13 @@ const SignUpForm = ({ setRenderType }: SignUpFormProps) => {
     },
   });
 
-  const onSubmit = (data: z.infer<typeof formSchema>) => {
-    console.log(data);
-    setRenderType('greetings');
+  const onSubmit = async (data: z.infer<typeof formSchema>) => {
+    try {
+      const res = await axios.post('/api/auth/signup', data);
+      console.log(res);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
