@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import LoginForm from '@/components/forms/LoginForm';
 import SignUpForm from '@/components/forms/SignUpForm';
+import useSWR from 'swr';
 import {
   Card,
   CardContent,
@@ -9,11 +10,20 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { useNavigate } from 'react-router-dom';
+
+const fetcher = (url: string) => fetch(url).then(res => res.json());
 
 const Home = () => {
   const [renderType, setRenderType] = useState<
     'signup' | 'login' | 'greetings'
   >('login');
+  const navigate = useNavigate();
+  const { data } = useSWR('/auth/user', fetcher);
+
+  if (data?.user) {
+    navigate('/dashboard');
+  }
 
   return (
     <div className='max-w-screen-xl mx-auto'>
