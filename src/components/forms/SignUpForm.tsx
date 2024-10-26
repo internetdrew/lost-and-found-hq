@@ -44,7 +44,7 @@ const SignUpForm = ({ setRenderType }: SignUpFormProps) => {
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
-      const res = await axios.post('/api/auth/signup', data);
+      const res = await axios.post('/auth/signup', data);
       console.log(res);
     } catch (error) {
       console.error(error);
