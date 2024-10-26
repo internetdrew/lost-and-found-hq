@@ -14,7 +14,7 @@ app.get('/api', (req: Request, res: Response) => {
 });
 
 // Auth routes
-app.use('/api/auth', authRoutes);
+app.use('/auth', authRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
