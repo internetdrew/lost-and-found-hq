@@ -39,6 +39,12 @@ const LoginForm = ({ setRenderType }: LoginFormProps) => {
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     setLoggingIn(true);
+
+    if (import.meta.env.PROD) {
+      setRenderType('greetings');
+      return;
+    }
+
     try {
       await axios.post('/auth/login', data);
       navigate('/dashboard');

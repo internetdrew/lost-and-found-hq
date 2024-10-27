@@ -46,6 +46,11 @@ const SignUpForm = ({ setRenderType }: SignUpFormProps) => {
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     setSigningUp(true);
+    if (import.meta.env.PROD) {
+      setRenderType('greetings');
+      return;
+    }
+
     try {
       await axios.post('/auth/signup', data);
     } catch (error) {
