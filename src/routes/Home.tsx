@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/card';
 import { Navigate } from 'react-router-dom';
 import { useUser } from '@/hooks/useUser';
+import Spinner from '@/components/Spinner';
 
 const Home = () => {
   const [renderType, setRenderType] = useState<
@@ -19,7 +20,7 @@ const Home = () => {
   const { data: user, isLoading } = useUser();
 
   if (isLoading) {
-    return <div className='mt-6 mx-4 sm:mx-8'>Loading...</div>;
+    return <Spinner />;
   }
 
   if (user) {

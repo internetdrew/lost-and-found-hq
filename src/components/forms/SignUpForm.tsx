@@ -13,6 +13,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '../ui/button';
 import axios from 'axios';
 import { useState } from 'react';
+import toast from 'react-hot-toast';
 
 interface SignUpFormProps {
   setRenderType: (renderType: 'signup' | 'login' | 'greetings') => void;
@@ -54,7 +55,13 @@ const SignUpForm = ({ setRenderType }: SignUpFormProps) => {
     try {
       await axios.post('/auth/signup', data);
     } catch (error) {
-      console.error(error);
+      if (axios.isAxiosError(error)) {
+        const errorMessage =
+          error.response?.data?.error || 'Failed to sign up. Please try again.';
+        toast.error(errorMessage);
+      } else {
+        toast.error('An unexpected error occurred');
+      }
     } finally {
       setSigningUp(false);
     }

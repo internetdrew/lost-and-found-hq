@@ -3,6 +3,7 @@ import { Button } from './ui/button';
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '@/hooks/useUser';
 import { useEffect } from 'react';
+import toast from 'react-hot-toast';
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -14,6 +15,13 @@ const Navbar = () => {
       mutate(null);
     } catch (error) {
       console.error(error);
+      if (axios.isAxiosError(error)) {
+        const errorMessage =
+          error.response?.data?.error || 'Failed to logout. Please try again.';
+        toast.error(errorMessage);
+      } else {
+        toast.error('An unexpected error occurred');
+      }
     }
   };
 

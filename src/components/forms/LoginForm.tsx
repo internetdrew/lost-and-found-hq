@@ -14,6 +14,7 @@ import { Button } from '../ui/button';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import toast from 'react-hot-toast';
 
 interface LoginFormProps {
   setRenderType: (renderType: 'signup' | 'login' | 'greetings') => void;
@@ -49,7 +50,14 @@ const LoginForm = ({ setRenderType }: LoginFormProps) => {
       await axios.post('/auth/login', data);
       navigate('/dashboard');
     } catch (error) {
-      console.error(error);
+      if (axios.isAxiosError(error)) {
+        const errorMessage =
+          error.response?.data?.error || 'Failed to login. Please try again.';
+        toast.error(errorMessage);
+      } else {
+        toast.error('An unexpected error occurred');
+        console.error('Login error:', error);
+      }
     } finally {
       setLoggingIn(false);
     }
