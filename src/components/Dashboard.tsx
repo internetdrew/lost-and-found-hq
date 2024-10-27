@@ -49,8 +49,8 @@ const Dashboard = () => {
             </Dialog>
           </div>
           <p className='text-sm text-gray-600 max-w-md mt-2'>
-            Welcome to your dashboard. Here is where you can manage all of the
-            items lost and found at your location.
+            Welcome to your dashboard. Here, you can manage all of the items
+            lost and found at your place of business.
           </p>
         </header>
       </main>
