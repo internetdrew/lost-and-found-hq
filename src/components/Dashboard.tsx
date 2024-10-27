@@ -1,7 +1,6 @@
 import { useUser } from '@/hooks/useUser';
 import { Navigate } from 'react-router-dom';
 import { Button } from './ui/button';
-import { PlusIcon } from '@radix-ui/react-icons';
 import {
   Dialog,
   DialogContent,
@@ -31,10 +30,7 @@ const Dashboard = () => {
             <h1 className='text-lg'>Dashboard</h1>
             <Dialog>
               <DialogTrigger asChild>
-                <Button>
-                  <PlusIcon />
-                  <span className='sr-only sm:not-sr-only'>Add Item</span>
-                </Button>
+                <Button>Add new item</Button>
               </DialogTrigger>
               <DialogContent className='font-mono overflow-y-scroll max-h-screen'>
                 <DialogHeader>
