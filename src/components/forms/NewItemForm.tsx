@@ -19,6 +19,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '../ui/select';
+import { useState } from 'react';
 
 const MAX_DESCRIPTION_LENGTH = 120;
 
@@ -39,6 +40,7 @@ const formSchema = z.object({
 });
 
 const NewItemForm = () => {
+  const [addingItem, setAddingItem] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -50,7 +52,11 @@ const NewItemForm = () => {
   });
 
   const onSubmit = (data: z.infer<typeof formSchema>) => {
+    setAddingItem(true);
     console.log(data);
+    setTimeout(() => {
+      setAddingItem(false);
+    }, 1500);
   };
 
   return (
@@ -66,6 +72,7 @@ const NewItemForm = () => {
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
+                  disabled={addingItem}
                 >
                   <FormControl>
                     <SelectTrigger>
@@ -91,7 +98,11 @@ const NewItemForm = () => {
               <FormItem>
                 <FormLabel>Where was it found?</FormLabel>
                 <FormControl>
-                  <Input placeholder='e.g. Main Lobby' {...field} />
+                  <Input
+                    placeholder='e.g. Main Lobby'
+                    disabled={addingItem}
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -104,7 +115,7 @@ const NewItemForm = () => {
               <FormItem>
                 <FormLabel>When was it found?</FormLabel>
                 <FormControl>
-                  <Input type='date' {...field} />
+                  <Input type='date' disabled={addingItem} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -120,6 +131,7 @@ const NewItemForm = () => {
                   <Textarea
                     placeholder='Add a brief description of the item'
                     className='resize-none h-24'
+                    disabled={addingItem}
                     maxLength={MAX_DESCRIPTION_LENGTH}
                     {...field}
                   />
@@ -129,7 +141,9 @@ const NewItemForm = () => {
             )}
           />
           <div className='flex justify-end'>
-            <Button type='submit'>Add Item</Button>
+            <Button type='submit' disabled={addingItem}>
+              {addingItem ? 'Adding...' : 'Add Item'}
+            </Button>
           </div>
         </div>
       </form>
