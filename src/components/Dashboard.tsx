@@ -12,11 +12,7 @@ import {
 import NewItemForm from './forms/NewItemForm';
 
 const Dashboard = () => {
-  const { data: user, isLoading } = useUser();
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
+  const { data: user } = useUser();
 
   if (!user) {
     return <Navigate to='/' replace />;
