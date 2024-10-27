@@ -1,7 +1,6 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import LoginForm from '@/components/forms/LoginForm';
 import SignUpForm from '@/components/forms/SignUpForm';
-import useSWR from 'swr';
 import {
   Card,
   CardContent,
@@ -11,18 +10,23 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { useNavigate } from 'react-router-dom';
-
-const fetcher = (url: string) => fetch(url).then(res => res.json());
+import { useUser } from '@/hooks/useUser';
 
 const Home = () => {
   const [renderType, setRenderType] = useState<
     'signup' | 'login' | 'greetings'
   >('login');
   const navigate = useNavigate();
-  const { data } = useSWR('/auth/user', fetcher);
+  const { data: user, isLoading, mutate } = useUser();
 
-  if (data?.user) {
-    navigate('/dashboard');
+  useEffect(() => {
+    if (user) {
+      navigate('/dashboard');
+    }
+  }, [user, navigate, mutate]);
+
+  if (isLoading) {
+    return <div className='mt-6 mx-4 sm:mx-8'>Loading...</div>;
   }
 
   return (
