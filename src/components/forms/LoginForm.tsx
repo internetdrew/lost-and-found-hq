@@ -11,6 +11,9 @@ import {
 } from '../ui/form';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 
 interface LoginFormProps {
   setRenderType: (renderType: 'signup' | 'login' | 'greetings') => void;
@@ -24,6 +27,8 @@ const formSchema = z.object({
 });
 
 const LoginForm = ({ setRenderType }: LoginFormProps) => {
+  const [loggingIn, setLoggingIn] = useState(false);
+  const navigate = useNavigate();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -32,9 +37,22 @@ const LoginForm = ({ setRenderType }: LoginFormProps) => {
     },
   });
 
-  const onSubmit = (data: z.infer<typeof formSchema>) => {
-    console.log(data);
-    setRenderType('greetings');
+  const onSubmit = async (data: z.infer<typeof formSchema>) => {
+    setLoggingIn(true);
+
+    if (import.meta.env.PROD) {
+      setRenderType('greetings');
+      return;
+    }
+
+    try {
+      await axios.post('/auth/login', data);
+      navigate('/dashboard');
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoggingIn(false);
+    }
   };
 
   return (
@@ -74,8 +92,8 @@ const LoginForm = ({ setRenderType }: LoginFormProps) => {
               </FormItem>
             )}
           />
-          <Button type='submit' className='w-full'>
-            Login
+          <Button type='submit' className='w-full' disabled={loggingIn}>
+            {loggingIn ? 'Logging in...' : 'Login'}
           </Button>
           <Button
             type='button'

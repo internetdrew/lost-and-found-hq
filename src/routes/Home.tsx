@@ -9,11 +9,22 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { Navigate } from 'react-router-dom';
+import { useUser } from '@/hooks/useUser';
 
 const Home = () => {
   const [renderType, setRenderType] = useState<
     'signup' | 'login' | 'greetings'
   >('login');
+  const { data: user, isLoading } = useUser();
+
+  if (isLoading) {
+    return <div className='mt-6 mx-4 sm:mx-8'>Loading...</div>;
+  }
+
+  if (user) {
+    return <Navigate to='/dashboard' replace />;
+  }
 
   return (
     <div className='max-w-screen-xl mx-auto'>

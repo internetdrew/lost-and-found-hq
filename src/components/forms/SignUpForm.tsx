@@ -11,6 +11,8 @@ import {
 } from '../ui/form';
 import { Input } from '@/components/ui/input';
 import { Button } from '../ui/button';
+import axios from 'axios';
+import { useState } from 'react';
 
 interface SignUpFormProps {
   setRenderType: (renderType: 'signup' | 'login' | 'greetings') => void;
@@ -32,6 +34,7 @@ const formSchema = z
   });
 
 const SignUpForm = ({ setRenderType }: SignUpFormProps) => {
+  const [signingUp, setSigningUp] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -41,9 +44,20 @@ const SignUpForm = ({ setRenderType }: SignUpFormProps) => {
     },
   });
 
-  const onSubmit = (data: z.infer<typeof formSchema>) => {
-    console.log(data);
-    setRenderType('greetings');
+  const onSubmit = async (data: z.infer<typeof formSchema>) => {
+    setSigningUp(true);
+    if (import.meta.env.PROD) {
+      setRenderType('greetings');
+      return;
+    }
+
+    try {
+      await axios.post('/auth/signup', data);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setSigningUp(false);
+    }
   };
 
   return (
@@ -97,8 +111,8 @@ const SignUpForm = ({ setRenderType }: SignUpFormProps) => {
             )}
           />
 
-          <Button type='submit' className='w-full'>
-            Sign up
+          <Button type='submit' className='w-full' disabled={signingUp}>
+            {signingUp ? 'Signing up...' : 'Sign up'}
           </Button>
 
           <Button
