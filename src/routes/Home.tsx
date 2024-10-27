@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import LoginForm from '@/components/forms/LoginForm';
 import SignUpForm from '@/components/forms/SignUpForm';
 import {
@@ -9,24 +9,21 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { useNavigate } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import { useUser } from '@/hooks/useUser';
 
 const Home = () => {
   const [renderType, setRenderType] = useState<
     'signup' | 'login' | 'greetings'
   >('login');
-  const navigate = useNavigate();
-  const { data: user, isLoading, mutate } = useUser();
-
-  useEffect(() => {
-    if (user) {
-      navigate('/dashboard');
-    }
-  }, [user, navigate, mutate]);
+  const { data: user, isLoading } = useUser();
 
   if (isLoading) {
     return <div className='mt-6 mx-4 sm:mx-8'>Loading...</div>;
+  }
+
+  if (user) {
+    return <Navigate to='/dashboard' replace />;
   }
 
   return (
