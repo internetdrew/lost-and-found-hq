@@ -1,12 +1,13 @@
 import { Request, Response } from 'express';
-import { createClient } from '../../lib/supabase';
+import { createSupabaseServerClient } from '../../lib/supabase';
 import { EmailOtpType } from '@supabase/supabase-js';
+import { AuthenticatedRequest } from '../middleware/auth';
 
 export const signup = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
 
-    const supabase = createClient(req, res);
+    const supabase = createSupabaseServerClient(req, res);
 
     const { error } = await supabase.auth.signUp({
       email,
@@ -29,7 +30,7 @@ export const signup = async (req: Request, res: Response) => {
 export const login = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
-    const supabase = createClient(req, res);
+    const supabase = createSupabaseServerClient(req, res);
     const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
@@ -51,7 +52,7 @@ export const login = async (req: Request, res: Response) => {
 
 export const logout = async (req: Request, res: Response) => {
   try {
-    const supabase = createClient(req, res);
+    const supabase = createSupabaseServerClient(req, res);
     const { error } = await supabase.auth.signOut();
     if (error) {
       console.error('Logout error:', error);
@@ -72,7 +73,7 @@ export const confirm = async (req: Request, res: Response) => {
     const next = req.query.next ?? '/';
 
     if (token_hash && type) {
-      const supabase = createClient(req, res);
+      const supabase = createSupabaseServerClient(req, res);
       const { error } = await supabase.auth.verifyOtp({
         type: type as EmailOtpType,
         token_hash: token_hash as string,
@@ -93,11 +94,7 @@ export const confirm = async (req: Request, res: Response) => {
 
 export const getUser = async (req: Request, res: Response) => {
   try {
-    const supabase = createClient(req, res);
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-
+    const user = (req as AuthenticatedRequest).user;
     res.status(200).json(user);
   } catch (error) {
     console.error('Error fetching user:', error);

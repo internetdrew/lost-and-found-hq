@@ -1,5 +1,3 @@
-import { useUser } from '@/hooks/useUser';
-import { Navigate } from 'react-router-dom';
 import { Button } from './ui/button';
 import {
   Dialog,
@@ -10,19 +8,8 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import NewItemForm from './forms/NewItemForm';
-import Spinner from './Spinner';
 
 const Dashboard = () => {
-  const { data: user, isLoading } = useUser();
-
-  if (isLoading) {
-    return <Spinner />;
-  }
-
-  if (!user) {
-    return <Navigate to='/' replace />;
-  }
-
   return (
     <div className='px-4 sm:px-8'>
       <main>

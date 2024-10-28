@@ -5,6 +5,7 @@ import App from './App.tsx';
 import './index.css';
 import Home from './routes/Home.tsx';
 import Dashboard from './components/Dashboard.tsx';
+import RouteGuard from './components/RouteGuard.tsx';
 
 const router = createBrowserRouter([
   {
@@ -13,11 +14,19 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Home />,
+        element: (
+          <RouteGuard requiresAuth={false}>
+            <Home />
+          </RouteGuard>
+        ),
       },
       {
-        path: 'dashboard',
-        element: <Dashboard />,
+        path: '/dashboard',
+        element: (
+          <RouteGuard requiresAuth>
+            <Dashboard />
+          </RouteGuard>
+        ),
       },
     ],
   },
