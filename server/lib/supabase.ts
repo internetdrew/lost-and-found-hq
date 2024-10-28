@@ -5,7 +5,7 @@ import {
 } from '@supabase/ssr';
 import { Request, Response } from 'express';
 
-export const createClient = (req: Request, res: Response) => {
+export const createSupabaseServerClient = (req: Request, res: Response) => {
   if (!process.env.SUPABASE_URL || !process.env.SUPABASE_ANON_KEY) {
     throw new Error('Missing required environment variables for Supabase');
   }
