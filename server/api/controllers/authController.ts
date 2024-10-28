@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
-import { createSupabaseServerClient } from '@supabaseServerLib';
+import { createSupabaseServerClient } from '../../lib/supabase';
 import { EmailOtpType } from '@supabase/supabase-js';
+import { AuthenticatedRequest } from '../middleware/auth';
 
 export const signup = async (req: Request, res: Response) => {
   try {
@@ -93,11 +94,7 @@ export const confirm = async (req: Request, res: Response) => {
 
 export const getUser = async (req: Request, res: Response) => {
   try {
-    const supabase = createSupabaseServerClient(req, res);
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-
+    const user = (req as AuthenticatedRequest).user;
     res.status(200).json(user);
   } catch (error) {
     console.error('Error fetching user:', error);
