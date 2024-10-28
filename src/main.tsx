@@ -6,6 +6,7 @@ import './index.css';
 import Home from './routes/Home.tsx';
 import Dashboard from './components/Dashboard.tsx';
 import ProtectedRoute from './components/ProtectedRoute.tsx';
+import GuestOnlyRoute from './components/GuestOnlyRoute.tsx';
 
 const router = createBrowserRouter([
   {
@@ -14,7 +15,11 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Home />,
+        element: (
+          <GuestOnlyRoute>
+            <Home />
+          </GuestOnlyRoute>
+        ),
       },
       {
         path: '/dashboard',
