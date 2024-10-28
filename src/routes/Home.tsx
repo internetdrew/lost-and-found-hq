@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import LoginForm from '@/components/forms/LoginForm';
 import SignUpForm from '@/components/forms/SignUpForm';
 import {
@@ -14,12 +14,19 @@ import { useUser } from '@/hooks/useUser';
 import Spinner from '@/components/Spinner';
 
 const Home = () => {
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
   const [renderType, setRenderType] = useState<
     'signup' | 'login' | 'greetings'
   >('login');
   const { data: user, isLoading } = useUser();
 
-  if (isLoading) {
+  useEffect(() => {
+    if (!isLoading) {
+      setIsInitialLoad(false);
+    }
+  }, [isLoading]);
+
+  if (isInitialLoad && isLoading) {
     return <Spinner />;
   }
 

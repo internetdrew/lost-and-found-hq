@@ -10,9 +10,14 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import NewItemForm from './forms/NewItemForm';
+import Spinner from './Spinner';
 
 const Dashboard = () => {
-  const { data: user } = useUser();
+  const { data: user, isLoading } = useUser();
+
+  if (isLoading) {
+    return <Spinner />;
+  }
 
   if (!user) {
     return <Navigate to='/' replace />;
