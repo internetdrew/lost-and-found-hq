@@ -5,8 +5,7 @@ import App from './App.tsx';
 import './index.css';
 import Home from './routes/Home.tsx';
 import Dashboard from './components/Dashboard.tsx';
-import ProtectedRoute from './components/ProtectedRoute.tsx';
-import GuestOnlyRoute from './components/GuestOnlyRoute.tsx';
+import RouteGuard from './components/RouteGuard.tsx';
 
 const router = createBrowserRouter([
   {
@@ -16,17 +15,17 @@ const router = createBrowserRouter([
       {
         index: true,
         element: (
-          <GuestOnlyRoute>
+          <RouteGuard requiresAuth={false}>
             <Home />
-          </GuestOnlyRoute>
+          </RouteGuard>
         ),
       },
       {
         path: '/dashboard',
         element: (
-          <ProtectedRoute>
+          <RouteGuard requiresAuth>
             <Dashboard />
-          </ProtectedRoute>
+          </RouteGuard>
         ),
       },
     ],
