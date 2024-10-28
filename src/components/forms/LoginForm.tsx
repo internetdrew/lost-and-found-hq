@@ -15,6 +15,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
+import { useSWRConfig } from 'swr';
 
 interface LoginFormProps {
   setRenderType: (renderType: 'signup' | 'login' | 'greetings') => void;
@@ -28,6 +29,7 @@ const formSchema = z.object({
 });
 
 const LoginForm = ({ setRenderType }: LoginFormProps) => {
+  const { mutate } = useSWRConfig();
   const [loggingIn, setLoggingIn] = useState(false);
   const navigate = useNavigate();
   const form = useForm<z.infer<typeof formSchema>>({
@@ -47,8 +49,9 @@ const LoginForm = ({ setRenderType }: LoginFormProps) => {
     }
 
     try {
-      await axios.post('/auth/login', data);
-      navigate('/dashboard');
+      const res = await axios.post('/auth/login', data);
+      mutate('/auth/user');
+      navigate(res.data.redirectTo);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const errorMessage =
