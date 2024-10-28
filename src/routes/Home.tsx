@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import LoginForm from '@/components/forms/LoginForm';
 import SignUpForm from '@/components/forms/SignUpForm';
 import {
@@ -9,30 +9,11 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Navigate } from 'react-router-dom';
-import { useUser } from '@/hooks/useUser';
-import Spinner from '@/components/Spinner';
 
 const Home = () => {
-  const [isInitialLoad, setIsInitialLoad] = useState(true);
   const [renderType, setRenderType] = useState<
     'signup' | 'login' | 'greetings'
   >('login');
-  const { data: user, isLoading } = useUser();
-
-  useEffect(() => {
-    if (!isLoading) {
-      setIsInitialLoad(false);
-    }
-  }, [isLoading]);
-
-  if (isInitialLoad && isLoading) {
-    return <Spinner />;
-  }
-
-  if (user) {
-    return <Navigate to='/dashboard' replace />;
-  }
 
   return (
     <div className='max-w-screen-xl mx-auto'>
