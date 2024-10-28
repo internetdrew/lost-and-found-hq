@@ -2,7 +2,6 @@ import axios from 'axios';
 import { Button } from './ui/button';
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '@/hooks/useUser';
-import { useEffect } from 'react';
 import toast from 'react-hot-toast';
 
 const Navbar = () => {
@@ -13,6 +12,7 @@ const Navbar = () => {
     try {
       await axios.post('/auth/logout');
       mutate(null);
+      navigate('/');
     } catch (error) {
       console.error(error);
       if (axios.isAxiosError(error)) {
@@ -24,12 +24,6 @@ const Navbar = () => {
       }
     }
   };
-
-  useEffect(() => {
-    if (!user) {
-      navigate('/');
-    }
-  }, [user, navigate]);
 
   return (
     <nav className='flex justify-between items-center p-4 sm:px-8'>
