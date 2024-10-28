@@ -6,6 +6,7 @@ import {
   logout,
   signup,
 } from '../controllers/authController';
+import { requireAuth } from 'api/middleware/auth';
 
 const router = express.Router();
 
@@ -13,6 +14,6 @@ router.get('/confirm', confirm);
 router.post('/signup', signup);
 router.post('/login', login);
 router.post('/logout', logout);
-router.get('/user', getUser);
+router.get('/user', requireAuth, getUser);
 
 export default router;
