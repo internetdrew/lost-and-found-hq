@@ -18,7 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '../ui/select';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { US_STATES } from '@/constants';
 import toast from 'react-hot-toast';
 import axios from 'axios';
@@ -45,29 +45,38 @@ const formSchema = z.object({
 });
 
 const LocationInfoForm = () => {
-  const { mutate } = useLocations();
+  const { data, mutate } = useLocations();
+  const location = data?.[0];
+  console.log(location);
+
   const [updatingInfo, setUpdatingInfo] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: '',
-      streetAddress: '',
-      city: '',
-      state: '',
-      zipCode: '',
+      name: location?.name || '',
+      streetAddress: location?.address || '',
+      city: location?.city || '',
+      state: location?.state || '',
+      zipCode: location?.postal_code || '',
     },
   });
 
-  const onSubmit = async (data: z.infer<typeof formSchema>) => {
+  const onSubmit = async (formData: z.infer<typeof formSchema>) => {
     setUpdatingInfo(true);
+    const method = data?.length > 0 ? 'put' : 'post';
+    const endpoint =
+      data?.length > 0
+        ? `/api/v1/locations/${location?.id}`
+        : `/api/v1/locations`;
+
     try {
-      const res = await axios.post('/api/v1/locations', data);
+      const res = await axios[method](endpoint, {
+        ...formData,
+        id: location?.id,
+      });
       console.log(res);
       mutate();
       toast.success('Location info updated successfully.');
-      setTimeout(() => {
-        setUpdatingInfo(false);
-      }, 1500);
     } catch (error) {
       console.error(error);
       toast.error('Failed to update location info.');
@@ -75,6 +84,19 @@ const LocationInfoForm = () => {
       setUpdatingInfo(false);
     }
   };
+
+  useEffect(() => {
+    if (location) {
+      form.reset({
+        name: location.name || '',
+        streetAddress: location.address || '',
+        city: location.city || '',
+        state: location.state || '',
+        zipCode: location.postal_code || '',
+      });
+    }
+  }, [form, location]);
+  const { isDirty, isValid } = form.formState;
 
   return (
     <Form {...form}>
@@ -182,8 +204,11 @@ const LocationInfoForm = () => {
           </div>
 
           <div className='flex justify-end'>
-            <Button type='submit' disabled={updatingInfo}>
-              {updatingInfo ? 'Updating...' : 'Update'}
+            <Button
+              type='submit'
+              disabled={updatingInfo || !isDirty || !isValid}
+            >
+              {data?.length > 0 ? 'Update' : 'Add'}
             </Button>
           </div>
         </div>
