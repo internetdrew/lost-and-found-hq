@@ -21,10 +21,6 @@ import {
 import { useState } from 'react';
 import { US_STATES } from '@/constants';
 
-interface CompanyInfoFormProps {
-  setHasCompanyInfo: (hasCompanyInfo: boolean) => void;
-}
-
 const formSchema = z.object({
   name: z
     .string()
@@ -45,7 +41,7 @@ const formSchema = z.object({
     .regex(/^\d{5}$/, { message: 'Zip code must be 5 numbers' }),
 });
 
-const CompanyInfoForm = ({ setHasCompanyInfo }: CompanyInfoFormProps) => {
+const CompanyInfoForm = () => {
   const [updatingInfo, setUpdatingInfo] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -63,7 +59,6 @@ const CompanyInfoForm = ({ setHasCompanyInfo }: CompanyInfoFormProps) => {
     console.log(data);
     setTimeout(() => {
       setUpdatingInfo(false);
-      setHasCompanyInfo(true);
     }, 1500);
   };
 
