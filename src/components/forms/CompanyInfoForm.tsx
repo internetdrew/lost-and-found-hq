@@ -125,6 +125,34 @@ const CompanyInfoForm = ({ setHasCompanyInfo }: CompanyInfoFormProps) => {
           <div className='flex gap-4'>
             <FormField
               control={form.control}
+              name='state'
+              render={({ field }) => (
+                <FormItem className='flex-1'>
+                  <FormLabel>State</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                    disabled={updatingInfo}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder='Select state' />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent className='font-mono'>
+                      {US_STATES.map(state => (
+                        <SelectItem key={state.value} value={state.value}>
+                          {state.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
               name='zipCode'
               render={({ field }) => (
                 <FormItem className='flex-1'>
@@ -138,34 +166,6 @@ const CompanyInfoForm = ({ setHasCompanyInfo }: CompanyInfoFormProps) => {
                       {...field}
                     />
                   </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name='state'
-              render={({ field }) => (
-                <FormItem className='flex-1'>
-                  <FormLabel>State</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                    disabled={updatingInfo}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder='Select your state' />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent className='font-mono'>
-                      {US_STATES.map(state => (
-                        <SelectItem key={state.value} value={state.value}>
-                          {state.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
                   <FormMessage />
                 </FormItem>
               )}
