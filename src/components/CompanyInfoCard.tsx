@@ -1,4 +1,4 @@
-import CompanyInfoForm from './forms/CompanyInfoForm';
+import LocationInfoForm from './forms/LocationInfoForm';
 import { Button } from './ui/button';
 import {
   Dialog,
@@ -45,7 +45,7 @@ export default function CompanyInfoCard() {
               business location.
             </DialogDescription>
           </DialogHeader>
-          <CompanyInfoForm />
+          <LocationInfoForm />
         </DialogContent>
       </Dialog>
     </div>
