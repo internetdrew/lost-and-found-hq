@@ -19,7 +19,7 @@ import {
 
 const AddNewItemButtonAndDialog = () => {
   const { data, isLoading } = useLocations();
-  const noLocations = data.length === 0;
+  const noLocations = data?.length === 0;
 
   if (isLoading) return <Skeleton className='w-20 h-10' />;
 
