@@ -9,7 +9,12 @@ import {
 } from '@/components/ui/dialog';
 import NewItemForm from './forms/NewItemForm';
 
+import { useState } from 'react';
+import CompanyInfoForm from './forms/CompanyInfoForm';
+
 const Dashboard = () => {
+  const [hasCompanyInfo, setHasCompanyInfo] = useState(false);
+
   return (
     <div className='px-4 sm:px-8'>
       <main>
@@ -38,6 +43,20 @@ const Dashboard = () => {
           </p>
         </header>
       </main>
+      <Dialog open={!hasCompanyInfo}>
+        <DialogContent
+          className='font-mono overflow-y-scroll max-h-screen sm:max-w-[425px]'
+          renderCloseButton={false}
+        >
+          <DialogHeader>
+            <DialogTitle>Company Info</DialogTitle>
+            <DialogDescription>
+              Before you can add items, you need to enter your company info.
+            </DialogDescription>
+          </DialogHeader>
+          <CompanyInfoForm setHasCompanyInfo={setHasCompanyInfo} />
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
