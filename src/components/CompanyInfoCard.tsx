@@ -23,9 +23,9 @@ export default function CompanyInfoCard() {
           <p className='text-sm font-semibold'>Location Info</p>
           <p className='text-sm mt-4'>{locations[0].name}</p>
           <p className='text-sm'>
-            {locations[0].streetAddress}
+            {locations[0].address}
             <br />
-            {locations[0].city}, {locations[0].state} {locations[0].zipCode}
+            {locations[0].city}, {locations[0].state} {locations[0].postal_code}
           </p>
         </div>
       ) : (
