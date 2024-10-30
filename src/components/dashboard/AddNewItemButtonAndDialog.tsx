@@ -26,21 +26,29 @@ const AddNewItemButtonAndDialog = () => {
   return (
     <Dialog>
       {noLocations ? (
-        <TooltipProvider delayDuration={0}>
+        <TooltipProvider delayDuration={10}>
           <Tooltip>
             <TooltipTrigger asChild>
               <div>
-                <Button disabled={noLocations}>Add new item</Button>
+                <Button disabled={true}>Add item</Button>
               </div>
             </TooltipTrigger>
-            <TooltipContent side='top' align='center' sideOffset={5}>
-              <p>You need to add a location first</p>
+            <TooltipContent
+              side='top'
+              align='start'
+              sideOffset={10}
+              className='font-mono max-w-xs'
+            >
+              <p>
+                You'll be able to add items once you've added a business
+                location.
+              </p>
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
       ) : (
         <DialogTrigger asChild>
-          <Button>Add new item</Button>
+          <Button>Add item</Button>
         </DialogTrigger>
       )}
       <DialogContent className='font-mono overflow-y-scroll max-h-screen'>
