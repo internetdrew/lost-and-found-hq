@@ -79,7 +79,7 @@ const NewItemForm = () => {
                       <SelectValue placeholder='Select a category' />
                     </SelectTrigger>
                   </FormControl>
-                  <SelectContent>
+                  <SelectContent className='font-mono'>
                     <SelectItem value='electronics'>Electronics</SelectItem>
                     <SelectItem value='clothing'>Clothing</SelectItem>
                     <SelectItem value='accessories'>Accessories</SelectItem>
