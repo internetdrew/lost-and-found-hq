@@ -1,6 +1,22 @@
 # Welcome to Lost and Found HQ for Businesses
 
-The headquarters for companies to manage customer lost and found items.
+The headquarters for companies to easily manage their customers' lost and found items.
+
+## Table of Contents
+
+- [How It Works](#how-it-works)
+- [Authentication](#authentication)
+- [Logging Found Items](#logging-found-items)
+- [Customer Claims](#customer-claims)
+- [Item Return Process](#item-return-process)
+- [Analytics and Reporting](#analytics-and-reporting)
+- [Integration Features](#integration-features)
+- [Subscription Tiers](#subscription-tiers)
+- [Community Features](#community-features)
+- [Considerations for Public Portal](#considerations-for-public-portal)
+  - [Search Functionality](#search-functionality)
+  - [Item Claims](#item-claims)
+  - [Privacy & Security](#privacy--security)
 
 ## How It Works
 
@@ -59,3 +75,24 @@ The headquarters for companies to manage customer lost and found items.
 
 - Inter-company item transfer for multi-tenant buildings or shopping centers
 - Best practices forum for lost and found management
+
+## Considerations for Public Portal
+
+### Search Functionality
+
+- Filter by business name, location, date range, category
+- Show item photos and basic details
+- Hide sensitive information
+
+### Item Claims
+
+- Secure form for submitting claims
+- Require detailed description
+- Email notifications
+- Claim status tracking
+
+### Privacy & Security
+
+- Don't show exact location of items
+- Limit visible details to prevent false claims
+- Rate limiting on claim submissions
