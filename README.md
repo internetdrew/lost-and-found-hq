@@ -1,4 +1,4 @@
-# Welcome to Lost and Found HQ for Businesses
+# Welcome to Lost and Found HQ
 
 The headquarters for companies to easily manage their customers' lost and found items.
 
