@@ -1,98 +1,36 @@
-# Welcome to Lost and Found HQ
+![repo banner](./public/repo-banner.png)
 
-The headquarters for companies to easily manage their customers' lost and found items.
+<div align="center"><strong>Lost & Found HQ</strong></div>
+<div align="center">Easily reunite your customers with their lost items.<br />A platform to streamline lost and found management with ease.</div>
+<br />
+<div align="center">
+<a href="https://www.lostandfoundhq.com">Website</a> 
+<span> · </span>
+<a href="https://github.com/internetdrew/lost-and-found-hq">GitHub</a> 
+</div>
 
-## Table of Contents
+## Introduction
 
-- [How It Works](#how-it-works)
-- [Authentication](#authentication)
-- [Logging Found Items](#logging-found-items)
-- [Customer Claims](#customer-claims)
-- [Item Return Process](#item-return-process)
-- [Analytics and Reporting](#analytics-and-reporting)
-- [Integration Features](#integration-features)
-- [Subscription Tiers](#subscription-tiers)
-- [Community Features](#community-features)
-- [Considerations for Public Portal](#considerations-for-public-portal)
-  - [Search Functionality](#search-functionality)
-  - [Item Claims](#item-claims)
-  - [Privacy & Security](#privacy--security)
+Lost & Found HQ is a platform that helps businesses streamline their lost and found operations, making it effortless to reunite customers with their missing items.
 
-## How It Works
+## Why
 
-- A company representative logs in to their dashboard.
-- They see a feed of all items reported lost or found within their business locations.
-- They can filter by location, date, or item type.
+After losing my wallet, I thought it might be great if the process was a little more transparent. It would be great if instead of hoping staff saved a phone number and passed it on to other coworkers, perpetually keeping an eye out for a lost item, that I could visit a business' lost and found page and see if my item popped up at some point.
 
-## Authentication
+## Features
 
-- Company accounts are created by the Lost and Found HQ team upon contract signing.
-- Each company can create multiple user accounts for their staff.
-- Users have different permission levels (e.g., admin, manager, staff).
+- Log into your dashboard to manage lost and found items at your place of business. ([#12](https://github.com/internetdrew/lost-and-found-hq/pull/12))
+- Add your business location to your dashboard. ([#15](https://github.com/internetdrew/lost-and-found-hq/pull/15))
 
-## Logging Found Items
+## Roadmap
 
-- Staff members can easily log found items through a simple form.
-- Required information includes:
-  - Date and time the item was found
-  - Location where the item was found
-  - Brief description of the item
-  - Condition of the item
-  - Any identifying marks or features
-  - At least one clear photo of the item (MANDATORY)
-  - Staff member who logged the item
-
-## Customer Claims
-
-- Customers can search for their lost items on a public-facing portal.
-- They can filter by business, location, date, and item type.
-- To claim an item, customers fill out a form describing the lost item in detail.
+- Public-facing portal for customers to use.
+- Customers claim items with a form desribing their the item in greater detail.
+- Notifications of new claims get sent via email.
 - Staff review claims and can approve or request more information.
-
-## Item Return Process
-
-- When a claim is approved, the system generates a unique code for the customer.
-- The customer presents this code when picking up the item.
+- When a claim is approved, the system generates a unique code for the customer to communicate at pickup.
 - Staff can easily mark items as returned in the system.
-
-## Analytics and Reporting
-
-- Companies can view analytics on lost item trends, return rates, and staff performance.
-- Regular reports can be generated for management review.
-
-## Integration Features
-
+- Companies can view analytics on lost item trends and return rates.
 - API access for companies to integrate the system with their existing customer service platforms.
-- Optional kiosk mode for self-service lost and found stations in high-traffic areas.
-
-## Subscription Tiers
-
-- Basic: For small businesses with a single location
-- Professional: For businesses with multiple locations
-- Enterprise: For large corporations with advanced integration needs and dedicated support
-
-## Community Features
-
+- Multi-location support
 - Inter-company item transfer for multi-tenant buildings or shopping centers
-- Best practices forum for lost and found management
-
-## Considerations for Public Portal
-
-### Search Functionality
-
-- Filter by business name, location, date range, category
-- Show item photos and basic details
-- Hide sensitive information
-
-### Item Claims
-
-- Secure form for submitting claims
-- Require detailed description
-- Email notifications
-- Claim status tracking
-
-### Privacy & Security
-
-- Don't show exact location of items
-- Limit visible details to prevent false claims
-- Rate limiting on claim submissions
