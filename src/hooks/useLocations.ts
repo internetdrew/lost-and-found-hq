@@ -13,9 +13,12 @@ const fetcher = async (url: string) => {
   }
 };
 
-export const useUser = () => {
-  const { data, isLoading, mutate } = useSWR('/auth/user', fetcher, {
-    shouldRetryOnError: false,
-  });
-  return { data, isLoading, mutate };
+export const useLocations = () => {
+  const { data, isLoading, mutate } = useSWR('api/v1/locations', fetcher);
+
+  return {
+    data,
+    isLoading,
+    mutate,
+  };
 };
