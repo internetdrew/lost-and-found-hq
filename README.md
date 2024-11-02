@@ -20,7 +20,7 @@ After losing my wallet, I thought it might be great if the process was a little 
 ## Features
 
 - Log into your dashboard to manage lost and found items at your place of business. ([#12](https://github.com/internetdrew/lost-and-found-hq/pull/12))
-- Add your business location, single locations as a pre-cursor to multi-location. ([#15](https://github.com/internetdrew/lost-and-found-hq/pull/15))
+- Add your business location to your dashboard. ([#15](https://github.com/internetdrew/lost-and-found-hq/pull/15))
 
 ## Roadmap
 
