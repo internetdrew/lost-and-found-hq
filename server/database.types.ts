@@ -21,6 +21,7 @@ export type Database = {
           is_public: boolean;
           location_id: number;
           status: Database['public']['Enums']['ITEM_STATUSES'];
+          title: string;
         };
         Insert: {
           added_by_user_id: string;
@@ -33,6 +34,7 @@ export type Database = {
           is_public?: boolean;
           location_id: number;
           status?: Database['public']['Enums']['ITEM_STATUSES'];
+          title: string;
         };
         Update: {
           added_by_user_id?: string;
@@ -45,6 +47,7 @@ export type Database = {
           is_public?: boolean;
           location_id?: number;
           status?: Database['public']['Enums']['ITEM_STATUSES'];
+          title?: string;
         };
         Relationships: [
           {
