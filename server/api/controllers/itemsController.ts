@@ -26,6 +26,7 @@ export const addItem = async (req: Request, res: Response) => {
     const { data, error } = await supabase
       .from('items')
       .insert({
+        title: req.body.title,
         location_id: req.body.locationId,
         added_by_user_id: userId,
         found_at: req.body.foundAt,
