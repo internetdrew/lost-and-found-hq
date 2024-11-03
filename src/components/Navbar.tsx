@@ -19,8 +19,7 @@ const Navbar = () => {
     } catch (error) {
       console.error(error);
       if (axios.isAxiosError(error)) {
-        const errorMessage =
-          error.response?.data?.error || 'Failed to logout. Please try again.';
+        const errorMessage = error.response?.data;
         toast.error(errorMessage);
       } else {
         toast.error('An unexpected error occurred');
