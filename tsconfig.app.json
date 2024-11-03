@@ -21,9 +21,10 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src"],
+  "include": ["src", "server"],
   "baseUrl": ".",
   "paths": {
-    "@/*": ["./src/*"]
+    "@/*": ["./src/*"],
+    "@dbTypes": ["./server/database.types.ts"]
   }
 }
