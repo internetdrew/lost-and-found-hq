@@ -20,12 +20,15 @@ import {
   SelectValue,
 } from '../ui/select';
 import { useState } from 'react';
+import axios from 'axios';
+import { toast } from 'react-hot-toast';
+import { useLocations } from '@/hooks/useLocations';
 
 const MAX_DESCRIPTION_LENGTH = 120;
 
 const formSchema = z.object({
   category: z.string().min(1, { message: 'Please select a category' }),
-  location: z
+  foundAt: z
     .string()
     .min(1, { message: 'Please enter where the item was found' }),
   dateFound: z
@@ -41,22 +44,33 @@ const formSchema = z.object({
 
 const NewItemForm = () => {
   const [addingItem, setAddingItem] = useState(false);
+  const { data: locations } = useLocations();
+  const locationId = locations?.[0]?.id;
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       category: '',
-      location: '',
+      foundAt: '',
       dateFound: '',
       briefDescription: '',
     },
   });
 
-  const onSubmit = (data: z.infer<typeof formSchema>) => {
+  const onSubmit = async (data: z.infer<typeof formSchema>) => {
     setAddingItem(true);
-    console.log(data);
-    setTimeout(() => {
+    try {
+      const res = await axios.post('/api/v1/items', {
+        ...data,
+        locationId,
+      });
+      console.log(res);
+    } catch (error) {
+      console.error(error);
+      toast.error('Failed to add item');
+    } finally {
       setAddingItem(false);
-    }, 1500);
+    }
   };
 
   return (
@@ -68,7 +82,7 @@ const NewItemForm = () => {
             name='category'
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Category</FormLabel>
+                <FormLabel>Which category does this item belong to?</FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
@@ -80,11 +94,15 @@ const NewItemForm = () => {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent className='font-mono'>
-                    <SelectItem value='electronics'>Electronics</SelectItem>
-                    <SelectItem value='clothing'>Clothing</SelectItem>
-                    <SelectItem value='accessories'>Accessories</SelectItem>
-                    <SelectItem value='documents'>Documents</SelectItem>
-                    <SelectItem value='other'>Other</SelectItem>
+                    <SelectItem value='electronics'>
+                      Electronics & Devices
+                    </SelectItem>
+                    <SelectItem value='wallets'>Wallets & Purses</SelectItem>
+                    <SelectItem value='clothing'>Clothing & Bags</SelectItem>
+                    <SelectItem value='jewelry'>Jewelry & Watches</SelectItem>
+                    <SelectItem value='documents'>ID & Documents</SelectItem>
+                    <SelectItem value='keys'>Keys & Cards</SelectItem>
+                    <SelectItem value='other'>Other Items</SelectItem>
                   </SelectContent>
                 </Select>
                 <FormMessage />
@@ -93,7 +111,7 @@ const NewItemForm = () => {
           />
           <FormField
             control={form.control}
-            name='location'
+            name='foundAt'
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Where was it found?</FormLabel>
