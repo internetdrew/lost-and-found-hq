@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -23,6 +24,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import { useLocations } from '@/hooks/useLocations';
+import { useItems } from '@/hooks/useItems';
 
 const MAX_DESCRIPTION_LENGTH = 120;
 
@@ -31,6 +33,7 @@ type NewItemFormProps = {
 };
 
 const formSchema = z.object({
+  title: z.string().min(1, { message: 'Please enter a title' }),
   category: z.string().min(1, { message: 'Please select a category' }),
   foundAt: z
     .string()
@@ -49,11 +52,13 @@ const formSchema = z.object({
 const NewItemForm = ({ onSuccess: closeDialog }: NewItemFormProps) => {
   const [addingItem, setAddingItem] = useState(false);
   const { data: locations } = useLocations();
+  const { mutate } = useItems();
   const locationId = locations?.[0]?.id;
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      title: '',
       category: '',
       foundAt: '',
       dateFound: '',
@@ -68,6 +73,7 @@ const NewItemForm = ({ onSuccess: closeDialog }: NewItemFormProps) => {
         ...data,
         locationId,
       });
+      mutate();
       toast.success('Item added successfully');
       form.reset();
       closeDialog();
@@ -85,10 +91,31 @@ const NewItemForm = ({ onSuccess: closeDialog }: NewItemFormProps) => {
         <div className='space-y-6 mt-4'>
           <FormField
             control={form.control}
+            name='title'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Title</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder='e.g. Black wallet'
+                    disabled={addingItem}
+                    {...field}
+                  />
+                </FormControl>
+                <FormDescription>
+                  Describe the item without giving away details. The true owner
+                  will help you identify it.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
             name='category'
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Which category does this item belong to?</FormLabel>
+                <FormLabel>Category</FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
@@ -96,7 +123,7 @@ const NewItemForm = ({ onSuccess: closeDialog }: NewItemFormProps) => {
                 >
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder='Select a category' />
+                      <SelectValue placeholder='Select an item category' />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent className='font-mono'>
@@ -153,13 +180,17 @@ const NewItemForm = ({ onSuccess: closeDialog }: NewItemFormProps) => {
                 <FormLabel>Brief Description</FormLabel>
                 <FormControl>
                   <Textarea
-                    placeholder='Add a brief description of the item'
+                    placeholder='E.g. It has a stripe and a logo on the front.'
                     className='resize-none h-24'
                     disabled={addingItem}
                     maxLength={MAX_DESCRIPTION_LENGTH}
                     {...field}
                   />
                 </FormControl>
+                <FormDescription>
+                  Some details can help discern between similar items. Avoid
+                  giving away too much information.
+                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
