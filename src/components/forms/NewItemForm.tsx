@@ -26,6 +26,10 @@ import { useLocations } from '@/hooks/useLocations';
 
 const MAX_DESCRIPTION_LENGTH = 120;
 
+type NewItemFormProps = {
+  onSuccess: () => void;
+};
+
 const formSchema = z.object({
   category: z.string().min(1, { message: 'Please select a category' }),
   foundAt: z
@@ -42,7 +46,7 @@ const formSchema = z.object({
     }),
 });
 
-const NewItemForm = () => {
+const NewItemForm = ({ onSuccess: closeDialog }: NewItemFormProps) => {
   const [addingItem, setAddingItem] = useState(false);
   const { data: locations } = useLocations();
   const locationId = locations?.[0]?.id;
@@ -60,11 +64,13 @@ const NewItemForm = () => {
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     setAddingItem(true);
     try {
-      const res = await axios.post('/api/v1/items', {
+      await axios.post('/api/v1/items', {
         ...data,
         locationId,
       });
-      console.log(res);
+      toast.success('Item added successfully');
+      form.reset();
+      closeDialog();
     } catch (error) {
       console.error(error);
       toast.error('Failed to add item');
