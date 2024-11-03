@@ -4,13 +4,14 @@ import {
   serializeCookieHeader,
 } from '@supabase/ssr';
 import { Request, Response } from 'express';
+import { Database } from '../database.types';
 
 export const createSupabaseServerClient = (req: Request, res: Response) => {
   if (!process.env.SUPABASE_URL || !process.env.SUPABASE_ANON_KEY) {
     throw new Error('Missing required environment variables for Supabase');
   }
 
-  return createServerClient(
+  return createServerClient<Database>(
     process.env.SUPABASE_URL,
     process.env.SUPABASE_ANON_KEY,
     {
