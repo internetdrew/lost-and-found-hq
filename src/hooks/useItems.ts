@@ -1,6 +1,8 @@
 import axios from 'axios';
 import useSWR from 'swr';
-import { Item } from '../../server/database.types';
+import { Tables } from '@dbTypes';
+
+type Item = Tables<'items'>;
 
 const fetcher = async (url: string) => {
   try {
