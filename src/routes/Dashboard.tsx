@@ -1,5 +1,6 @@
-import CompanyInfoCard from './CompanyInfoCard';
-import AddNewItemButtonAndDialog from './dashboard/AddNewItemButtonAndDialog';
+import CompanyInfoCard from '@/components/CompanyInfoCard';
+import AddNewItemButtonAndDialog from '@/components/dashboard/AddNewItemButtonAndDialog';
+import ItemList from '@/components/dashboard/ItemList';
 
 export interface CompanyInfo {
   name: string;
@@ -24,6 +25,7 @@ const Dashboard = () => {
           </p>
           <CompanyInfoCard />
         </header>
+        <ItemList />
       </main>
     </div>
   );

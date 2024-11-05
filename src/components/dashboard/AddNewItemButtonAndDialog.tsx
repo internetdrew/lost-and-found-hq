@@ -16,15 +16,17 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '../ui/tooltip';
+import { useState } from 'react';
 
 const AddNewItemButtonAndDialog = () => {
   const { data, isLoading } = useLocations();
   const noLocations = data?.length === 0;
+  const [open, setOpen] = useState(false);
 
   if (isLoading) return <Skeleton className='w-20 h-10' />;
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       {noLocations ? (
         <TooltipProvider delayDuration={10}>
           <Tooltip>
@@ -59,7 +61,7 @@ const AddNewItemButtonAndDialog = () => {
             any personal information.
           </DialogDescription>
         </DialogHeader>
-        <NewItemForm />
+        <NewItemForm onSuccess={() => setOpen(false)} />
       </DialogContent>
     </Dialog>
   );

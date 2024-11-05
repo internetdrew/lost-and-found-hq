@@ -4,8 +4,8 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import App from './App.tsx';
 import './index.css';
 import Home from './routes/Home.tsx';
-import Dashboard from './components/Dashboard.tsx';
 import RouteGuard from './components/RouteGuard.tsx';
+import Dashboard from './routes/Dashboard.tsx';
 
 const router = createBrowserRouter([
   {
