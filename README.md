@@ -17,20 +17,28 @@ Lost & Found HQ is a platform that helps businesses streamline their lost and fo
 
 After losing my wallet, I thought it might be great if the process was a little more transparent. It would be great if instead of hoping staff saved a phone number and passed it on to other coworkers, perpetually keeping an eye out for a lost item, that I could visit a business' lost and found page and see if my item popped up at some point.
 
-## Features
+## Roadmap
 
 - Log into your dashboard to manage lost and found items at your place of business. ([#12](https://github.com/internetdrew/lost-and-found-hq/pull/12))
 - Add your business location to your dashboard. ([#15](https://github.com/internetdrew/lost-and-found-hq/pull/15))
-
-## Roadmap
-
+- Users should be able to operate on items
+  - **Activate/deactivate** with a toggle (active is posted to the public portal)(happens on the card itself in the UI)
+  - **Edit** any information that is already there (re-open the item form)
+  - **Delete** an item
+    - This should be two step. Delete button -> confirm deletion modal.
+- Testing should be implemented. Stop acting like testing is optional!
 - Public-facing portal for customers to use.
 - Customers claim items with a form desribing their the item in greater detail.
-- Notifications of new claims get sent via email.
+- Notifications of new claims get sent via email and show in app.
 - Staff review claims and can approve or request more information.
 - When a claim is approved, the system generates a unique code for the customer to communicate at pickup.
 - Staff can easily mark items as returned in the system.
 - Companies can view analytics on lost item trends and return rates.
 - API access for companies to integrate the system with their existing customer service platforms.
+
+## Extended Roadmap
+
+We only go here if the product takes off.
+
 - Multi-location support
 - Inter-company item transfer for multi-tenant buildings or shopping centers
