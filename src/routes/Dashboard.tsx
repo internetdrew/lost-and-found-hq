@@ -1,6 +1,6 @@
-import CompanyInfoCard from '@/components/CompanyInfoCard';
 import AddNewItemButtonAndDialog from '@/components/dashboard/AddNewItemButtonAndDialog';
 import ItemList from '@/components/dashboard/ItemList';
+import LocationInfoCard from '@/components/LocationInfoCard';
 
 export interface CompanyInfo {
   name: string;
@@ -23,7 +23,7 @@ const Dashboard = () => {
             Here's where you can manage all of the items lost and found at your
             place of business.
           </p>
-          <CompanyInfoCard />
+          <LocationInfoCard />
         </header>
         <ItemList />
       </main>
