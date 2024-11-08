@@ -12,6 +12,7 @@ import { Switch } from '../ui/switch';
 import { Label } from '../ui/label';
 import { useState } from 'react';
 import ItemFormDialog from './dialogs/ItemFormDialog';
+import axios from 'axios';
 
 type Item = Tables<'items'>;
 
@@ -23,7 +24,16 @@ export default function ItemDetailsCard({ item }: { item: Item }) {
     brief_description: briefDescription,
     found_at: foundAt,
     date_found: dateFound,
+    is_public: isActive,
   } = item;
+
+  const toggleItemActiveStatus = async () => {
+    console.log('toggle active');
+    const res = await axios.patch(`/api/items/${item.id}`, {
+      is_public: !isActive,
+    });
+    console.log(res);
+  };
 
   return (
     <li className='ring-1 ring-gray-200 p-4 rounded-md flex flex-col sm:max-w-md'>
@@ -53,8 +63,12 @@ export default function ItemDetailsCard({ item }: { item: Item }) {
         <p className='font-semibold'>Additional details</p>
         <p className='text-sm text-neutral-500'>{briefDescription}</p>
         <div className='flex items-center mt-auto gap-2 pt-4'>
-          <Switch id='item-active' />
-          <Label htmlFor='item-active'>Active item</Label>
+          <Switch
+            id='item-status'
+            checked={isActive}
+            onCheckedChange={toggleItemActiveStatus}
+          />
+          <Label htmlFor='item-status'>Active item</Label>
         </div>
       </div>
 
