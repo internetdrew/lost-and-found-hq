@@ -10,10 +10,14 @@ import {
 import { DotsHorizontalIcon } from '@radix-ui/react-icons';
 import { Switch } from '../ui/switch';
 import { Label } from '../ui/label';
+import { useState } from 'react';
+import ItemFormDialog from './dialogs/ItemFormDialog';
 
 type Item = Tables<'items'>;
 
 export default function ItemDetailsCard({ item }: { item: Item }) {
+  const [renderItemDialog, setRenderItemDialog] = useState(false);
+
   const {
     title,
     brief_description: briefDescription,
@@ -26,15 +30,15 @@ export default function ItemDetailsCard({ item }: { item: Item }) {
       <header className='flex justify-between items-center'>
         <h3 className='font-semibold'>{title}</h3>
         <DropdownMenu>
-          <DropdownMenuTrigger className='self-start'>
-            <button className='p-2 grid place-items-center hover:bg-neutral-100 rounded-md'>
-              <DotsHorizontalIcon />
-            </button>
+          <DropdownMenuTrigger className='self-start p-2 hover:bg-neutral-100 rounded-md'>
+            <DotsHorizontalIcon />
           </DropdownMenuTrigger>
           <DropdownMenuContent align='end' className='font-mono'>
             <DropdownMenuLabel>Item Actions</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Edit</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setRenderItemDialog(true)}>
+              Edit
+            </DropdownMenuItem>
             <DropdownMenuItem>Delete</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -53,6 +57,12 @@ export default function ItemDetailsCard({ item }: { item: Item }) {
           <Label htmlFor='item-active'>Active item</Label>
         </div>
       </div>
+
+      <ItemFormDialog
+        item={item}
+        renderItemDialog={renderItemDialog}
+        setRenderItemDialog={setRenderItemDialog}
+      />
     </li>
   );
 }

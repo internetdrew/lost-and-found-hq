@@ -1,13 +1,4 @@
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '../ui/dialog';
 import { Button } from '../ui/button';
-import NewItemForm from '../forms/NewItemForm';
 import { useLocations } from '@/hooks/useLocations';
 import { Skeleton } from '../ui/skeleton';
 import {
@@ -17,16 +8,17 @@ import {
   TooltipTrigger,
 } from '../ui/tooltip';
 import { useState } from 'react';
+import ItemFormDialog from './dialogs/ItemFormDialog';
 
 const AddNewItemButtonAndDialog = () => {
   const { data, isLoading } = useLocations();
   const noLocations = data?.length === 0;
-  const [open, setOpen] = useState(false);
+  const [renderItemDialog, setRenderItemDialog] = useState(false);
 
   if (isLoading) return <Skeleton className='w-20 h-10' />;
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <>
       {noLocations ? (
         <TooltipProvider delayDuration={10}>
           <Tooltip>
@@ -49,21 +41,13 @@ const AddNewItemButtonAndDialog = () => {
           </Tooltip>
         </TooltipProvider>
       ) : (
-        <DialogTrigger asChild>
-          <Button>Add item</Button>
-        </DialogTrigger>
+        <Button onClick={() => setRenderItemDialog(true)}>Add item</Button>
       )}
-      <DialogContent className='font-mono overflow-y-scroll max-h-screen'>
-        <DialogHeader>
-          <DialogTitle>Add Item</DialogTitle>
-          <DialogDescription>
-            Enter details of the item you'd like to add. Be sure to not include
-            any personal information.
-          </DialogDescription>
-        </DialogHeader>
-        <NewItemForm onSuccess={() => setOpen(false)} />
-      </DialogContent>
-    </Dialog>
+      <ItemFormDialog
+        renderItemDialog={renderItemDialog}
+        setRenderItemDialog={setRenderItemDialog}
+      />
+    </>
   );
 };
 
