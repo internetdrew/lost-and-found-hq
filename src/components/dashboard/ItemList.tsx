@@ -23,10 +23,10 @@ const ItemList = () => {
     <section className='my-10'>
       <h2 className='text-lg font-semibold'>
         {data?.length === 0
-          ? 'No lost items reported yet...'
+          ? 'No lost items reported'
           : `Managing ${data?.length} lost ${
               data?.length === 1 ? 'item' : 'items'
-            }:`}
+            }`}
       </h2>
       <ul className='mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3'>
         {data?.map(item => (

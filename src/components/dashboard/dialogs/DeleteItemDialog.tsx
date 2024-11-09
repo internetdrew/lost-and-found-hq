@@ -42,14 +42,21 @@ const DeleteItemDialog = (props: DeleteItemDialogProps) => {
     <Dialog open={renderDeleteDialog} onOpenChange={setRenderDeleteDialog}>
       <DialogContent className='font-mono max-w-md'>
         <DialogHeader>
-          <DialogTitle>Delete {item.title}?</DialogTitle>
+          <DialogTitle className='leading-normal'>
+            Are you sure you want to delete the{' '}
+            <span className='text-neutral-500'>{item.title}</span>?
+          </DialogTitle>
           <DialogDescription>
             Once you click delete, this item will be permanently removed from
             your inventory and dashboard.
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
-          <Button onClick={deleteItem} disabled={isDeleting}>
+          <Button
+            onClick={deleteItem}
+            disabled={isDeleting}
+            className='bg-red-500 hover:bg-red-600'
+          >
             {isDeleting ? 'Deleting...' : 'Delete'}
           </Button>
         </DialogFooter>
