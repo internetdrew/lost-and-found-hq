@@ -79,7 +79,7 @@ export default function ItemDetailsCard({ item }: { item: Item }) {
             checked={isActive}
             onCheckedChange={toggleItemActiveStatus}
           />
-          <Label htmlFor='item-status'>Active item</Label>
+          <Label htmlFor='item-status'>Publicly visible</Label>
         </div>
       </div>
 
