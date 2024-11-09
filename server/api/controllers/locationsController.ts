@@ -39,6 +39,33 @@ export const getLocations = async (req: Request, res: Response) => {
   }
 };
 
+export const getLocation = async (req: Request, res: Response) => {
+  const locationId = req.params.id;
+
+  if (!locationId) {
+    res.status(400).json({ error: 'Location ID is required' });
+    return;
+  }
+
+  try {
+    const supabase = createSupabaseServerClient(req, res);
+    const { data, error } = await supabase
+      .from('locations')
+      .select('*')
+      .eq('id', locationId)
+      .single();
+
+    if (error) {
+      res.status(500).json({ error: error.message });
+      return;
+    }
+    res.json(data);
+  } catch (error) {
+    console.error('Error fetching location:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
 export const updateLocation = async (req: Request, res: Response) => {
   try {
     const supabase = createSupabaseServerClient(req, res);

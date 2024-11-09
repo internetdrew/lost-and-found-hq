@@ -11,7 +11,7 @@ import {
 import { useLocations } from '@/hooks/useLocations';
 import { Skeleton } from './ui/skeleton';
 
-export default function CompanyInfoCard() {
+export default function LocationInfoCard() {
   const { data: locations, isLoading } = useLocations();
 
   if (isLoading) return <Skeleton className='max-w-sm h-16 mt-4' />;

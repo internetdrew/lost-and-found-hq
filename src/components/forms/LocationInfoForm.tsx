@@ -47,7 +47,6 @@ const formSchema = z.object({
 const LocationInfoForm = () => {
   const { data, mutate } = useLocations();
   const location = data?.[0];
-  console.log(location);
 
   const [updatingInfo, setUpdatingInfo] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
@@ -70,11 +69,10 @@ const LocationInfoForm = () => {
         : `/api/v1/locations`;
 
     try {
-      const res = await axios[method](endpoint, {
+      await axios[method](endpoint, {
         ...formData,
         id: location?.id,
       });
-      console.log(res);
       mutate();
       toast.success('Location info updated successfully.');
     } catch (error) {

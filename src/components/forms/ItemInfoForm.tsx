@@ -25,11 +25,13 @@ import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import { useLocations } from '@/hooks/useLocations';
 import { useItems } from '@/hooks/useItems';
+import { Tables } from '@dbTypes';
 
 const MAX_DESCRIPTION_LENGTH = 120;
 
-type NewItemFormProps = {
+type ItemInfoFormProps = {
   onSuccess: () => void;
+  initialData: Tables<'items'> | null;
 };
 
 const formSchema = z.object({
@@ -49,8 +51,11 @@ const formSchema = z.object({
     }),
 });
 
-const NewItemForm = ({ onSuccess: closeDialog }: NewItemFormProps) => {
-  const [addingItem, setAddingItem] = useState(false);
+const ItemInfoForm = ({
+  onSuccess: closeDialog,
+  initialData,
+}: ItemInfoFormProps) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { data: locations } = useLocations();
   const { mutate } = useItems();
   const locationId = locations?.[0]?.id;
@@ -58,18 +63,23 @@ const NewItemForm = ({ onSuccess: closeDialog }: NewItemFormProps) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: '',
-      category: '',
-      foundAt: '',
-      dateFound: '',
-      briefDescription: '',
+      title: initialData?.title || '',
+      category: initialData?.category || '',
+      foundAt: initialData?.found_at || '',
+      dateFound: initialData?.date_found || '',
+      briefDescription: initialData?.brief_description || '',
     },
   });
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
-    setAddingItem(true);
+    setIsSubmitting(true);
+    const method = initialData ? 'put' : 'post';
+    const endpoint = initialData
+      ? `/api/v1/items/${initialData.id}`
+      : '/api/v1/items';
+
     try {
-      await axios.post('/api/v1/items', {
+      await axios[method](endpoint, {
         ...data,
         locationId,
       });
@@ -81,7 +91,7 @@ const NewItemForm = ({ onSuccess: closeDialog }: NewItemFormProps) => {
       console.error(error);
       toast.error('Failed to add item');
     } finally {
-      setAddingItem(false);
+      setIsSubmitting(false);
     }
   };
 
@@ -98,7 +108,7 @@ const NewItemForm = ({ onSuccess: closeDialog }: NewItemFormProps) => {
                 <FormControl>
                   <Input
                     placeholder='e.g. Black wallet'
-                    disabled={addingItem}
+                    disabled={isSubmitting}
                     {...field}
                   />
                 </FormControl>
@@ -119,7 +129,7 @@ const NewItemForm = ({ onSuccess: closeDialog }: NewItemFormProps) => {
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
-                  disabled={addingItem}
+                  disabled={isSubmitting}
                 >
                   <FormControl>
                     <SelectTrigger>
@@ -151,7 +161,7 @@ const NewItemForm = ({ onSuccess: closeDialog }: NewItemFormProps) => {
                 <FormControl>
                   <Input
                     placeholder='e.g. Main Lobby'
-                    disabled={addingItem}
+                    disabled={isSubmitting}
                     {...field}
                   />
                 </FormControl>
@@ -166,7 +176,7 @@ const NewItemForm = ({ onSuccess: closeDialog }: NewItemFormProps) => {
               <FormItem>
                 <FormLabel>When was it found?</FormLabel>
                 <FormControl>
-                  <Input type='date' disabled={addingItem} {...field} />
+                  <Input type='date' disabled={isSubmitting} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -182,7 +192,7 @@ const NewItemForm = ({ onSuccess: closeDialog }: NewItemFormProps) => {
                   <Textarea
                     placeholder='E.g. It has a stripe and a logo on the front.'
                     className='resize-none h-24'
-                    disabled={addingItem}
+                    disabled={isSubmitting}
                     maxLength={MAX_DESCRIPTION_LENGTH}
                     {...field}
                   />
@@ -196,8 +206,14 @@ const NewItemForm = ({ onSuccess: closeDialog }: NewItemFormProps) => {
             )}
           />
           <div className='flex justify-end'>
-            <Button type='submit' disabled={addingItem}>
-              {addingItem ? 'Adding...' : 'Add Item'}
+            <Button type='submit' disabled={isSubmitting}>
+              {isSubmitting
+                ? initialData
+                  ? 'Updating...'
+                  : 'Adding...'
+                : initialData
+                ? 'Update Item'
+                : 'Add Item'}
             </Button>
           </div>
         </div>
@@ -206,4 +222,4 @@ const NewItemForm = ({ onSuccess: closeDialog }: NewItemFormProps) => {
   );
 };
 
-export default NewItemForm;
+export default ItemInfoForm;
