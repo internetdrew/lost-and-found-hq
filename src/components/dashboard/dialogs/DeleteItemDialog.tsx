@@ -55,7 +55,8 @@ const DeleteItemDialog = (props: DeleteItemDialogProps) => {
           <Button
             onClick={deleteItem}
             disabled={isDeleting}
-            className='bg-red-500 hover:bg-red-600'
+            variant='destructive'
+            className='bg-red-600 hover:bg-red-700 focus-visible:ring-1 focus-visible:ring-red-700'
           >
             {isDeleting ? 'Deleting...' : 'Delete'}
           </Button>

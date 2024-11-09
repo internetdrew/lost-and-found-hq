@@ -22,7 +22,6 @@ export const getItems = async (req: Request, res: Response) => {
 };
 
 export const getItem = async (req: Request, res: Response) => {
-  console.log('get item');
   const itemId = req.params.id;
 
   if (!itemId) {
@@ -84,7 +83,6 @@ export const addItem = async (req: Request, res: Response) => {
 };
 
 export const updateItem = async (req: Request, res: Response) => {
-  console.log('update item');
   const itemId = req.params.id;
 
   if (!itemId) {
@@ -121,7 +119,6 @@ export const updateItem = async (req: Request, res: Response) => {
 };
 
 export const toggleItemActiveStatus = async (req: Request, res: Response) => {
-  console.log('toggle item active status');
   const itemId = req.params.id;
 
   if (!itemId) {
@@ -151,7 +148,6 @@ export const toggleItemActiveStatus = async (req: Request, res: Response) => {
 };
 
 export const deleteItem = async (req: Request, res: Response) => {
-  console.log('delete item');
   const itemId = req.params.id;
 
   if (!itemId) {
