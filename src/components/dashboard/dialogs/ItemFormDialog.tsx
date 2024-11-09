@@ -26,7 +26,7 @@ const ItemFormDialog = ({
 
   return (
     <Dialog open={renderItemDialog} onOpenChange={setRenderItemDialog}>
-      <DialogContent className='font-mono overflow-y-scroll max-h-screen'>
+      <DialogContent className='font-mono max-h-[90vh] overflow-y-scroll'>
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
           <DialogDescription>{description}</DialogDescription>
