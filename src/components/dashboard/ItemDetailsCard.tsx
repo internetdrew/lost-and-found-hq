@@ -13,11 +13,16 @@ import { Label } from '../ui/label';
 import { useState } from 'react';
 import ItemFormDialog from './dialogs/ItemFormDialog';
 import axios from 'axios';
+import { useItems } from '@/hooks/useItems';
+import toast from 'react-hot-toast';
+import DeleteItemDialog from './dialogs/DeleteItemDialog';
 
 type Item = Tables<'items'>;
 
 export default function ItemDetailsCard({ item }: { item: Item }) {
   const [renderItemDialog, setRenderItemDialog] = useState(false);
+  const [renderDeleteDialog, setRenderDeleteDialog] = useState(false);
+  const { mutate } = useItems();
 
   const {
     title,
@@ -28,11 +33,15 @@ export default function ItemDetailsCard({ item }: { item: Item }) {
   } = item;
 
   const toggleItemActiveStatus = async () => {
-    console.log('toggle active');
-    const res = await axios.patch(`/api/items/${item.id}`, {
-      is_public: !isActive,
-    });
-    console.log(res);
+    try {
+      await axios.patch(`/api/v1/items/${item.id}/status`, {
+        isPublic: !isActive,
+      });
+      mutate();
+    } catch (error) {
+      console.error(error);
+      toast.error('Failed to add item');
+    }
   };
 
   return (
@@ -49,7 +58,9 @@ export default function ItemDetailsCard({ item }: { item: Item }) {
             <DropdownMenuItem onClick={() => setRenderItemDialog(true)}>
               Edit
             </DropdownMenuItem>
-            <DropdownMenuItem>Delete</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setRenderDeleteDialog(true)}>
+              Delete
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </header>
@@ -76,6 +87,12 @@ export default function ItemDetailsCard({ item }: { item: Item }) {
         item={item}
         renderItemDialog={renderItemDialog}
         setRenderItemDialog={setRenderItemDialog}
+      />
+
+      <DeleteItemDialog
+        item={item}
+        renderDeleteDialog={renderDeleteDialog}
+        setRenderDeleteDialog={setRenderDeleteDialog}
       />
     </li>
   );
