@@ -28,12 +28,12 @@ const DeleteItemDialog = (props: DeleteItemDialogProps) => {
     setIsDeleting(true);
     try {
       await axios.delete(`/api/v1/items/${item.id}`);
-      setRenderDeleteDialog(false);
       mutate();
     } catch (error) {
       console.error(error);
       toast.error('Failed to delete item');
     } finally {
+      setRenderDeleteDialog(false);
       setIsDeleting(false);
     }
   };
