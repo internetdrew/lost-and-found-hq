@@ -8,7 +8,8 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
-      "@dbTypes": ["./server/database.types.ts"]
+      "@dbTypes": ["./server/database.types.ts"],
+      "@server/*": ["./server/*"]
     }
   }
 }
