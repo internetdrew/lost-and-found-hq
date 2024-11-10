@@ -13,6 +13,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use('/auth', authRouter);
 app.use('/api/v1', requireAuth, v1Router);
+
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
