@@ -13,9 +13,12 @@ import { http } from 'msw';
 import { HttpResponse } from 'msw';
 import RouteGuard from '@/components/RouteGuard';
 
-interface SWRMockData {
-  id: string;
-  email: string;
+interface SWRMockState {
+  data: { id: string; email: string } | null;
+  isLoading: boolean;
+  error: Error | null;
+  mutate: ReturnType<typeof vi.fn>;
+  isValidating: boolean;
 }
 
 const mockNavigate = vi.fn();
@@ -31,8 +34,6 @@ vi.mock('react-hot-toast', () => ({
   default: {
     success: vi.fn(),
     error: vi.fn(),
-    loading: vi.fn(),
-    dismiss: vi.fn(),
   },
   toast: {
     success: vi.fn(),
@@ -43,13 +44,7 @@ vi.mock('react-hot-toast', () => ({
   Toaster: () => null,
 }));
 
-const mockSWRState: {
-  data: SWRMockData | null;
-  isLoading: boolean;
-  error: Error | null;
-  mutate: ReturnType<typeof vi.fn>;
-  isValidating: boolean;
-} = {
+const mockSWRState: SWRMockState = {
   data: null,
   isLoading: false,
   error: null,
@@ -64,7 +59,7 @@ vi.mock('swr', () => ({
   }),
 }));
 
-const setSWRMockData = (data: SWRMockData) => {
+const setSWRMockData = (data: SWRMockState['data']) => {
   mockSWRState.data = data;
 };
 
