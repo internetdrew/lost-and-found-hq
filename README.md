@@ -11,7 +11,7 @@
 
 ## Introduction
 
-Lost & Found HQ is a platform that helps businesses streamline their lost and found operations, making it effortless to reunite customers with their missing items.
+Lost & Found HQ is a platform that helps businesses streamline their lost and found operations, making reuniting customers with their missing items effortless.
 
 ## Why
 
