@@ -6,9 +6,17 @@ import { beforeAll, afterEach, afterAll } from 'vitest';
 import Home from './Home';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import App from '@/App';
-import { server } from '@server/mocks/node';
+import { server } from '@/test/mocks/node';
+import { TestUser } from '@/test/mocks/handlers';
+import toast from 'react-hot-toast';
 import { http } from 'msw';
 import { HttpResponse } from 'msw';
+import RouteGuard from '@/components/RouteGuard';
+
+interface SWRMockData {
+  id: string;
+  email: string;
+}
 
 const mockNavigate = vi.fn();
 vi.mock('react-router-dom', async () => {
@@ -18,6 +26,47 @@ vi.mock('react-router-dom', async () => {
     useNavigate: () => mockNavigate,
   };
 });
+
+vi.mock('react-hot-toast', () => ({
+  default: {
+    success: vi.fn(),
+    error: vi.fn(),
+    loading: vi.fn(),
+    dismiss: vi.fn(),
+  },
+  toast: {
+    success: vi.fn(),
+    error: vi.fn(),
+    loading: vi.fn(),
+    dismiss: vi.fn(),
+  },
+  Toaster: () => null,
+}));
+
+const mockSWRState: {
+  data: SWRMockData | null;
+  isLoading: boolean;
+  error: Error | null;
+  mutate: ReturnType<typeof vi.fn>;
+  isValidating: boolean;
+} = {
+  data: null,
+  isLoading: false,
+  error: null,
+  mutate: vi.fn(),
+  isValidating: false,
+};
+
+vi.mock('swr', () => ({
+  default: () => mockSWRState,
+  useSWRConfig: () => ({
+    mutate: vi.fn(),
+  }),
+}));
+
+const setSWRMockData = (data: SWRMockData) => {
+  mockSWRState.data = data;
+};
 
 beforeAll(() => server.listen());
 afterEach(() => {
@@ -31,7 +80,14 @@ const renderHome = () => {
     <MemoryRouter>
       <Routes>
         <Route path='/' element={<App />}>
-          <Route index element={<Home />} />
+          <Route
+            index
+            element={
+              <RouteGuard requiresAuth={false}>
+                <Home />
+              </RouteGuard>
+            }
+          />
         </Route>
       </Routes>
     </MemoryRouter>
@@ -100,26 +156,56 @@ describe('Home', () => {
 
   it('successfully logs users in and redirects to the dashboard', async () => {
     const user = userEvent.setup();
-    server.use(
-      http.post('/auth/login', () => {
-        return HttpResponse.json({
-          message: 'Login successful',
-          redirectTo: '/dashboard',
-        });
-      })
-    );
     renderHome();
 
     const emailInput = screen.getByLabelText('Email address');
     const passwordInput = screen.getByLabelText('Password');
     const loginButton = screen.getByRole('button', { name: 'Login' });
 
-    await user.type(emailInput, 'test@test.com');
-    await user.type(passwordInput, 'password');
+    await user.type(emailInput, TestUser.EMAIL);
+    await user.type(passwordInput, TestUser.PASSWORD);
     await user.click(loginButton);
 
     await waitFor(() => {
       expect(mockNavigate).toHaveBeenCalledWith('/dashboard');
+    });
+  });
+
+  it('displays an error message for invalid credentials', async () => {
+    const user = userEvent.setup();
+    renderHome();
+
+    const emailInput = screen.getByLabelText('Email address');
+    const passwordInput = screen.getByLabelText('Password');
+    const loginButton = screen.getByRole('button', { name: 'Login' });
+
+    await user.type(emailInput, TestUser.EMAIL);
+    await user.type(passwordInput, 'invalid-password');
+    await user.click(loginButton);
+
+    expect(toast.error).toHaveBeenCalledWith('Invalid email or password');
+  });
+  it('redirects to the dashboard if a user is already logged in', async () => {
+    server.use(
+      http.get('/auth/user', () => {
+        console.log('Captured a "GET /auth/user" request');
+        return HttpResponse.json({
+          id: 'c7b3d8e0-5e0b-4b0f-8b3a-3b9f4b3d3b3d',
+        });
+      })
+    );
+
+    // Mock SWR to ensure immediate data availability
+    setSWRMockData({
+      id: 'c7b3d8e0-5e0b-4b0f-8b3a-3b9f4b3d3b3d',
+      email: TestUser.EMAIL,
+    });
+    renderHome();
+
+    await waitFor(() => {
+      expect(mockNavigate).toHaveBeenCalledWith('/dashboard', {
+        replace: true,
+      });
     });
   });
 });
