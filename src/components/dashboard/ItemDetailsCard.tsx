@@ -16,13 +16,14 @@ import axios from 'axios';
 import toast from 'react-hot-toast';
 import DeleteItemDialog from './dialogs/DeleteItemDialog';
 import { useItemsAtLocation } from '@/hooks/useItemsAtLocation';
+import { useLocationId } from '@/hooks/useLocationId';
 
 type Item = Tables<'items'>;
 
 export default function ItemDetailsCard({ item }: { item: Item }) {
   const [renderItemDialog, setRenderItemDialog] = useState(false);
   const [renderDeleteDialog, setRenderDeleteDialog] = useState(false);
-  const locationId = item.location_id;
+  const { locationId } = useLocationId();
   const { mutate } = useItemsAtLocation(locationId);
 
   const {
