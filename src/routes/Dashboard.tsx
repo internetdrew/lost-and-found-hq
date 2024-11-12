@@ -2,6 +2,7 @@ import AddNewItemButtonAndDialog from '@/components/dashboard/AddNewItemButtonAn
 import ItemList from '@/components/dashboard/ItemList';
 import LocationInfoCard from '@/components/LocationInfoCard';
 import { Skeleton } from '@/components/ui/skeleton';
+import { LocationIdProvider } from '@/context/LocationIdContext';
 import { useLocations } from '@/hooks/useLocations';
 
 export interface CompanyInfo {
@@ -33,8 +34,10 @@ const Dashboard = () => {
             <LocationInfoCard location={locations?.[0] || null} />
           )}
         </header>
-        {locations && locations?.[0] && (
-          <ItemList locationId={locations[0].id} />
+        {locations?.[0] && (
+          <LocationIdProvider locationId={locations[0].id}>
+            <ItemList />
+          </LocationIdProvider>
         )}
       </main>
     </div>
