@@ -11,12 +11,11 @@ import { useState } from 'react';
 import ItemFormDialog from './dialogs/ItemFormDialog';
 
 const AddNewItemButtonAndDialog = () => {
-  const { data, isLoading } = useLocations();
-  const noLocations = data?.length === 0;
+  const { data: locations, isLoading } = useLocations();
+  const noLocations = locations?.length === 0;
   const [renderItemDialog, setRenderItemDialog] = useState(false);
 
   if (isLoading) return <Skeleton className='w-20 h-10' />;
-
   return (
     <>
       {noLocations ? (
@@ -41,12 +40,14 @@ const AddNewItemButtonAndDialog = () => {
           </Tooltip>
         </TooltipProvider>
       ) : (
-        <Button onClick={() => setRenderItemDialog(true)}>Add item</Button>
+        <>
+          <Button onClick={() => setRenderItemDialog(true)}>Add item</Button>
+          <ItemFormDialog
+            renderItemDialog={renderItemDialog}
+            setRenderItemDialog={setRenderItemDialog}
+          />
+        </>
       )}
-      <ItemFormDialog
-        renderItemDialog={renderItemDialog}
-        setRenderItemDialog={setRenderItemDialog}
-      />
     </>
   );
 };
