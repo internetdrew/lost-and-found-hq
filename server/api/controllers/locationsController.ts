@@ -23,10 +23,12 @@ export const addLocation = async (req: Request, res: Response) => {
 export const getLocations = async (req: Request, res: Response) => {
   try {
     const supabase = createSupabaseServerClient(req, res);
+    const userId = (req as AuthenticatedRequest).user.id;
+
     const { data, error } = await supabase
       .from('locations')
       .select('*')
-      .limit(1);
+      .eq('user_id', userId);
 
     if (error) {
       res.status(500).json({ error: error.message });
