@@ -27,15 +27,11 @@ const Home = () => {
       <main className='px-4 sm:px-0'>
         <div className='max-w-xl mx-auto flex flex-col items-center'>
           <div className='flex flex-col items-center mb-6'>
-            {process.env.NODE_ENV !== 'production' && isDemo && (
-              <>
-                <p className='text-sm text-muted-foreground text-center'>
-                  Thanks for visiting the app! <br />
-                  Test drives are now available. Take it for a spin!
-                </p>
-                <TestDriveButton />
-              </>
-            )}
+            <p className='text-sm text-muted-foreground text-center'>
+              Thanks for visiting the app! <br />
+              Test drives are now available. Take it for a spin!
+            </p>
+            <TestDriveButton />
           </div>
           <InterestForm />
         </div>
