@@ -24,6 +24,8 @@ After losing my wallet, I thought it might be great if the process was a little 
 - Users should be able to toggle public viewability on items, as well as edit and delete them. ([#21](https://github.com/internetdrew/lost-and-found-hq/pull/21))
 - Add testing to the frontend code ([#22](https://github.com/internetdrew/lost-and-found-hq/pull/22)).
 - Make test account available for public users to play with.
+  - Users can get the full dashboard experience.
+  - Add a cron job to purge the results every X time. Maybe clear the items every 24 hours.
 - Public-facing portal for customers to use.
 - Limit input lengths on dashboard.
 - Add input validation to API layer.
