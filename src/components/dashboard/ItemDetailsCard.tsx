@@ -36,9 +36,12 @@ export default function ItemDetailsCard({ item }: { item: Item }) {
 
   const toggleItemActiveStatus = async () => {
     try {
-      await axios.patch(`/api/v1/items/${item.id}/status`, {
-        isPublic: !isActive,
-      });
+      await axios.patch(
+        `/api/v1/locations/${locationId}/items/${item.id}/status`,
+        {
+          isPublic: !isActive,
+        }
+      );
       mutate();
     } catch (error) {
       console.error(error);
