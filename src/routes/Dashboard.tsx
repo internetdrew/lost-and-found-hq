@@ -22,11 +22,16 @@ const Dashboard = () => {
         <header className='mt-6'>
           <div className='flex justify-between items-center'>
             <h1 className='text-lg'>Dashboard</h1>
-            <AddNewItemButtonAndDialog />
+            {locations?.[0] && (
+              <LocationIdProvider locationId={locations[0].id}>
+                <AddNewItemButtonAndDialog />
+              </LocationIdProvider>
+            )}
           </div>
           <p className='text-sm text-gray-600 max-w-md mt-2'>
             Here's where you can manage all of the items lost and found at your
-            place of business.
+            place of business.{' '}
+            {locations?.length === 0 && 'Start by adding a location.'}
           </p>
           {fetchingLocations ? (
             <Skeleton className='mt-4 max-w-sm w-full h-20' />
