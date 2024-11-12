@@ -22,7 +22,13 @@ import { useEffect, useState } from 'react';
 import { US_STATES } from '@/constants';
 import toast from 'react-hot-toast';
 import axios from 'axios';
+import { Tables } from '@dbTypes';
 import { useLocations } from '@/hooks/useLocations';
+
+type LocationInfoFormProps = {
+  location: Tables<'locations'> | null;
+  onSuccess: () => void;
+};
 
 const formSchema = z.object({
   name: z
@@ -44,11 +50,13 @@ const formSchema = z.object({
     .regex(/^\d{5}$/, { message: 'Zip code must be 5 numbers' }),
 });
 
-const LocationInfoForm = () => {
-  const { data, mutate } = useLocations();
-  const location = data?.[0];
-
+const LocationInfoForm = ({
+  location,
+  onSuccess: closeLocationFormDialog,
+}: LocationInfoFormProps) => {
   const [updatingInfo, setUpdatingInfo] = useState(false);
+  const { mutate } = useLocations();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -62,11 +70,10 @@ const LocationInfoForm = () => {
 
   const onSubmit = async (formData: z.infer<typeof formSchema>) => {
     setUpdatingInfo(true);
-    const method = data?.length > 0 ? 'put' : 'post';
-    const endpoint =
-      data?.length > 0
-        ? `/api/v1/locations/${location?.id}`
-        : `/api/v1/locations`;
+    const method = location ? 'put' : 'post';
+    const endpoint = location
+      ? `/api/v1/locations/${location?.id}`
+      : `/api/v1/locations`;
 
     try {
       await axios[method](endpoint, {
@@ -74,6 +81,7 @@ const LocationInfoForm = () => {
         id: location?.id,
       });
       mutate();
+      closeLocationFormDialog();
       toast.success('Location info updated successfully.');
     } catch (error) {
       console.error(error);
@@ -206,7 +214,7 @@ const LocationInfoForm = () => {
               type='submit'
               disabled={updatingInfo || !isDirty || !isValid}
             >
-              {data?.length > 0 ? 'Update' : 'Add'}
+              {location ? 'Update' : 'Add'}
             </Button>
           </div>
         </div>
