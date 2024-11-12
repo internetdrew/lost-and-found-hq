@@ -25,6 +25,8 @@ After losing my wallet, I thought it might be great if the process was a little 
 - Add testing to the frontend code ([#22](https://github.com/internetdrew/lost-and-found-hq/pull/22)).
 - Make test account available for public users to play with.
 - Public-facing portal for customers to use.
+- Limit input lengths on dashboard.
+- Add input validation to API layer.
 - Customers claim items with a form desribing their the item in greater detail.
 - Notifications of new claims get sent via email and show in app.
 - Staff review claims and can approve or request more information.
