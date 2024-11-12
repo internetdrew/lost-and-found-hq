@@ -33,9 +33,13 @@ export default function LocationInfoCard() {
       )}
       <Dialog>
         <DialogTrigger asChild>
-          <Button variant='outline' className='text-xs w-max ml-auto'>
-            {locations?.length > 0 ? 'Edit' : 'Add'}
-          </Button>
+          {locations?.length > 0 ? (
+            <Button variant='outline' className='text-xs w-max ml-auto'>
+              Edit
+            </Button>
+          ) : (
+            <Button className='text-xs w-max ml-auto'>Add</Button>
+          )}
         </DialogTrigger>
         <DialogContent className='font-mono overflow-y-scroll max-h-screen'>
           <DialogHeader>
