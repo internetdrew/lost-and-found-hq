@@ -25,13 +25,13 @@ import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import { Tables } from '@dbTypes';
 import { useItemsAtLocation } from '@/hooks/useItemsAtLocation';
+import { useLocationId } from '@/hooks/useLocationId';
 
 const MAX_DESCRIPTION_LENGTH = 120;
 
 type ItemInfoFormProps = {
   onSuccess: () => void;
   item: Tables<'items'> | null;
-  locationId: number;
 };
 
 const formSchema = z.object({
@@ -51,12 +51,9 @@ const formSchema = z.object({
     }),
 });
 
-const ItemInfoForm = ({
-  onSuccess: closeDialog,
-  item,
-  locationId,
-}: ItemInfoFormProps) => {
+const ItemInfoForm = ({ onSuccess: closeDialog, item }: ItemInfoFormProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { locationId } = useLocationId();
   const { mutate } = useItemsAtLocation(locationId);
 
   const form = useForm<z.infer<typeof formSchema>>({
