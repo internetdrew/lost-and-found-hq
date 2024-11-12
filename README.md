@@ -23,8 +23,10 @@ After losing my wallet, I thought it might be great if the process was a little 
 - Add your business location to your dashboard. ([#15](https://github.com/internetdrew/lost-and-found-hq/pull/15))
 - Users should be able to toggle public viewability on items, as well as edit and delete them. ([#21](https://github.com/internetdrew/lost-and-found-hq/pull/21))
 - Add testing to the frontend code ([#22](https://github.com/internetdrew/lost-and-found-hq/pull/22)).
-- Make test account available for public users to play with.
-  - Users can get the full dashboard experience.
+- Visitors can sign up to get launch updates.
+- Make test account available for visitors to play with.
+  - Visitors can get the full dashboard experience (test drive).
+  - Test drive gives users 3 mins of usage before being logged out and items added are deleted.
   - Add a cron job to purge the results every X time. Maybe clear the items every 24 hours.
 - Public-facing portal for customers to use.
 - Limit input lengths on dashboard.
