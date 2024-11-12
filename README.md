@@ -28,7 +28,7 @@ After losing my wallet, I thought it might be great if the process was a little 
   - Visitors can get the full dashboard experience (test drive).
   - Test drive gives users 3 mins of usage before being logged out and items added are deleted.
   - Add a cron job to purge the results every X time. Maybe clear the items every 24 hours.
-- Public-facing portal for customers to use.
+- Allow users to create a public portal for customers to view items.
 - Limit input lengths on dashboard.
 - Add input validation to API layer.
 - Customers claim items with a form desribing their the item in greater detail.
