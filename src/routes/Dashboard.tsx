@@ -1,6 +1,7 @@
 import AddNewItemButtonAndDialog from '@/components/dashboard/AddNewItemButtonAndDialog';
 import ItemList from '@/components/dashboard/ItemList';
 import LocationInfoCard from '@/components/LocationInfoCard';
+import { useLocations } from '@/hooks/useLocations';
 
 export interface CompanyInfo {
   name: string;
@@ -11,6 +12,8 @@ export interface CompanyInfo {
 }
 
 const Dashboard = () => {
+  const { data: locations } = useLocations();
+
   return (
     <div className='px-4 sm:px-8'>
       <main>
@@ -23,9 +26,9 @@ const Dashboard = () => {
             Here's where you can manage all of the items lost and found at your
             place of business.
           </p>
-          <LocationInfoCard />
+          <LocationInfoCard location={locations?.[0] || null} />
         </header>
-        <ItemList />
+        {locations && locations?.length > 0 && <ItemList />}
       </main>
     </div>
   );
