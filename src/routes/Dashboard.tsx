@@ -33,7 +33,9 @@ const Dashboard = () => {
             <LocationInfoCard location={locations?.[0] || null} />
           )}
         </header>
-        {locations && locations?.length > 0 && <ItemList />}
+        {locations && locations?.[0] && (
+          <ItemList locationId={locations[0].id} />
+        )}
       </main>
     </div>
   );
