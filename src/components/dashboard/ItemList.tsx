@@ -1,9 +1,9 @@
-import { useItems } from '@/hooks/useItems';
+import { useItemsAtLocation } from '@/hooks/useItemsAtLocation';
 import { Skeleton } from '../ui/skeleton';
 import ItemDetailsCard from './ItemDetailsCard';
 
-const ItemList = () => {
-  const { data, isLoading } = useItems();
+const ItemList = ({ locationId }: { locationId: number }) => {
+  const { data, isLoading } = useItemsAtLocation(locationId);
 
   if (isLoading)
     return (
