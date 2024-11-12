@@ -23,7 +23,7 @@ const TestDriveButton = () => {
   };
 
   return (
-    <Button className='mt-4' onClick={handleTestDrive}>
+    <Button className='mt-4' variant='outline' onClick={handleTestDrive}>
       Start my test drive
     </Button>
   );
