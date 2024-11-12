@@ -5,9 +5,12 @@ import { AuthenticatedRequest } from '../middleware/auth';
 export const getItems = async (req: Request, res: Response) => {
   try {
     const supabase = createSupabaseServerClient(req, res);
+    const locationId = req.params.locationId;
+
     const { data, error } = await supabase
       .from('items')
       .select('*')
+      .eq('location_id', locationId)
       .order('created_at', { ascending: true });
 
     if (error) {
