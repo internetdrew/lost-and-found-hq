@@ -6,12 +6,12 @@ import {
   DialogDescription,
   DialogFooter,
 } from '@/components/ui/dialog';
-import { useItems } from '@/hooks/useItems';
 import { toast } from 'react-hot-toast';
 import axios from 'axios';
 import { Tables } from '@dbTypes';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
+import { useItemsAtLocation } from '@/hooks/useItemsAtLocation';
 
 interface DeleteItemDialogProps {
   item: Tables<'items'>;
@@ -22,7 +22,7 @@ interface DeleteItemDialogProps {
 const DeleteItemDialog = (props: DeleteItemDialogProps) => {
   const { item, renderDeleteDialog, setRenderDeleteDialog } = props;
   const [isDeleting, setIsDeleting] = useState(false);
-  const { mutate } = useItems();
+  const { mutate } = useItemsAtLocation(item.location_id);
 
   const deleteItem = async () => {
     setIsDeleting(true);

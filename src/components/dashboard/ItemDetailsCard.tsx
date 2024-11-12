@@ -13,16 +13,16 @@ import { Label } from '../ui/label';
 import { useState } from 'react';
 import ItemFormDialog from './dialogs/ItemFormDialog';
 import axios from 'axios';
-import { useItems } from '@/hooks/useItems';
 import toast from 'react-hot-toast';
 import DeleteItemDialog from './dialogs/DeleteItemDialog';
+import { useItemsAtLocation } from '@/hooks/useItemsAtLocation';
 
 type Item = Tables<'items'>;
 
 export default function ItemDetailsCard({ item }: { item: Item }) {
   const [renderItemDialog, setRenderItemDialog] = useState(false);
   const [renderDeleteDialog, setRenderDeleteDialog] = useState(false);
-  const { mutate } = useItems();
+  const { mutate } = useItemsAtLocation(item.location_id);
 
   const {
     title,
