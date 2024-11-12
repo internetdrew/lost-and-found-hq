@@ -7,7 +7,6 @@ import TestDriveButton from '@/components/TestDriveButton';
 
 const Home = () => {
   const [searchParams] = useSearchParams();
-
   const isDemo = searchParams.get('mode') === 'demo';
 
   const [renderType, setRenderType] = useState<
@@ -27,18 +26,18 @@ const Home = () => {
       </header>
       <main className='px-4 sm:px-0'>
         <div className='max-w-xl mx-auto flex flex-col items-center'>
-          {process.env.NODE_ENV !== 'production' && (
-            <>
-              <div className='flex flex-col items-center mb-6'>
+          <div className='flex flex-col items-center mb-6'>
+            {process.env.NODE_ENV !== 'production' && isDemo && (
+              <>
                 <p className='text-sm text-muted-foreground text-center'>
                   Thanks for visiting the app! <br />
                   Test drives are now available. Take it for a spin!
                 </p>
                 <TestDriveButton />
-              </div>
-              <InterestForm />
-            </>
-          )}
+              </>
+            )}
+          </div>
+          <InterestForm />
         </div>
         {process.env.NODE_ENV === 'production' &&
           !isDemo &&
