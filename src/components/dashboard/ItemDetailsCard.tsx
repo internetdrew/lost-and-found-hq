@@ -22,7 +22,8 @@ type Item = Tables<'items'>;
 export default function ItemDetailsCard({ item }: { item: Item }) {
   const [renderItemDialog, setRenderItemDialog] = useState(false);
   const [renderDeleteDialog, setRenderDeleteDialog] = useState(false);
-  const { mutate } = useItemsAtLocation(item.location_id);
+  const locationId = item.location_id;
+  const { mutate } = useItemsAtLocation(locationId);
 
   const {
     title,
