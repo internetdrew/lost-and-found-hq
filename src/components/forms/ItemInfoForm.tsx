@@ -23,15 +23,15 @@ import {
 import { useState } from 'react';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
-import { useLocations } from '@/hooks/useLocations';
-import { useItems } from '@/hooks/useItems';
 import { Tables } from '@dbTypes';
+import { useItemsAtLocation } from '@/hooks/useItemsAtLocation';
 
 const MAX_DESCRIPTION_LENGTH = 120;
 
 type ItemInfoFormProps = {
   onSuccess: () => void;
-  initialData: Tables<'items'> | null;
+  item: Tables<'items'> | null;
+  locationId: number;
 };
 
 const formSchema = z.object({
@@ -53,30 +53,29 @@ const formSchema = z.object({
 
 const ItemInfoForm = ({
   onSuccess: closeDialog,
-  initialData,
+  item,
+  locationId,
 }: ItemInfoFormProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { data: locations } = useLocations();
-  const { mutate } = useItems();
-  const locationId = locations?.[0]?.id;
+  const { mutate } = useItemsAtLocation(locationId);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: initialData?.title || '',
-      category: initialData?.category || '',
-      foundAt: initialData?.found_at || '',
-      dateFound: initialData?.date_found || '',
-      briefDescription: initialData?.brief_description || '',
+      title: item?.title || '',
+      category: item?.category || '',
+      foundAt: item?.found_at || '',
+      dateFound: item?.date_found || '',
+      briefDescription: item?.brief_description || '',
     },
   });
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     setIsSubmitting(true);
-    const method = initialData ? 'put' : 'post';
-    const endpoint = initialData
-      ? `/api/v1/items/${initialData.id}`
-      : '/api/v1/items';
+    const method = item ? 'put' : 'post';
+    const endpoint = item
+      ? `/api/v1/locations/${locationId}/items/${item.id}`
+      : `/api/v1/locations/${locationId}/items`;
 
     try {
       await axios[method](endpoint, {
@@ -208,10 +207,10 @@ const ItemInfoForm = ({
           <div className='flex justify-end'>
             <Button type='submit' disabled={isSubmitting}>
               {isSubmitting
-                ? initialData
+                ? item
                   ? 'Updating...'
                   : 'Adding...'
-                : initialData
+                : item
                 ? 'Update Item'
                 : 'Add Item'}
             </Button>
