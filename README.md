@@ -20,11 +20,11 @@ After losing my wallet, I thought it might be great if the process was a little 
 ## Roadmap
 
 - Log into your dashboard to manage lost and found items at your place of business. [#12](https://github.com/internetdrew/lost-and-found-hq/pull/12)
-- Add your business location to your dashboard. ([#15](https://github.com/internetdrew/lost-and-found-hq/pull/15))
-- Users should be able to toggle public viewability on items, as well as edit and delete them. ([#21](https://github.com/internetdrew/lost-and-found-hq/pull/21))
-- Add testing to the frontend code ([#22](https://github.com/internetdrew/lost-and-found-hq/pull/22)).
-- Visitors can sign up to get launch updates. ([#23](https://github.com/internetdrew/lost-and-found-hq/pull/23))
-- Make test account available for visitors to play with. ([#23](https://github.com/internetdrew/lost-and-found-hq/pull/23))
+- Add your business location to your dashboard. [#15](https://github.com/internetdrew/lost-and-found-hq/pull/15)
+- Users should be able to toggle public viewability on items, as well as edit and delete them. [#21](https://github.com/internetdrew/lost-and-found-hq/pull/21)
+- Add testing to the frontend code. [#22](https://github.com/internetdrew/lost-and-found-hq/pull/22)
+- Visitors can sign up to get launch updates. [#23](https://github.com/internetdrew/lost-and-found-hq/pull/23)
+- Make test account available for visitors to play with. [#23](https://github.com/internetdrew/lost-and-found-hq/pull/23)
   - Visitors can get the full dashboard experience (test drive).
   - Add a cron job to purge the test user items at midnight.
 - Allow users to create a public portal for customers to view items.
