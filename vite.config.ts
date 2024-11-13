@@ -23,6 +23,10 @@ export default defineConfig({
         target: `http://localhost:${PORT}`,
         changeOrigin: true,
       },
+      '/interest': {
+        target: `http://localhost:${PORT}`,
+        changeOrigin: true,
+      },
     },
   },
   test: {
