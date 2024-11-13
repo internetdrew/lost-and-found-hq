@@ -35,7 +35,7 @@ const Home = () => {
           </div>
           <InterestForm />
         </div>
-        {process.env.NODE_ENV === 'production' &&
+        {process.env.NODE_ENV !== 'production' &&
           !isDemo &&
           (renderType === 'signup' ? (
             <SignUpForm setRenderType={setRenderType} />
