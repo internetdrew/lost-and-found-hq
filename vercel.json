@@ -19,7 +19,7 @@
   "crons": [
     {
       "path": "/api/cron/purge-test-items",
-      "schedule": "15 14 * * *"
+      "schedule": "25 14 * * *"
     }
   ]
 }
