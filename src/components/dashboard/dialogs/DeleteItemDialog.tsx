@@ -6,12 +6,13 @@ import {
   DialogDescription,
   DialogFooter,
 } from '@/components/ui/dialog';
-import { useItems } from '@/hooks/useItems';
 import { toast } from 'react-hot-toast';
 import axios from 'axios';
 import { Tables } from '@dbTypes';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
+import { useItemsAtLocation } from '@/hooks/useItemsAtLocation';
+import { useLocationId } from '@/hooks/useLocationId';
 
 interface DeleteItemDialogProps {
   item: Tables<'items'>;
@@ -22,13 +23,15 @@ interface DeleteItemDialogProps {
 const DeleteItemDialog = (props: DeleteItemDialogProps) => {
   const { item, renderDeleteDialog, setRenderDeleteDialog } = props;
   const [isDeleting, setIsDeleting] = useState(false);
-  const { mutate } = useItems();
+  const { locationId } = useLocationId();
+  const { mutate } = useItemsAtLocation(locationId);
 
   const deleteItem = async () => {
     setIsDeleting(true);
     try {
-      await axios.delete(`/api/v1/items/${item.id}`);
+      await axios.delete(`/api/v1/locations/${locationId}/items/${item.id}`);
       mutate();
+      toast.success('Item deleted successfully');
     } catch (error) {
       console.error(error);
       toast.error('Failed to delete item');

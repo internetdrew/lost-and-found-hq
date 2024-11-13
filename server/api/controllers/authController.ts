@@ -101,3 +101,29 @@ export const getUser = async (req: Request, res: Response) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 };
+
+export const startTestDrive = async (req: Request, res: Response) => {
+  console.log('start test drive');
+  const supabase = createSupabaseServerClient(req, res);
+
+  if (
+    !process.env.TEST_DRIVE_USER_EMAIL ||
+    !process.env.TEST_DRIVE_USER_PASSWORD
+  ) {
+    throw new Error('Missing required credentials for test drive');
+  }
+
+  const { error } = await supabase.auth.signInWithPassword({
+    email: process.env.TEST_DRIVE_USER_EMAIL,
+    password: process.env.TEST_DRIVE_USER_PASSWORD,
+  });
+
+  if (error) {
+    console.error('Error starting test drive:', error);
+    res.status(400).json({ error: error.message });
+    return;
+  }
+  res
+    .status(200)
+    .json({ message: 'Test drive started', redirectTo: '/dashboard' });
+};

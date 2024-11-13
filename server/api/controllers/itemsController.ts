@@ -1,13 +1,19 @@
 import { Request, Response } from 'express';
-import { createSupabaseServerClient } from '../../lib/supabase';
+import {
+  createSupabaseAdminClient,
+  createSupabaseServerClient,
+} from '../../lib/supabase';
 import { AuthenticatedRequest } from '../middleware/auth';
 
 export const getItems = async (req: Request, res: Response) => {
   try {
     const supabase = createSupabaseServerClient(req, res);
+    const locationId = req.params.locationId;
+
     const { data, error } = await supabase
       .from('items')
       .select('*')
+      .eq('location_id', locationId)
       .order('created_at', { ascending: true });
 
     if (error) {
@@ -171,5 +177,44 @@ export const deleteItem = async (req: Request, res: Response) => {
   } catch (error) {
     console.error('Error deleting item:', error);
     res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+export const clearTestUserItems = async () => {
+  try {
+    if (!process.env.TEST_DRIVE_USER_EMAIL) {
+      throw new Error('TEST_DRIVE_USER_EMAIL not configured');
+    }
+
+    const supabase = createSupabaseAdminClient();
+    const { data: userData, error: userError } = await supabase
+      .from('users')
+      .select('id')
+      .eq('email', process.env.TEST_DRIVE_USER_EMAIL)
+      .single();
+
+    if (userError || !userData) {
+      console.error('Error finding test user:', userError);
+      return;
+    }
+
+    const { data: testUserItemIds } = await supabase
+      .from('items')
+      .select('id')
+      .eq('added_by_user_id', userData.id);
+
+    const { error: deleteError } = await supabase
+      .from('items')
+      .delete()
+      .in('id', testUserItemIds?.map(item => item.id) || []);
+
+    if (deleteError) {
+      console.error('Error clearing test items:', deleteError);
+      return;
+    }
+
+    console.log('Successfully cleared test user items');
+  } catch (error) {
+    console.error('Error in clearTestUserItems:', error);
   }
 };

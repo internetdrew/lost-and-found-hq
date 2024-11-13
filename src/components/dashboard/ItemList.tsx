@@ -1,9 +1,11 @@
-import { useItems } from '@/hooks/useItems';
+import { useItemsAtLocation } from '@/hooks/useItemsAtLocation';
 import { Skeleton } from '../ui/skeleton';
 import ItemDetailsCard from './ItemDetailsCard';
+import { useLocationId } from '@/hooks/useLocationId';
 
 const ItemList = () => {
-  const { data, isLoading } = useItems();
+  const { locationId } = useLocationId();
+  const { data, isLoading } = useItemsAtLocation(locationId);
 
   if (isLoading)
     return (
@@ -22,11 +24,14 @@ const ItemList = () => {
   return (
     <section className='my-10'>
       <h2 className='text-lg font-semibold'>
-        {data?.length === 0
-          ? 'No lost items reported'
-          : `Managing ${data?.length} lost ${
-              data?.length === 1 ? 'item' : 'items'
-            }`}
+        {data?.length === 0 ? (
+          'No lost items reported'
+        ) : (
+          <p>
+            Managing <span className='text-neutral-500'>{data?.length}</span>{' '}
+            lost {data?.length === 1 ? 'item' : 'items'}:
+          </p>
+        )}
       </h2>
       <ul className='mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3'>
         {data?.map(item => (

@@ -13,16 +13,18 @@ import { Label } from '../ui/label';
 import { useState } from 'react';
 import ItemFormDialog from './dialogs/ItemFormDialog';
 import axios from 'axios';
-import { useItems } from '@/hooks/useItems';
 import toast from 'react-hot-toast';
 import DeleteItemDialog from './dialogs/DeleteItemDialog';
+import { useItemsAtLocation } from '@/hooks/useItemsAtLocation';
+import { useLocationId } from '@/hooks/useLocationId';
 
 type Item = Tables<'items'>;
 
 export default function ItemDetailsCard({ item }: { item: Item }) {
   const [renderItemDialog, setRenderItemDialog] = useState(false);
   const [renderDeleteDialog, setRenderDeleteDialog] = useState(false);
-  const { mutate } = useItems();
+  const { locationId } = useLocationId();
+  const { mutate } = useItemsAtLocation(locationId);
 
   const {
     title,
@@ -34,9 +36,12 @@ export default function ItemDetailsCard({ item }: { item: Item }) {
 
   const toggleItemActiveStatus = async () => {
     try {
-      await axios.patch(`/api/v1/items/${item.id}/status`, {
-        isPublic: !isActive,
-      });
+      await axios.patch(
+        `/api/v1/locations/${locationId}/items/${item.id}/status`,
+        {
+          isPublic: !isActive,
+        }
+      );
       mutate();
     } catch (error) {
       console.error(error);

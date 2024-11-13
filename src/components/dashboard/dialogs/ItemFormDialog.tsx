@@ -32,7 +32,7 @@ const ItemFormDialog = ({
           <DialogDescription>{description}</DialogDescription>
         </DialogHeader>
         <ItemInfoForm
-          initialData={item}
+          item={item}
           onSuccess={() => setRenderItemDialog(false)}
         />
       </DialogContent>
