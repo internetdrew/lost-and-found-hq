@@ -12,6 +12,10 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.get('/api/health', (_, res) => {
+  res.status(200).json({ status: 'ok' });
+});
+
 app.use('/auth', authRouter);
 app.use('/api/v1', requireAuth, v1Router);
 app.use('/api', publicRouter);
