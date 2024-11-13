@@ -1,8 +1,5 @@
 import { Request, Response } from 'express';
-import {
-  createSupabaseAdminClient,
-  createSupabaseServerClient,
-} from '../../lib/supabase';
+import { createSupabaseServerClient } from '../../lib/supabase';
 import { AuthenticatedRequest } from '../middleware/auth';
 
 export const getItems = async (req: Request, res: Response) => {
@@ -180,13 +177,13 @@ export const deleteItem = async (req: Request, res: Response) => {
   }
 };
 
-export const clearTestUserItems = async () => {
+export const clearTestUserItems = async (req: Request, res: Response) => {
   try {
     if (!process.env.TEST_DRIVE_USER_EMAIL) {
       throw new Error('TEST_DRIVE_USER_EMAIL not configured');
     }
 
-    const supabase = createSupabaseAdminClient();
+    const supabase = createSupabaseServerClient(req, res);
     const { data: userData, error: userError } = await supabase
       .from('users')
       .select('id')
