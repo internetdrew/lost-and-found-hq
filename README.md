@@ -26,8 +26,7 @@ After losing my wallet, I thought it might be great if the process was a little 
 - Visitors can sign up to get launch updates.
 - Make test account available for visitors to play with.
   - Visitors can get the full dashboard experience (test drive).
-  - Test drive gives users 3 mins of usage before being logged out and items added are deleted.
-  - Add a cron job to purge the results every X time. Maybe clear the items every 24 hours.
+  - Add a cron job to purge the test user items at midnight.
 - Allow users to create a public portal for customers to view items.
 - Limit input lengths on dashboard.
 - Add input validation to API layer.
