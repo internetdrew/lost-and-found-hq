@@ -1,5 +1,8 @@
 import { Request, Response } from 'express';
-import { createSupabaseServerClient } from '../../lib/supabase';
+import {
+  createSupabaseAdminClient,
+  createSupabaseServerClient,
+} from '../../lib/supabase';
 import { AuthenticatedRequest } from '../middleware/auth';
 
 export const getItems = async (req: Request, res: Response) => {
@@ -178,15 +181,21 @@ export const deleteItem = async (req: Request, res: Response) => {
 };
 
 export const clearTestUserItems = async (req: Request, res: Response) => {
+  if (!process.env.TEST_DRIVE_USER_EMAIL) {
+    throw new Error('TEST_DRIVE_USER_EMAIL not configured');
+  }
   try {
-    if (!process.env.TEST_DRIVE_USER_EMAIL) {
-      throw new Error('TEST_DRIVE_USER_EMAIL not configured');
+    if (req.headers.authorization !== `Bearer ${process.env.CRON_SECRET}`) {
+      console.log('Unauthorized for auth header:', req.headers.authorization);
+      res.status(401).end('Unauthorized');
+      return;
     }
 
-    const supabase = createSupabaseServerClient(req, res);
+    const supabase = createSupabaseAdminClient();
+
     const { data: userData, error: userError } = await supabase
       .from('users')
-      .select('id')
+      .select('*')
       .eq('email', process.env.TEST_DRIVE_USER_EMAIL)
       .single();
 
@@ -210,8 +219,9 @@ export const clearTestUserItems = async (req: Request, res: Response) => {
       return;
     }
 
-    console.log('Successfully cleared test user items');
+    res.status(200).json({ message: 'Success' });
   } catch (error) {
     console.error('Error in clearTestUserItems:', error);
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
