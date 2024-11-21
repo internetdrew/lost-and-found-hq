@@ -5,7 +5,7 @@ import { useLocationId } from '@/hooks/useLocationId';
 
 const ItemList = () => {
   const { locationId } = useLocationId();
-  const { data, isLoading } = useItemsAtLocation(locationId);
+  const { items, isLoading } = useItemsAtLocation(locationId);
 
   if (isLoading)
     return (
@@ -24,17 +24,17 @@ const ItemList = () => {
   return (
     <section className='my-10'>
       <h2 className='text-lg font-semibold'>
-        {data?.length === 0 ? (
+        {items?.length === 0 ? (
           'No lost items reported'
         ) : (
           <p>
-            Managing <span className='text-neutral-500'>{data?.length}</span>{' '}
-            lost {data?.length === 1 ? 'item' : 'items'}:
+            Managing <span className='text-neutral-500'>{items?.length}</span>{' '}
+            lost {items?.length === 1 ? 'item' : 'items'}:
           </p>
         )}
       </h2>
       <ul className='mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3'>
-        {data?.map(item => (
+        {items?.map(item => (
           <ItemDetailsCard key={item.id} item={item} />
         ))}
       </ul>
