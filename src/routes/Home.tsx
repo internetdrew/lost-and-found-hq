@@ -2,13 +2,11 @@ import { useState } from 'react';
 import LoginForm from '@/components/forms/LoginForm';
 import SignUpForm from '@/components/forms/SignUpForm';
 import { InterestForm } from '@/components/forms/InterestForm';
-import { useSearchParams } from 'react-router-dom';
 import TestDriveButton from '@/components/TestDriveButton';
 
 const Home = () => {
-  const [searchParams] = useSearchParams();
-  const isDemo = searchParams.get('mode') === 'demo';
-
+  const isProduction = process.env.NODE_ENV === 'production';
+  const isTest = process.env.NODE_ENV === 'test';
   const [renderType, setRenderType] = useState<
     'signup' | 'login' | 'greetings'
   >('login');
@@ -33,10 +31,9 @@ const Home = () => {
             </p>
             <TestDriveButton />
           </div>
-          <InterestForm />
+          {!isTest && <InterestForm />}
         </div>
-        {process.env.NODE_ENV !== 'production' &&
-          !isDemo &&
+        {(isProduction || isTest) &&
           (renderType === 'signup' ? (
             <SignUpForm setRenderType={setRenderType} />
           ) : (

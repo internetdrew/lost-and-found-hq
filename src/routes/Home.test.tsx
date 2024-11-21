@@ -76,7 +76,7 @@ const renderHome = () => {
           <Route
             index
             element={
-              <RouteGuard requiresAuth={false}>
+              <RouteGuard requiresAuth={false} rejectAuthUser>
                 <Home />
               </RouteGuard>
             }
