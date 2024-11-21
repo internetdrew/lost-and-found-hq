@@ -18,7 +18,7 @@ const fetcher = async (url: string) => {
 };
 
 export const useLocations = () => {
-  const { data, isLoading, mutate } = useSWR('api/v1/locations', fetcher);
+  const { data, isLoading, mutate } = useSWR('/api/v1/locations', fetcher);
 
   return {
     data,
