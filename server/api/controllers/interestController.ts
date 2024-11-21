@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { createSupabaseServerClient } from '../../lib/supabase';
+import { createSupabaseAdminClient } from '../../lib/supabase';
 
 export const addInterestedEmail = async (req: Request, res: Response) => {
   const { email } = req.body;
@@ -8,7 +8,7 @@ export const addInterestedEmail = async (req: Request, res: Response) => {
     res.status(400).json({ error: 'Email is required' });
     return;
   }
-  const supabase = createSupabaseServerClient(req, res);
+  const supabase = createSupabaseAdminClient();
 
   const { error } = await supabase.from('interested_parties').insert({
     email_address: email,
