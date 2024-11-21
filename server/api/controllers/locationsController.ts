@@ -1,11 +1,12 @@
 import { Request, Response } from 'express';
-import { createSupabaseServerClient } from '../../lib/supabase';
+import { createSupabaseAdminClient } from '../../lib/supabase';
 import { AuthenticatedRequest } from '../middleware/auth';
 
 export const addLocation = async (req: Request, res: Response) => {
-  const supabase = createSupabaseServerClient(req, res);
+  const userId = (req as AuthenticatedRequest).user.id;
+  const supabase = createSupabaseAdminClient();
   const { data, error } = await supabase.from('locations').insert({
-    user_id: (req as AuthenticatedRequest).user.id,
+    user_id: userId,
     name: req.body.name,
     address: req.body.streetAddress,
     city: req.body.city,
@@ -22,7 +23,7 @@ export const addLocation = async (req: Request, res: Response) => {
 
 export const getLocations = async (req: Request, res: Response) => {
   try {
-    const supabase = createSupabaseServerClient(req, res);
+    const supabase = createSupabaseAdminClient();
     const userId = (req as AuthenticatedRequest).user.id;
 
     const { data, error } = await supabase
@@ -31,6 +32,7 @@ export const getLocations = async (req: Request, res: Response) => {
       .eq('user_id', userId);
 
     if (error) {
+      console.error('Supabase error fetching locations:', error);
       res.status(500).json({ error: error.message });
       return;
     }
@@ -50,11 +52,13 @@ export const getLocation = async (req: Request, res: Response) => {
   }
 
   try {
-    const supabase = createSupabaseServerClient(req, res);
+    const userId = (req as AuthenticatedRequest).user.id;
+    const supabase = createSupabaseAdminClient();
     const { data, error } = await supabase
       .from('locations')
       .select('*')
       .eq('id', locationId)
+      .eq('user_id', userId)
       .single();
 
     if (error) {
@@ -69,8 +73,16 @@ export const getLocation = async (req: Request, res: Response) => {
 };
 
 export const updateLocation = async (req: Request, res: Response) => {
+  const locationId = req.params.id;
+
+  if (!locationId) {
+    res.status(400).json({ error: 'Location ID is required' });
+    return;
+  }
+
   try {
-    const supabase = createSupabaseServerClient(req, res);
+    const userId = (req as AuthenticatedRequest).user.id;
+    const supabase = createSupabaseAdminClient();
     const { data, error } = await supabase
       .from('locations')
       .update({
@@ -80,9 +92,13 @@ export const updateLocation = async (req: Request, res: Response) => {
         state: req.body.state,
         postal_code: req.body.zipCode,
       })
-      .eq('id', req.body.id);
+      .eq('id', locationId)
+      .eq('user_id', userId)
+      .select('address, city, state, postal_code, name')
+      .single();
 
     if (error) {
+      console.error('Error updating location:', error);
       res.status(500).json({ error: error.message });
       return;
     }
@@ -95,12 +111,24 @@ export const updateLocation = async (req: Request, res: Response) => {
 };
 
 export const deleteLocation = async (req: Request, res: Response) => {
+  const locationId = req.params.id;
+
+  if (!locationId) {
+    res.status(400).json({ error: 'Location ID is required' });
+    return;
+  }
+
   try {
-    const supabase = createSupabaseServerClient(req, res);
+    const userId = (req as AuthenticatedRequest).user.id;
+    const supabase = createSupabaseAdminClient();
     const { data, error } = await supabase
       .from('locations')
       .delete()
-      .eq('id', req.params.id);
+      .eq('id', locationId)
+      .eq('user_id', userId)
+      .select('id, name, address, city, state, postal_code')
+      .single();
+
     if (error) {
       res.status(500).json({ error: error.message });
       return;
