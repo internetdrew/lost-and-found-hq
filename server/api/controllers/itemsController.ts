@@ -1,14 +1,17 @@
 import { Request, Response } from 'express';
-import {
-  createSupabaseAdminClient,
-  createSupabaseServerClient,
-} from '../../lib/supabase';
+import { createSupabaseAdminClient } from '../../lib/supabase';
 import { AuthenticatedRequest } from '../middleware/auth';
 
 export const getItems = async (req: Request, res: Response) => {
+  const locationId = req.params.locationId;
+
+  if (!locationId) {
+    res.status(400).json({ error: 'Location ID is required' });
+    return;
+  }
+
   try {
-    const supabase = createSupabaseServerClient(req, res);
-    const locationId = req.params.locationId;
+    const supabase = createSupabaseAdminClient();
 
     const { data, error } = await supabase
       .from('items')
@@ -28,23 +31,25 @@ export const getItems = async (req: Request, res: Response) => {
 };
 
 export const getItem = async (req: Request, res: Response) => {
-  const itemId = req.params.id;
+  const itemId = req.params.itemId;
+  const locationId = req.params.locationId;
 
-  if (!itemId) {
-    res.status(400).json({ error: 'Item ID is required' });
+  if (!itemId || !locationId) {
+    res.status(400).json({ error: 'Item ID and location ID are required' });
     return;
   }
 
   try {
-    const supabase = createSupabaseServerClient(req, res);
+    const supabase = createSupabaseAdminClient();
     const { data, error } = await supabase
       .from('items')
       .select('*')
+      .eq('location_id', locationId)
       .eq('id', itemId)
       .single();
 
     if (error) {
-      console.error('Error fetching item:', error);
+      console.error('Supabase error fetching item:', error);
       res.status(500).json({ error: error.message });
       return;
     }
@@ -56,15 +61,22 @@ export const getItem = async (req: Request, res: Response) => {
 };
 
 export const addItem = async (req: Request, res: Response) => {
+  const locationId = req.params.locationId;
+
+  if (!locationId) {
+    res.status(400).json({ error: 'Location ID is required' });
+    return;
+  }
+
   try {
-    const supabase = createSupabaseServerClient(req, res);
     const userId = (req as AuthenticatedRequest).user.id;
+    const supabase = createSupabaseAdminClient();
 
     const { data, error } = await supabase
       .from('items')
       .insert({
         title: req.body.title,
-        location_id: req.body.locationId,
+        location_id: locationId,
         added_by_user_id: userId,
         found_at: req.body.foundAt,
         category: req.body.category,
@@ -77,7 +89,7 @@ export const addItem = async (req: Request, res: Response) => {
       .single();
 
     if (error) {
-      console.error('Error adding item:', error);
+      console.error('Supabase error adding item:', error);
       res.status(500).json({ error: error.message });
       return;
     }
@@ -89,31 +101,34 @@ export const addItem = async (req: Request, res: Response) => {
 };
 
 export const updateItem = async (req: Request, res: Response) => {
-  const itemId = req.params.id;
+  const locationId = req.params.locationId;
+  const itemId = req.params.itemId;
 
-  if (!itemId) {
-    res.status(400).json({ error: 'Item ID is required' });
+  if (!locationId || !itemId) {
+    res.status(400).json({ error: 'Location ID and item ID are required' });
     return;
   }
 
   try {
-    const supabase = createSupabaseServerClient(req, res);
+    const userId = (req as AuthenticatedRequest).user.id;
+    const supabase = createSupabaseAdminClient();
     const { data, error } = await supabase
       .from('items')
       .update({
         title: req.body.title,
-        location_id: req.body.locationId,
+        location_id: locationId,
         brief_description: req.body.briefDescription,
         found_at: req.body.foundAt,
         category: req.body.category,
         date_found: req.body.dateFound,
+        added_by_user_id: userId,
       })
       .eq('id', itemId)
       .select()
       .single();
 
     if (error) {
-      console.error('Error updating item:', error);
+      console.error('Supabase error updating item:', error);
       res.status(500).json({ error: error.message });
       return;
     }
@@ -124,8 +139,8 @@ export const updateItem = async (req: Request, res: Response) => {
   }
 };
 
-export const toggleItemActiveStatus = async (req: Request, res: Response) => {
-  const itemId = req.params.id;
+export const deleteItem = async (req: Request, res: Response) => {
+  const itemId = req.params.itemId;
 
   if (!itemId) {
     res.status(400).json({ error: 'Item ID is required' });
@@ -133,43 +148,18 @@ export const toggleItemActiveStatus = async (req: Request, res: Response) => {
   }
 
   try {
-    const supabase = createSupabaseServerClient(req, res);
+    const userId = (req as AuthenticatedRequest).user.id;
+    const supabase = createSupabaseAdminClient();
     const { data, error } = await supabase
       .from('items')
-      .update({ is_public: req.body.isPublic })
+      .delete()
       .eq('id', itemId)
+      .eq('added_by_user_id', userId)
       .select()
       .single();
 
     if (error) {
-      console.error('Error toggling item active status:', error);
-      res.status(500).json({ error: error.message });
-      return;
-    }
-    res.json(data);
-  } catch (error) {
-    console.error('Error toggling item active status:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-};
-
-export const deleteItem = async (req: Request, res: Response) => {
-  const itemId = req.params.id;
-
-  if (!itemId) {
-    res.status(400).json({ error: 'Item ID is required' });
-    return;
-  }
-
-  try {
-    const supabase = createSupabaseServerClient(req, res);
-    const { data, error } = await supabase
-      .from('items')
-      .delete()
-      .eq('id', itemId);
-
-    if (error) {
-      console.error('Error deleting item:', error);
+      console.error('Supabase error deleting item:', error);
       res.status(500).json({ error: error.message });
       return;
     }
@@ -180,13 +170,44 @@ export const deleteItem = async (req: Request, res: Response) => {
   }
 };
 
+export const toggleItemActiveStatus = async (req: Request, res: Response) => {
+  const locationId = req.params.locationId;
+  const itemId = req.params.itemId;
+
+  if (!locationId || !itemId) {
+    res.status(400).json({ error: 'Location ID and item ID are required' });
+    return;
+  }
+
+  try {
+    const supabase = createSupabaseAdminClient();
+    const { data, error } = await supabase
+      .from('items')
+      .update({ is_public: req.body.isPublic })
+      .eq('id', itemId)
+      .select()
+      .single();
+
+    if (error) {
+      console.error('Supabase error toggling item active status:', error);
+      res.status(500).json({ error: error.message });
+      return;
+    }
+    res.json(data);
+  } catch (error) {
+    console.error('Error toggling item active status:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
 export const clearTestUserItems = async (req: Request, res: Response) => {
   if (!process.env.TEST_DRIVE_USER_EMAIL) {
     throw new Error('TEST_DRIVE_USER_EMAIL not configured');
   }
+
   try {
     if (req.headers.authorization !== `Bearer ${process.env.CRON_SECRET}`) {
-      console.log('Unauthorized for auth header:', req.headers.authorization);
+      console.error('Unauthorized for auth header:', req.headers.authorization);
       res.status(401).end('Unauthorized');
       return;
     }
