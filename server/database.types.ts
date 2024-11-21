@@ -37,7 +37,7 @@ export type Database = {
           found_at: string
           id: number
           is_public: boolean
-          location_id: number
+          location_id: string
           status: Database["public"]["Enums"]["ITEM_STATUSES"]
           title: string
         }
@@ -50,7 +50,7 @@ export type Database = {
           found_at: string
           id?: number
           is_public?: boolean
-          location_id: number
+          location_id: string
           status?: Database["public"]["Enums"]["ITEM_STATUSES"]
           title: string
         }
@@ -63,7 +63,7 @@ export type Database = {
           found_at?: string
           id?: number
           is_public?: boolean
-          location_id?: number
+          location_id?: string
           status?: Database["public"]["Enums"]["ITEM_STATUSES"]
           title?: string
         }
@@ -89,7 +89,7 @@ export type Database = {
           address: string
           city: string
           created_at: string
-          id: number
+          id: string
           name: string
           postal_code: string
           state: string
@@ -99,7 +99,7 @@ export type Database = {
           address: string
           city: string
           created_at?: string
-          id?: number
+          id?: string
           name: string
           postal_code: string
           state: string
@@ -109,7 +109,7 @@ export type Database = {
           address?: string
           city?: string
           created_at?: string
-          id?: number
+          id?: string
           name?: string
           postal_code?: string
           state?: string
