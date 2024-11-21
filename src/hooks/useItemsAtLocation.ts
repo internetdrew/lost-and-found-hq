@@ -24,7 +24,7 @@ export const useItemsAtLocation = (locationId: string) => {
   );
 
   return {
-    data,
+    items: data,
     isLoading,
     mutate,
   };
