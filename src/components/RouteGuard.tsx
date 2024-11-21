@@ -6,22 +6,30 @@ import Spinner from './Spinner';
 interface RouteGuardProps {
   children: React.ReactNode;
   requiresAuth: boolean;
-  redirectTo?: string;
+  rejectAuthUser?: boolean;
 }
 
 const RouteGuard = ({
   children,
   requiresAuth,
-  redirectTo = requiresAuth ? '/' : '/dashboard',
+  rejectAuthUser,
 }: RouteGuardProps) => {
   const navigate = useNavigate();
   const { data: user, isLoading } = useUser();
 
   useEffect(() => {
-    if (!isLoading && (requiresAuth ? !user : user)) {
-      navigate(redirectTo, { replace: true });
+    if (isLoading) return;
+
+    if (requiresAuth && !user) {
+      navigate('/', { replace: true });
+      return;
     }
-  }, [user, isLoading, navigate, requiresAuth, redirectTo]);
+
+    if (!requiresAuth && user && rejectAuthUser) {
+      navigate('/dashboard', { replace: true });
+      return;
+    }
+  }, [user, isLoading, navigate, requiresAuth, rejectAuthUser]);
 
   if (isLoading) {
     return <Spinner />;
