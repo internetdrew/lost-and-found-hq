@@ -19,7 +19,7 @@ const fetcher = async (url: string) => {
 
 export const useItemsAtLocation = (locationId: string) => {
   const { data, isLoading, mutate } = useSWR(
-    `api/v1/locations/${locationId}/items`,
+    `/api/v1/locations/${locationId}/items`,
     fetcher
   );
 
