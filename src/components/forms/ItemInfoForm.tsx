@@ -92,6 +92,8 @@ const ItemInfoForm = ({ onSuccess: closeDialog, item }: ItemInfoFormProps) => {
     }
   };
 
+  const { isDirty, isValid } = form.formState;
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -199,7 +201,10 @@ const ItemInfoForm = ({ onSuccess: closeDialog, item }: ItemInfoFormProps) => {
             )}
           />
           <div className='flex justify-end'>
-            <Button type='submit' disabled={isSubmitting}>
+            <Button
+              type='submit'
+              disabled={isSubmitting || !isDirty || !isValid}
+            >
               {isSubmitting
                 ? item
                   ? 'Updating...'
