@@ -5,6 +5,7 @@ import {
   addLocation,
   updateLocation,
   deleteLocation,
+  validateLocationId,
 } from '../controllers/locationsController';
 import {
   addItem,
@@ -23,6 +24,9 @@ v1Router.get('/locations/:id', getLocation);
 v1Router.post('/locations', addLocation);
 v1Router.put('/locations/:id', updateLocation);
 v1Router.delete('/locations/:id', deleteLocation);
+
+/* Location Validation */
+v1Router.get('/locations/:id/validate', validateLocationId);
 
 /* Location's Items */
 v1Router.get('/locations/:locationId/items', getItems);
