@@ -159,3 +159,23 @@ export const validateLocationId = async (req: Request, res: Response) => {
   }
   res.json(!!data);
 };
+
+export const validateSubscription = async (req: Request, res: Response) => {
+  const locationId = req.params.id;
+  if (!locationId) {
+    res.status(400).json({ error: 'Location ID is required' });
+    return;
+  }
+  const supabase = createSupabaseAdminClient();
+  const { data, error } = await supabase
+    .from('locations')
+    .select('has_active_subscription')
+    .eq('id', locationId)
+    .single();
+
+  if (error) {
+    res.status(500).json({ error: error.message });
+    return;
+  }
+  res.json(!!data?.has_active_subscription);
+};
