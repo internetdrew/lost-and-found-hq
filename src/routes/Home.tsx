@@ -33,7 +33,7 @@ const Home = () => {
           </div>
           {!isTest && <InterestForm />}
         </div>
-        {(isProduction || isTest) &&
+        {(!isProduction || isTest) &&
           (renderType === 'signup' ? (
             <SignUpForm setRenderType={setRenderType} />
           ) : (
