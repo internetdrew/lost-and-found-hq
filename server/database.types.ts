@@ -89,6 +89,7 @@ export type Database = {
           address: string
           city: string
           created_at: string
+          has_active_subscription: boolean
           id: string
           name: string
           postal_code: string
@@ -99,6 +100,7 @@ export type Database = {
           address: string
           city: string
           created_at?: string
+          has_active_subscription?: boolean
           id?: string
           name: string
           postal_code: string
@@ -109,6 +111,7 @@ export type Database = {
           address?: string
           city?: string
           created_at?: string
+          has_active_subscription?: boolean
           id?: string
           name?: string
           postal_code?: string
