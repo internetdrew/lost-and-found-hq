@@ -1,3 +1,5 @@
+import { Tables } from '@dbTypes';
+
 export const US_STATES = [
   { value: 'AL', label: 'Alabama' },
   { value: 'AK', label: 'Alaska' },
@@ -53,3 +55,25 @@ export const US_STATES = [
 
 // Optional: Type for a US State
 export type USState = (typeof US_STATES)[number];
+
+type Item = Tables<'items'>;
+
+type ItemCategory = Item['category'];
+
+const ITEM_CATEGORY_LABELS: Record<ItemCategory, string> = {
+  wallets: 'Wallets & Purses',
+  electronics: 'Electronics & Devices',
+  clothing: 'Clothing',
+  jewelry: 'Jewelry & Watches',
+  keys: 'Keys & Cards',
+  documents: 'ID & Documents',
+  bags: 'Bags',
+  other: 'Other Items',
+};
+
+export const itemCategoryOptions = Object.entries(ITEM_CATEGORY_LABELS).map(
+  ([value, label]) => ({
+    value: value as ItemCategory,
+    label,
+  })
+);
