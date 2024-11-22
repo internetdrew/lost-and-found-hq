@@ -4,8 +4,10 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import App from './App.tsx';
 import './index.css';
 import Home from './routes/Home.tsx';
-import RouteGuard from './components/RouteGuard.tsx';
+import AuthGuard from './components/AuthGuard.tsx';
 import Dashboard from './routes/Dashboard.tsx';
+import CustomerPage from './routes/CustomerPage.tsx';
+import SubscriptionGuard from './components/SubscriptionGuard.tsx';
 
 const router = createBrowserRouter([
   {
@@ -15,17 +17,33 @@ const router = createBrowserRouter([
       {
         index: true,
         element: (
-          <RouteGuard requiresAuth={false}>
+          <AuthGuard requiresAuth={false} rejectAuthUser>
             <Home />
-          </RouteGuard>
+          </AuthGuard>
         ),
       },
       {
         path: '/dashboard',
         element: (
-          <RouteGuard requiresAuth>
+          <AuthGuard requiresAuth>
             <Dashboard />
-          </RouteGuard>
+          </AuthGuard>
+        ),
+      },
+      {
+        path: '/location/:locationId',
+        element: (
+          <SubscriptionGuard>
+            <CustomerPage />
+          </SubscriptionGuard>
+        ),
+      },
+      {
+        path: '/preview/:locationId',
+        element: (
+          <AuthGuard requiresAuth>
+            <CustomerPage preview />
+          </AuthGuard>
         ),
       },
     ],
