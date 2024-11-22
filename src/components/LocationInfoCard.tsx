@@ -22,6 +22,13 @@ export default function LocationInfoCard({
 }) {
   const [renderLocationDialog, setRenderLocationDialog] = useState(false);
 
+  const customerPageUrl = location?.has_active_subscription
+    ? `/location/${location?.id}`
+    : `/preview/${location?.id}`;
+  const customerPageLabel = location?.has_active_subscription
+    ? 'Visit Customer Page'
+    : 'Preview Customer Page';
+
   return (
     <div className='flex items-start gap-4 mt-4 ring-1 ring-gray-200 p-4 rounded-md max-w-sm'>
       {location ? (
@@ -40,12 +47,12 @@ export default function LocationInfoCard({
                 </DropdownMenuItem>
                 <DropdownMenuItem>
                   <Link
-                    to={`/preview/${location.id}`}
+                    to={customerPageUrl}
                     target='_blank'
                     rel='noopener noreferrer'
                     className='w-full'
                   >
-                    View Preview
+                    {customerPageLabel}
                   </Link>
                 </DropdownMenuItem>
               </DropdownMenuContent>
