@@ -1,9 +1,6 @@
 import { Request, Response } from 'express';
 import { createSupabaseAdminClient } from '../../lib/supabase';
 import { AuthenticatedRequest } from '../middleware/auth';
-import { Tables } from '../../database.types';
-
-type Item = Tables<'items'>;
 
 export const getItems = async (req: Request, res: Response) => {
   const locationId = req.params.locationId;
@@ -254,15 +251,13 @@ export const resetTestUserItems = async (req: Request, res: Response) => {
       return;
     }
 
-    const itemsToAdd: Item[] = [
+    const { error: newItemsError } = await supabase.from('items').insert([
       {
-        id: Math.floor(Math.random() * 1000000),
         title: 'Utility Belt',
         added_by_user_id: userData.id,
         brief_description:
           'A utility belt with a few tools. It has a winged creature on the buckle.',
-        category: '',
-        created_at: new Date().toISOString(),
+        category: 'clothing',
         date_found: new Date().toISOString(),
         found_at: 'Under the Batmobile',
         is_public: true,
@@ -270,24 +265,18 @@ export const resetTestUserItems = async (req: Request, res: Response) => {
         status: 'pending',
       },
       {
-        id: Math.floor(Math.random() * 1000000),
-        title: 'Utility Belt',
+        title: 'Playing Card',
         added_by_user_id: userData.id,
         brief_description:
-          'A utility belt with a few tools. It has a winged creature on the buckle.',
-        category: '',
-        created_at: new Date().toISOString(),
+          'A Joker playing card. It has a red and black pattern. And a note on the back.',
+        category: 'other',
         date_found: new Date().toISOString(),
-        found_at: 'Under the Batmobile',
+        found_at: 'In the Bat...levator',
         is_public: true,
         location_id: locationData.id,
         status: 'pending',
       },
-    ];
-
-    const { error: newItemsError } = await supabase
-      .from('items')
-      .insert(itemsToAdd);
+    ]);
 
     if (newItemsError) {
       console.error('Error adding cron items:', newItemsError);

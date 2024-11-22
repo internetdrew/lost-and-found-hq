@@ -31,7 +31,7 @@ export type Database = {
         Row: {
           added_by_user_id: string
           brief_description: string
-          category: string
+          category: Database["public"]["Enums"]["ITEM_CATEGORIES"]
           created_at: string
           date_found: string
           found_at: string
@@ -44,7 +44,7 @@ export type Database = {
         Insert: {
           added_by_user_id: string
           brief_description: string
-          category: string
+          category: Database["public"]["Enums"]["ITEM_CATEGORIES"]
           created_at?: string
           date_found: string
           found_at: string
@@ -57,7 +57,7 @@ export type Database = {
         Update: {
           added_by_user_id?: string
           brief_description?: string
-          category?: string
+          category?: Database["public"]["Enums"]["ITEM_CATEGORIES"]
           created_at?: string
           date_found?: string
           found_at?: string
@@ -151,6 +151,15 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
+      ITEM_CATEGORIES:
+        | "wallets"
+        | "electronics"
+        | "clothing"
+        | "jewelry"
+        | "keys"
+        | "documents"
+        | "bags"
+        | "other"
       ITEM_STATUSES:
         | "pending"
         | "active"
