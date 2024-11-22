@@ -12,7 +12,9 @@ interface CustomerPageProps {
 
 const CustomerPage = ({ preview }: CustomerPageProps) => {
   const { locationId } = useParams();
-  const { locationInfo } = useLocationInfo(locationId ?? '');
+  const { locationInfo, isLoading: loadingLocationInfo } = useLocationInfo(
+    locationId ?? ''
+  );
   const { items } = useItemsAtLocation(locationId ?? '');
   const { isValid, isLoading: validatingLocation } = useLocationValidation(
     locationId ?? ''
@@ -48,10 +50,14 @@ const CustomerPage = ({ preview }: CustomerPageProps) => {
       <h1 className='text-2xl font-bold text-center'>
         Lost and Found at {locationInfo?.name}
       </h1>
-      <p className='text-center text-neutral-500'>
-        {locationInfo?.address}, {locationInfo?.city}, {locationInfo?.state},{' '}
-        {locationInfo?.postal_code}
-      </p>
+      {loadingLocationInfo ? (
+        <Skeleton className='max-w-sm mx-auto h-6' />
+      ) : (
+        <p className='text-center text-neutral-500'>
+          {locationInfo?.address}, {locationInfo?.city}, {locationInfo?.state},{' '}
+          {locationInfo?.postal_code}
+        </p>
+      )}
 
       <section className='mt-10'>
         <ul className='mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3'>
