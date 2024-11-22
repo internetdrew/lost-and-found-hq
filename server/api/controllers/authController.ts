@@ -103,7 +103,6 @@ export const getUser = async (req: Request, res: Response) => {
 };
 
 export const startTestDrive = async (req: Request, res: Response) => {
-  console.log('start test drive');
   const supabase = createSupabaseServerClient(req, res);
 
   if (

@@ -11,7 +11,7 @@ import { TestUser } from '@/test/mocks/handlers';
 import toast from 'react-hot-toast';
 import { http } from 'msw';
 import { HttpResponse } from 'msw';
-import RouteGuard from '@/components/RouteGuard';
+import AuthGuard from '@/components/AuthGuard';
 
 interface SWRMockState {
   data: { id: string; email: string } | null;
@@ -76,9 +76,9 @@ const renderHome = () => {
           <Route
             index
             element={
-              <RouteGuard requiresAuth={false}>
+              <AuthGuard requiresAuth={false} rejectAuthUser>
                 <Home />
-              </RouteGuard>
+              </AuthGuard>
             }
           />
         </Route>

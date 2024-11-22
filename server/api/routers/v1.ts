@@ -5,6 +5,8 @@ import {
   addLocation,
   updateLocation,
   deleteLocation,
+  validateLocationId,
+  validateSubscription,
 } from '../controllers/locationsController';
 import {
   addItem,
@@ -24,15 +26,18 @@ v1Router.post('/locations', addLocation);
 v1Router.put('/locations/:id', updateLocation);
 v1Router.delete('/locations/:id', deleteLocation);
 
+/* Location Validation */
+v1Router.get('/locations/:id/exists', validateLocationId);
+v1Router.get('/locations/:id/subscription', validateSubscription);
 /* Location's Items */
 v1Router.get('/locations/:locationId/items', getItems);
-v1Router.get('/locations/:locationId/items/:id', getItem);
+v1Router.get('/locations/:locationId/items/:itemId', getItem);
 v1Router.post('/locations/:locationId/items', addItem);
-v1Router.put('/locations/:locationId/items/:id', updateItem);
+v1Router.put('/locations/:locationId/items/:itemId', updateItem);
+v1Router.delete('/locations/:locationId/items/:itemId', deleteItem);
 v1Router.patch(
-  '/locations/:locationId/items/:id/status',
+  '/locations/:locationId/items/:itemId/status',
   toggleItemActiveStatus
 );
-v1Router.delete('/locations/:locationId/items/:id', deleteItem);
 
 export default v1Router;

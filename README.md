@@ -28,17 +28,20 @@ After losing my wallet, I thought it might be great if the process was a little 
 - Allow users to create a public portal for customers to view items.
 - Limit input lengths on dashboard.
 - Add input validation to API layer.
-- Customers claim items with a form describing their the item in greater detail.
-- Notifications of new claims get sent via email and show in app.
-- Staff review claims and can approve or request more information.
-- When a claim is approved, the system generates a unique code for the customer to communicate at pickup.
-- Staff can easily mark items as returned in the system.
-- Companies can view analytics on lost item trends and return rates.
-- API access for companies to integrate the system with their existing customer service platforms.
+- Integrate Stripe checkout for subscription
+- Allow users to add a custom page slug once they're subscribed.
+- Allow users to include a company logo for the public page view.
+- Allow claims to be opened on the items publicly viewable.
+- Add notifications to dashboard when new claims are opened.
+- **Contemplation**: Should V1 allow users to takeover via email or should I build a full chat interface?
+- When a claim is approved, the system generates a unique code for the customer to use at pickup.
+- Add option for completing claim and marking an item as returned.
 
 ## Extended Roadmap
 
 We only go here if the product takes off.
 
+- Companies can view analytics on lost item trends and return rates.
+- API access for companies to integrate the system with their existing customer service platforms.
 - Multi-location support
 - Inter-company item transfer for multi-tenant buildings or shopping centers

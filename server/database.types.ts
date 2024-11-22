@@ -31,39 +31,39 @@ export type Database = {
         Row: {
           added_by_user_id: string
           brief_description: string
-          category: string
+          category: Database["public"]["Enums"]["ITEM_CATEGORIES"]
           created_at: string
           date_found: string
           found_at: string
           id: number
           is_public: boolean
-          location_id: number
+          location_id: string
           status: Database["public"]["Enums"]["ITEM_STATUSES"]
           title: string
         }
         Insert: {
           added_by_user_id: string
           brief_description: string
-          category: string
+          category: Database["public"]["Enums"]["ITEM_CATEGORIES"]
           created_at?: string
           date_found: string
           found_at: string
           id?: number
           is_public?: boolean
-          location_id: number
+          location_id: string
           status?: Database["public"]["Enums"]["ITEM_STATUSES"]
           title: string
         }
         Update: {
           added_by_user_id?: string
           brief_description?: string
-          category?: string
+          category?: Database["public"]["Enums"]["ITEM_CATEGORIES"]
           created_at?: string
           date_found?: string
           found_at?: string
           id?: number
           is_public?: boolean
-          location_id?: number
+          location_id?: string
           status?: Database["public"]["Enums"]["ITEM_STATUSES"]
           title?: string
         }
@@ -89,7 +89,8 @@ export type Database = {
           address: string
           city: string
           created_at: string
-          id: number
+          has_active_subscription: boolean
+          id: string
           name: string
           postal_code: string
           state: string
@@ -99,7 +100,8 @@ export type Database = {
           address: string
           city: string
           created_at?: string
-          id?: number
+          has_active_subscription?: boolean
+          id?: string
           name: string
           postal_code: string
           state: string
@@ -109,7 +111,8 @@ export type Database = {
           address?: string
           city?: string
           created_at?: string
-          id?: number
+          has_active_subscription?: boolean
+          id?: string
           name?: string
           postal_code?: string
           state?: string
@@ -151,6 +154,15 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
+      ITEM_CATEGORIES:
+        | "wallets"
+        | "electronics"
+        | "clothing"
+        | "jewelry"
+        | "keys"
+        | "documents"
+        | "bags"
+        | "other"
       ITEM_STATUSES:
         | "pending"
         | "active"

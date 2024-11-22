@@ -26,6 +26,7 @@ import { toast } from 'react-hot-toast';
 import { Tables } from '@dbTypes';
 import { useItemsAtLocation } from '@/hooks/useItemsAtLocation';
 import { useLocationId } from '@/hooks/useLocationId';
+import { itemCategoryOptions } from '@/constants';
 
 const MAX_DESCRIPTION_LENGTH = 120;
 
@@ -91,6 +92,8 @@ const ItemInfoForm = ({ onSuccess: closeDialog, item }: ItemInfoFormProps) => {
     }
   };
 
+  const { isDirty, isValid } = form.formState;
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -133,15 +136,11 @@ const ItemInfoForm = ({ onSuccess: closeDialog, item }: ItemInfoFormProps) => {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent className='font-mono'>
-                    <SelectItem value='electronics'>
-                      Electronics & Devices
-                    </SelectItem>
-                    <SelectItem value='wallets'>Wallets & Purses</SelectItem>
-                    <SelectItem value='clothing'>Clothing & Bags</SelectItem>
-                    <SelectItem value='jewelry'>Jewelry & Watches</SelectItem>
-                    <SelectItem value='documents'>ID & Documents</SelectItem>
-                    <SelectItem value='keys'>Keys & Cards</SelectItem>
-                    <SelectItem value='other'>Other Items</SelectItem>
+                    {itemCategoryOptions.map(({ value, label }) => (
+                      <SelectItem key={value} value={value}>
+                        {label}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
                 <FormMessage />
@@ -202,7 +201,10 @@ const ItemInfoForm = ({ onSuccess: closeDialog, item }: ItemInfoFormProps) => {
             )}
           />
           <div className='flex justify-end'>
-            <Button type='submit' disabled={isSubmitting}>
+            <Button
+              type='submit'
+              disabled={isSubmitting || !isDirty || !isValid}
+            >
               {isSubmitting
                 ? item
                   ? 'Updating...'

@@ -2,6 +2,16 @@ import { Button } from './ui/button';
 import LocationFormDialog from './dashboard/dialogs/LocationFormDialog';
 import { useState } from 'react';
 import { Tables } from '@dbTypes';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from './ui/dropdown-menu';
+import { DotsHorizontalIcon } from '@radix-ui/react-icons';
+import { Link } from 'react-router-dom';
 
 type Location = Tables<'locations'>;
 
@@ -12,27 +22,49 @@ export default function LocationInfoCard({
 }) {
   const [renderLocationDialog, setRenderLocationDialog] = useState(false);
 
+  const customerPageUrl = location?.has_active_subscription
+    ? `/location/${location?.id}`
+    : `/preview/${location?.id}`;
+  const customerPageLabel = location?.has_active_subscription
+    ? 'Visit Customer Page'
+    : 'Preview Customer Page';
+
   return (
     <div className='flex items-start gap-4 mt-4 ring-1 ring-gray-200 p-4 rounded-md max-w-sm'>
       {location ? (
-        <>
-          <div>
+        <div className='w-full'>
+          <header className='flex justify-between items-center'>
             <p className='text-sm font-semibold'>Location Info</p>
-            <p className='text-sm mt-4'>{location.name}</p>
-            <p className='text-sm'>
-              {location.address}
-              <br />
-              {location.city}, {location.state} {location.postal_code}
-            </p>
-          </div>
-          <Button
-            variant='outline'
-            className='text-xs w-max ml-auto'
-            onClick={() => setRenderLocationDialog(true)}
-          >
-            Edit
-          </Button>
-        </>
+            <DropdownMenu>
+              <DropdownMenuTrigger className='self-start p-2 hover:bg-neutral-100 rounded-md'>
+                <DotsHorizontalIcon />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align='end' className='font-mono'>
+                <DropdownMenuLabel>Location Actions</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={() => setRenderLocationDialog(true)}>
+                  Edit
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Link
+                    to={customerPageUrl}
+                    target='_blank'
+                    rel='noopener noreferrer'
+                    className='w-full'
+                  >
+                    {customerPageLabel}
+                  </Link>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </header>
+          <p className='text-sm mt-4'>{location.name}</p>
+          <p className='text-sm'>
+            {location.address}
+            <br />
+            {location.city}, {location.state} {location.postal_code}
+          </p>
+        </div>
       ) : (
         <>
           <p className='text-sm'>There's no business location info yet.</p>

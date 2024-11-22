@@ -1,7 +1,7 @@
 import { createContext, ReactNode } from 'react';
 
 type LocationIdContextType = {
-  locationId: number;
+  locationId: string;
 };
 
 export const LocationIdContext = createContext<
