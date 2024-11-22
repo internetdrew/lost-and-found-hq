@@ -14,14 +14,14 @@ const fetcher = async (url: string) => {
   }
 };
 
-export const useLocationValidation = (locationId: string) => {
+export const useSubscriptionValidation = (locationId: string) => {
   const { data, isLoading, mutate } = useSWR(
-    `/api/v1/locations/${locationId}/exists`,
+    `/api/v1/locations/${locationId}/subscription`,
     fetcher
   );
 
   return {
-    isValid: data,
+    subscriptionValid: data,
     isLoading,
     mutate,
   };
