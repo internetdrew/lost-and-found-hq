@@ -18,19 +18,16 @@ const CustomerPage = ({ preview }: CustomerPageProps) => {
     locationId ?? ''
   );
 
-  console.log('items from preview page', items);
-  console.log('locationInfo from preview page', locationInfo);
-
   if (validatingLocation) {
     return (
-      <div className='flex items-center justify-center p-4 sm:px-8'>
-        <Skeleton className='w-full h-10 max-w-sm' />
+      <div className='p-4 sm:px-8'>
+        <Skeleton className='w-full h-28 max-w-sm' />
       </div>
     );
   }
 
   if (!locationId || !isValid) {
-    return <Navigate to='/' replace />;
+    return <Navigate to='/404' replace />;
   }
 
   return (
