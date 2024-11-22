@@ -1,6 +1,9 @@
 import { Request, Response } from 'express';
 import { createSupabaseAdminClient } from '../../lib/supabase';
 import { AuthenticatedRequest } from '../middleware/auth';
+import { Tables } from '../../database.types';
+
+type Item = Tables<'items'>;
 
 export const getItems = async (req: Request, res: Response) => {
   const locationId = req.params.locationId;
@@ -200,7 +203,7 @@ export const toggleItemActiveStatus = async (req: Request, res: Response) => {
   }
 };
 
-export const clearTestUserItems = async (req: Request, res: Response) => {
+export const resetTestUserItems = async (req: Request, res: Response) => {
   if (!process.env.TEST_DRIVE_USER_EMAIL) {
     throw new Error('TEST_DRIVE_USER_EMAIL not configured');
   }
@@ -237,6 +240,57 @@ export const clearTestUserItems = async (req: Request, res: Response) => {
 
     if (deleteError) {
       console.error('Error clearing test items:', deleteError);
+      return;
+    }
+
+    const { data: locationData, error: locationError } = await supabase
+      .from('locations')
+      .select('id')
+      .eq('user_id', userData.id)
+      .single();
+
+    if (locationError || !locationData) {
+      console.error('Error finding location:', locationError);
+      return;
+    }
+
+    const itemsToAdd: Item[] = [
+      {
+        id: Math.floor(Math.random() * 1000000),
+        title: 'Utility Belt',
+        added_by_user_id: userData.id,
+        brief_description:
+          'A utility belt with a few tools. It has a winged creature on the buckle.',
+        category: '',
+        created_at: new Date().toISOString(),
+        date_found: new Date().toISOString(),
+        found_at: 'Under the Batmobile',
+        is_public: true,
+        location_id: locationData.id,
+        status: 'pending',
+      },
+      {
+        id: Math.floor(Math.random() * 1000000),
+        title: 'Utility Belt',
+        added_by_user_id: userData.id,
+        brief_description:
+          'A utility belt with a few tools. It has a winged creature on the buckle.',
+        category: '',
+        created_at: new Date().toISOString(),
+        date_found: new Date().toISOString(),
+        found_at: 'Under the Batmobile',
+        is_public: true,
+        location_id: locationData.id,
+        status: 'pending',
+      },
+    ];
+
+    const { error: newItemsError } = await supabase
+      .from('items')
+      .insert(itemsToAdd);
+
+    if (newItemsError) {
+      console.error('Error adding cron items:', newItemsError);
       return;
     }
 

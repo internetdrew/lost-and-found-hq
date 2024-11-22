@@ -18,7 +18,7 @@
   ],
   "crons": [
     {
-      "path": "/api/cron/purge-test-items",
+      "path": "/api/cron/reset-test-items",
       "schedule": "25 14 * * *"
     }
   ]
