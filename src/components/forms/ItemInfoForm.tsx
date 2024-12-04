@@ -26,9 +26,7 @@ import { toast } from 'react-hot-toast';
 import { Tables } from '@dbTypes';
 import { useItemsAtLocation } from '@/hooks/useItemsAtLocation';
 import { useLocationId } from '@/hooks/useLocationId';
-import { itemCategoryOptions } from '@/constants';
-
-const MAX_DESCRIPTION_LENGTH = 120;
+import { INPUT_LENGTHS, itemCategoryOptions } from '@/constants';
 
 type ItemInfoFormProps = {
   onSuccess: () => void;
@@ -36,19 +34,32 @@ type ItemInfoFormProps = {
 };
 
 const formSchema = z.object({
-  title: z.string().min(1, { message: 'Please enter a title' }),
+  title: z
+    .string()
+    .min(INPUT_LENGTHS.item.name.min, { message: 'Please enter a title' })
+    .max(INPUT_LENGTHS.item.name.max, {
+      message: `Title cannot exceed ${INPUT_LENGTHS.item.name.max} characters`,
+    }),
   category: z.string().min(1, { message: 'Please select a category' }),
   foundAt: z
     .string()
-    .min(1, { message: 'Please enter where the item was found' }),
+    .min(INPUT_LENGTHS.item.foundAt.min, {
+      message: 'Please enter where the item was found',
+    })
+    .max(INPUT_LENGTHS.item.foundAt.max, {
+      message: `Location cannot exceed ${INPUT_LENGTHS.item.foundAt.max} characters`,
+    }),
   dateFound: z
     .string()
+    .date()
     .min(1, { message: 'Please enter the date the item was found' }),
   briefDescription: z
     .string()
-    .min(1, { message: 'Please add a brief description of the item' })
-    .max(MAX_DESCRIPTION_LENGTH, {
-      message: `Description should not exceed ${MAX_DESCRIPTION_LENGTH} characters`,
+    .min(INPUT_LENGTHS.item.briefDescription.min, {
+      message: 'Please add a brief description of the item',
+    })
+    .max(INPUT_LENGTHS.item.briefDescription.max, {
+      message: `Description should not exceed ${INPUT_LENGTHS.item.briefDescription.max} characters`,
     }),
 });
 
@@ -105,11 +116,18 @@ const ItemInfoForm = ({ onSuccess: closeDialog, item }: ItemInfoFormProps) => {
               <FormItem>
                 <FormLabel>Title</FormLabel>
                 <FormControl>
-                  <Input
-                    placeholder='e.g. Black wallet'
-                    disabled={isSubmitting}
-                    {...field}
-                  />
+                  <>
+                    <Input
+                      placeholder='e.g. Black wallet'
+                      disabled={isSubmitting}
+                      maxLength={INPUT_LENGTHS.item.name.max}
+                      {...field}
+                    />
+                    <small className='text-xs text-gray-500'>
+                      {INPUT_LENGTHS.item.name.max - (field.value?.length || 0)}{' '}
+                      characters remaining
+                    </small>
+                  </>
                 </FormControl>
                 <FormDescription>
                   Describe the item without giving away details. The true owner
@@ -154,11 +172,19 @@ const ItemInfoForm = ({ onSuccess: closeDialog, item }: ItemInfoFormProps) => {
               <FormItem>
                 <FormLabel>Where was it found?</FormLabel>
                 <FormControl>
-                  <Input
-                    placeholder='e.g. Main Lobby'
-                    disabled={isSubmitting}
-                    {...field}
-                  />
+                  <>
+                    <Input
+                      placeholder='e.g. Main Lobby'
+                      disabled={isSubmitting}
+                      maxLength={INPUT_LENGTHS.item.foundAt.max}
+                      {...field}
+                    />
+                    <small className='text-xs text-gray-500'>
+                      {INPUT_LENGTHS.item.foundAt.max -
+                        (field.value?.length || 0)}{' '}
+                      characters remaining
+                    </small>
+                  </>
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -184,13 +210,20 @@ const ItemInfoForm = ({ onSuccess: closeDialog, item }: ItemInfoFormProps) => {
               <FormItem>
                 <FormLabel>Brief Description</FormLabel>
                 <FormControl>
-                  <Textarea
-                    placeholder='E.g. It has a stripe and a logo on the front.'
-                    className='resize-none h-24'
-                    disabled={isSubmitting}
-                    maxLength={MAX_DESCRIPTION_LENGTH}
-                    {...field}
-                  />
+                  <>
+                    <Textarea
+                      placeholder='E.g. It has a stripe and a logo on the front.'
+                      className='resize-none h-32'
+                      disabled={isSubmitting}
+                      maxLength={INPUT_LENGTHS.item.briefDescription.max}
+                      {...field}
+                    />
+                    <small className='text-xs text-gray-500'>
+                      {INPUT_LENGTHS.item.briefDescription.max -
+                        (field.value?.length || 0)}{' '}
+                      characters remaining
+                    </small>
+                  </>
                 </FormControl>
                 <FormDescription>
                   Some details can help discern between similar items. Avoid

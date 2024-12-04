@@ -18,12 +18,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from '../ui/select';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { US_STATES } from '@/constants';
 import toast from 'react-hot-toast';
 import axios from 'axios';
 import { Tables } from '@dbTypes';
 import { useLocations } from '@/hooks/useLocations';
+import { INPUT_LENGTHS } from '@/constants';
 
 type LocationInfoFormProps = {
   location: Tables<'locations'> | null;
@@ -33,16 +34,28 @@ type LocationInfoFormProps = {
 const formSchema = z.object({
   name: z
     .string()
-    .min(1, { message: 'Please enter your company name' })
-    .max(100, { message: 'Company name cannot exceed 100 characters' }),
+    .min(INPUT_LENGTHS.location.name.min, {
+      message: 'Please enter your company name',
+    })
+    .max(INPUT_LENGTHS.location.name.max, {
+      message: `Company name cannot exceed ${INPUT_LENGTHS.location.name.max} characters`,
+    }),
   streetAddress: z
     .string()
-    .min(1, { message: 'Please enter your company street address' })
-    .max(200, { message: 'Street address cannot exceed 200 characters' }),
+    .min(INPUT_LENGTHS.location.streetAddress.min, {
+      message: 'Please enter your company street address',
+    })
+    .max(INPUT_LENGTHS.location.streetAddress.max, {
+      message: `Street address cannot exceed ${INPUT_LENGTHS.location.streetAddress.max} characters`,
+    }),
   city: z
     .string()
-    .min(1, { message: 'Please enter your company city' })
-    .max(50, { message: 'City name cannot exceed 50 characters' }),
+    .min(INPUT_LENGTHS.location.city.min, {
+      message: 'Please enter your company city',
+    })
+    .max(INPUT_LENGTHS.location.city.max, {
+      message: `City name cannot exceed ${INPUT_LENGTHS.location.city.max} characters`,
+    }),
   state: z.string().min(1, { message: 'Please enter your company state' }),
   zipCode: z
     .string()
@@ -91,17 +104,6 @@ const LocationInfoForm = ({
     }
   };
 
-  useEffect(() => {
-    if (location) {
-      form.reset({
-        name: location.name || '',
-        streetAddress: location.address || '',
-        city: location.city || '',
-        state: location.state || '',
-        zipCode: location.postal_code || '',
-      });
-    }
-  }, [form, location]);
   const { isDirty, isValid } = form.formState;
 
   return (
@@ -115,11 +117,19 @@ const LocationInfoForm = ({
               <FormItem>
                 <FormLabel>Company Name</FormLabel>
                 <FormControl>
-                  <Input
-                    placeholder='ACME Inc.'
-                    disabled={updatingInfo}
-                    {...field}
-                  />
+                  <>
+                    <Input
+                      placeholder='ACME Inc.'
+                      disabled={updatingInfo}
+                      maxLength={INPUT_LENGTHS.location.name.max}
+                      {...field}
+                    />
+                    <small className='text-xs text-gray-500'>
+                      {INPUT_LENGTHS.location.name.max -
+                        (field.value?.length || 0)}{' '}
+                      characters remaining
+                    </small>
+                  </>
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -132,11 +142,19 @@ const LocationInfoForm = ({
               <FormItem>
                 <FormLabel>Street Address</FormLabel>
                 <FormControl>
-                  <Input
-                    placeholder='123 Main St.'
-                    disabled={updatingInfo}
-                    {...field}
-                  />
+                  <>
+                    <Input
+                      placeholder='123 Main St.'
+                      disabled={updatingInfo}
+                      maxLength={INPUT_LENGTHS.location.streetAddress.max}
+                      {...field}
+                    />
+                    <small className='text-xs text-gray-500'>
+                      {INPUT_LENGTHS.location.streetAddress.max -
+                        (field.value?.length || 0)}{' '}
+                      characters remaining
+                    </small>
+                  </>
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -149,11 +167,19 @@ const LocationInfoForm = ({
               <FormItem>
                 <FormLabel>City</FormLabel>
                 <FormControl>
-                  <Input
-                    placeholder='Gotham City'
-                    disabled={updatingInfo}
-                    {...field}
-                  />
+                  <>
+                    <Input
+                      placeholder='Gotham City'
+                      disabled={updatingInfo}
+                      maxLength={INPUT_LENGTHS.location.city.max}
+                      {...field}
+                    />
+                    <small className='text-xs text-gray-500'>
+                      {INPUT_LENGTHS.location.city.max -
+                        (field.value?.length || 0)}{' '}
+                      characters remaining
+                    </small>
+                  </>
                 </FormControl>
                 <FormMessage />
               </FormItem>
