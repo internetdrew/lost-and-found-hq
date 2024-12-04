@@ -17,6 +17,7 @@ import toast from 'react-hot-toast';
 import DeleteItemDialog from './dialogs/DeleteItemDialog';
 import { useItemsAtLocation } from '@/hooks/useItemsAtLocation';
 import { useLocationId } from '@/hooks/useLocationId';
+import { format, parseISO } from 'date-fns';
 
 type Item = Tables<'items'>;
 
@@ -70,7 +71,7 @@ export default function ItemDetailsCard({ item }: { item: Item }) {
         </DropdownMenu>
       </header>
       <span className='text-sm text-neutral-600'>
-        Found on {new Date(dateFound).toDateString()}
+        Found on {format(parseISO(dateFound), 'MMM d, yyyy')}
       </span>
       <div className='mt-4 flex flex-col flex-1'>
         <p className='font-semibold'>Where it was found</p>
