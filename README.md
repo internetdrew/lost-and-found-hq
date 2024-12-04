@@ -26,7 +26,7 @@ After losing my wallet, I thought it might be great if the process was a little 
 - Visitors can sign up to get launch updates. [#23](https://github.com/internetdrew/lost-and-found-hq/pull/23)
 - Make test account available for visitors to play with and clear test user items. [#23](https://github.com/internetdrew/lost-and-found-hq/pull/23), [#24](https://github.com/internetdrew/lost-and-found-hq/pull/24)
 - Allow users to create a public portal for customers to view items. [#25](https://github.com/internetdrew/lost-and-found-hq/pull/25)
-- Limit input lengths on dashboard.
+- Limit input lengths on dashboard. [#26](https://github.com/internetdrew/lost-and-found-hq/pull/26)
 - Add tests for the dashboard.
 - Add input validation to API layer.
 - Integrate Stripe checkout for subscription
