@@ -26,7 +26,7 @@ const LocationFormDialog = ({
 
   return (
     <Dialog open={renderLocationDialog} onOpenChange={setRenderLocationDialog}>
-      <DialogContent className='font-mono overflow-y-scroll max-h-screen'>
+      <DialogContent className='font-mono overflow-y-auto max-h-screen'>
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
           <DialogDescription>{description}</DialogDescription>
