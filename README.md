@@ -1,7 +1,7 @@
 ![repo banner](./public/repo-banner.png)
 
 <div align="center"><strong>Lost & Found HQ</strong></div>
-<div align="center">Easily reunite your customers with their lost items.<br />A platform to streamline lost and found management and help businesses reconnect their customers with their lost items.</div>
+<div align="center">Easily reunite your customers with their lost items.<br />A platform to streamline lost and found management with ease.</div>
 <br />
 <div align="center">
 <a href="https://www.lostandfoundhq.com">Website</a> 
