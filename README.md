@@ -30,19 +30,30 @@ After losing my wallet, I thought it might be great if the process was a little 
 - Add tests for the dashboard.
 - Add input validation to API layer.
 - Integrate Stripe checkout for subscription
-- Allow users to add a custom page slug once they're subscribed.
-- Allow users to include a company logo for the public page view.
-- Allow claims to be opened on the items publicly viewable.
-- Add notifications to dashboard when new claims are opened.
-- **Contemplation**: Should V1 allow users to takeover via email or should I build a full chat interface?
-- When a claim is approved, the system generates a unique code for the customer to use at pickup.
-- Add option for completing claim and marking an item as returned.
+- Allow users (admin) to add a custom page slug once they're subscribed.
+- Allow users (admin) to include a company logo for the public page view.
+- Allow users (searchers) to open claims on the items publicly viewable with a "This is mine" button.
 
-## Extended Roadmap
+<!-- Claims -->
 
-We only go here if the product takes off.
+- Basic claim flow:
 
-- Companies can view analytics on lost item trends and return rates.
-- API access for companies to integrate the system with their existing customer service platforms.
-- Multi-location support
-- Inter-company item transfer for multi-tenant buildings or shopping centers
+  - User sees item → submits claim with email + details
+  - Business reviews claim details
+  - If approved → User gets pickup code via email
+  - If denied → User gets notification with reason
+  - Business marks item as returned using pickup code
+
+- If more info is needed:
+
+  - Business clicks "Request More Info" + adds specific questions
+  - User gets email with link to respond
+  - Send email with link:
+    /claims/{claim_id}/conversation/{conversation_id}?token=<token>
+  - User clicks email link
+  - Token validates their access
+  - Shows simple form with:
+    - Original claim details
+    - Business questions
+    - Text area for response
+  - Submit → Updates claim status back to "pending"
