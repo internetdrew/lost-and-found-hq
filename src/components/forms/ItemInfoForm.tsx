@@ -27,6 +27,11 @@ import { Tables } from '@dbTypes';
 import { useItemsAtLocation } from '@/hooks/useItemsAtLocation';
 import { useLocationId } from '@/hooks/useLocationId';
 import { INPUT_LENGTHS, itemCategoryOptions } from '@/constants';
+import { cn } from '@/lib/utils';
+import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
+import { format } from 'date-fns';
+import { CalendarIcon } from 'lucide-react';
+import { Calendar } from '../ui/calendar';
 
 type ItemInfoFormProps = {
   onSuccess: () => void;
@@ -114,10 +119,11 @@ const ItemInfoForm = ({ onSuccess: closeDialog, item }: ItemInfoFormProps) => {
             name='title'
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Title</FormLabel>
+                <FormLabel htmlFor='title'>Title</FormLabel>
                 <FormControl>
                   <>
                     <Input
+                      id='title'
                       placeholder='e.g. Black wallet'
                       disabled={isSubmitting}
                       maxLength={INPUT_LENGTHS.item.name.max}
@@ -142,14 +148,14 @@ const ItemInfoForm = ({ onSuccess: closeDialog, item }: ItemInfoFormProps) => {
             name='category'
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Category</FormLabel>
+                <FormLabel htmlFor='category'>Category</FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
                   disabled={isSubmitting}
                 >
                   <FormControl>
-                    <SelectTrigger>
+                    <SelectTrigger id='category'>
                       <SelectValue placeholder='Select an item category' />
                     </SelectTrigger>
                   </FormControl>
@@ -170,10 +176,11 @@ const ItemInfoForm = ({ onSuccess: closeDialog, item }: ItemInfoFormProps) => {
             name='foundAt'
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Where was it found?</FormLabel>
+                <FormLabel htmlFor='foundAt'>Where was it found?</FormLabel>
                 <FormControl>
                   <>
                     <Input
+                      id='foundAt'
                       placeholder='e.g. Main Lobby'
                       disabled={isSubmitting}
                       maxLength={INPUT_LENGTHS.item.foundAt.max}
@@ -193,15 +200,54 @@ const ItemInfoForm = ({ onSuccess: closeDialog, item }: ItemInfoFormProps) => {
           <FormField
             control={form.control}
             name='dateFound'
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>When was it found?</FormLabel>
-                <FormControl>
-                  <Input type='date' disabled={isSubmitting} {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
+            render={({ field }) => {
+              console.log(field);
+              return (
+                <FormItem>
+                  <FormLabel htmlFor='dateFound'>When was it found?</FormLabel>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <FormControl>
+                        <Button
+                          variant={'outline'}
+                          className={cn(
+                            'w-full pl-3 text-left font-normal',
+                            !field.value && 'text-muted-foreground'
+                          )}
+                        >
+                          {field.value ? (
+                            format(new Date(field.value), 'PPP')
+                          ) : (
+                            <span>Pick a date</span>
+                          )}
+                          <CalendarIcon className='ml-auto h-4 w-4 opacity-50' />
+                        </Button>
+                      </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent className='w-auto p-0' align='start'>
+                      <Calendar
+                        mode='single'
+                        selected={
+                          field.value ? new Date(field.value) : undefined
+                        }
+                        onSelect={date => {
+                          if (date) {
+                            const formattedDate = format(date, 'yyyy/MM/dd');
+                            field.onChange(formattedDate);
+                          }
+                        }}
+                        disabled={date =>
+                          date > new Date() || date < new Date('1900-01-01')
+                        }
+                        style={{ pointerEvents: 'auto' }}
+                        initialFocus
+                      />
+                    </PopoverContent>
+                  </Popover>
+                  <FormMessage />
+                </FormItem>
+              );
+            }}
           />
           <FormField
             control={form.control}
