@@ -23,7 +23,7 @@ const v1Router = express.Router();
 v1Router.get('/locations', getLocations);
 v1Router.get('/locations/:id', getLocation);
 v1Router.post('/locations', addLocation);
-v1Router.put('/locations/:id', updateLocation);
+v1Router.patch('/locations/:id', updateLocation);
 v1Router.delete('/locations/:id', deleteLocation);
 
 /* Location Validation */
