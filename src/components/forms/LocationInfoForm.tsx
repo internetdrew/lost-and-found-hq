@@ -83,7 +83,7 @@ const LocationInfoForm = ({
 
   const onSubmit = async (formData: z.infer<typeof formSchema>) => {
     setUpdatingInfo(true);
-    const method = location ? 'put' : 'post';
+    const method = location ? 'patch' : 'post';
     const endpoint = location
       ? `/api/v1/locations/${location?.id}`
       : `/api/v1/locations`;
@@ -115,10 +115,11 @@ const LocationInfoForm = ({
             name='name'
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Company Name</FormLabel>
+                <FormLabel htmlFor='company-name'>Company Name</FormLabel>
                 <FormControl>
                   <>
                     <Input
+                      id='company-name'
                       placeholder='ACME Inc.'
                       disabled={updatingInfo}
                       maxLength={INPUT_LENGTHS.location.name.max}
@@ -140,10 +141,11 @@ const LocationInfoForm = ({
             name='streetAddress'
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Street Address</FormLabel>
+                <FormLabel htmlFor='street-address'>Street Address</FormLabel>
                 <FormControl>
                   <>
                     <Input
+                      id='street-address'
                       placeholder='123 Main St.'
                       disabled={updatingInfo}
                       maxLength={INPUT_LENGTHS.location.streetAddress.max}
@@ -165,10 +167,11 @@ const LocationInfoForm = ({
             name='city'
             render={({ field }) => (
               <FormItem>
-                <FormLabel>City</FormLabel>
+                <FormLabel htmlFor='city'>City</FormLabel>
                 <FormControl>
                   <>
                     <Input
+                      id='city'
                       placeholder='Gotham City'
                       disabled={updatingInfo}
                       maxLength={INPUT_LENGTHS.location.city.max}
@@ -191,14 +194,14 @@ const LocationInfoForm = ({
               name='state'
               render={({ field }) => (
                 <FormItem className='flex-1'>
-                  <FormLabel>State</FormLabel>
+                  <FormLabel htmlFor='state'>State</FormLabel>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
                     disabled={updatingInfo}
                   >
                     <FormControl>
-                      <SelectTrigger>
+                      <SelectTrigger id='state'>
                         <SelectValue placeholder='Select state' />
                       </SelectTrigger>
                     </FormControl>
@@ -219,9 +222,10 @@ const LocationInfoForm = ({
               name='zipCode'
               render={({ field }) => (
                 <FormItem className='flex-1'>
-                  <FormLabel>Zip Code</FormLabel>
+                  <FormLabel htmlFor='zip-code'>Zip Code</FormLabel>
                   <FormControl>
                     <Input
+                      id='zip-code'
                       disabled={updatingInfo}
                       placeholder='12345'
                       maxLength={5}
