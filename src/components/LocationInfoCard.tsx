@@ -36,7 +36,10 @@ export default function LocationInfoCard({
           <header className='flex justify-between items-center'>
             <p className='text-sm font-semibold'>Location Info</p>
             <DropdownMenu>
-              <DropdownMenuTrigger className='self-start p-2 hover:bg-neutral-100 rounded-md'>
+              <DropdownMenuTrigger
+                data-testid='location-info-card-dropdown-trigger'
+                className='self-start p-2 hover:bg-neutral-100 rounded-md'
+              >
                 <DotsHorizontalIcon />
               </DropdownMenuTrigger>
               <DropdownMenuContent align='end' className='font-mono'>
@@ -59,9 +62,8 @@ export default function LocationInfoCard({
             </DropdownMenu>
           </header>
           <p className='text-sm mt-4'>{location.name}</p>
+          <p className='text-sm'>{location.address}</p>
           <p className='text-sm'>
-            {location.address}
-            <br />
             {location.city}, {location.state} {location.postal_code}
           </p>
         </div>
