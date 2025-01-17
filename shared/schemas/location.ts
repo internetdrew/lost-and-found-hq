@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { INPUT_LENGTHS } from '../constants.ts';
+import { INPUT_LENGTHS } from '../constants.js';
 
 export const locationSchema = z.object({
   name: z
