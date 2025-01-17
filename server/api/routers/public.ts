@@ -1,10 +1,10 @@
 import express from 'express';
-import { addInterestedEmail } from '../controllers/interestController.ts';
+import { addInterestedEmail } from '../controllers/interestController.js';
 import {
   resetTestUserItems,
   getPublicItems,
   getPublicItem,
-} from '../controllers/itemsController.ts';
+} from '../controllers/itemsController.js';
 
 const publicRouter = express.Router();
 

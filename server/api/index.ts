@@ -1,10 +1,10 @@
 import express from 'express';
 import cors from 'cors';
-import { PORT } from './config.ts';
-import authRouter from './routers/auth.ts';
-import v1Router from './routers/v1.ts';
-import { requireAuth } from './middleware/auth.ts';
-import publicRouter from './routers/public.ts';
+import { PORT } from './config.js';
+import authRouter from './routers/auth.js';
+import v1Router from './routers/v1.js';
+import { requireAuth } from './middleware/auth.js';
+import publicRouter from './routers/public.js';
 import compression from 'compression';
 import helmet from 'helmet';
 

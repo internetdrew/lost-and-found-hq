@@ -8,7 +8,7 @@ import {
   deleteLocation,
   validateLocationId,
   validateSubscription,
-} from '../controllers/locationsController.ts';
+} from '../controllers/locationsController.js';
 import {
   addItem,
   deleteItem,
@@ -23,29 +23,11 @@ import { itemSchema } from '../../../shared/schemas/item.ts';
 
 const v1Router = express.Router();
 
-// Common validation schemas
-const uuidSchema = (fieldName: string) =>
-  z
-    .string({ required_error: `${fieldName} is required` })
-    .uuid({ message: `Invalid ${fieldName}` });
-
-const commonValidation = {
-  locationId: () => ({
-    params: z.object({ id: uuidSchema('Location ID') }),
-  }),
-  locationAndItemId: () => ({
-    params: z.object({
-      locationId: uuidSchema('Location ID'),
-      itemId: uuidSchema('Item ID'),
-    }),
-  }),
-};
-
 /* Locations */
 v1Router.get('/locations', getLocations);
 v1Router.get(
-  '/locations/:id',
-  validateRequest(commonValidation.locationId()),
+  '/locations/:locationId',
+  validateRequest({ params: z.object({ locationId: z.string().uuid() }) }),
   getLocation
 );
 v1Router.post(
@@ -54,63 +36,85 @@ v1Router.post(
   addLocation
 );
 v1Router.patch(
-  '/locations/:id',
-  validateRequest({ ...commonValidation.locationId(), body: locationSchema }),
+  '/locations/:locationId',
+  validateRequest({
+    params: z.object({ locationId: z.string().uuid() }),
+    body: locationSchema,
+  }),
   updateLocation
 );
 v1Router.delete(
-  '/locations/:id',
-  validateRequest(commonValidation.locationId()),
+  '/locations/:locationId',
+  validateRequest({ params: z.object({ locationId: z.string().uuid() }) }),
   deleteLocation
 );
 
 /* Location Validation */
 v1Router.get(
-  '/locations/:id/exists',
-  validateRequest(commonValidation.locationId()),
+  '/locations/:locationId/exists',
+  validateRequest({ params: z.object({ locationId: z.string().uuid() }) }),
   validateLocationId
 );
 v1Router.get(
-  '/locations/:id/subscription',
-  validateRequest(commonValidation.locationId()),
+  '/locations/:locationId/subscription',
+  validateRequest({ params: z.object({ locationId: z.string().uuid() }) }),
   validateSubscription
 );
 
 /* Location's Items */
 v1Router.get(
   '/locations/:locationId/items',
-  validateRequest(commonValidation.locationId()),
+  validateRequest({ params: z.object({ locationId: z.string().uuid() }) }),
   getItems
 );
 
 v1Router.get(
   '/locations/:locationId/items/:itemId',
-  validateRequest(commonValidation.locationAndItemId()),
+  validateRequest({
+    params: z.object({
+      locationId: z.string().uuid(),
+      itemId: z.string(),
+    }),
+  }),
   getItem
 );
 v1Router.post(
   '/locations/:locationId/items',
-  validateRequest({ ...commonValidation.locationId(), body: itemSchema }),
+  validateRequest({
+    params: z.object({ locationId: z.string().uuid() }),
+    body: itemSchema,
+  }),
   addItem
 );
 v1Router.put(
   '/locations/:locationId/items/:itemId',
   validateRequest({
-    ...commonValidation.locationAndItemId(),
+    params: z.object({
+      locationId: z.string().uuid(),
+      itemId: z.string(),
+    }),
     body: itemSchema,
   }),
   updateItem
 );
 v1Router.delete(
   '/locations/:locationId/items/:itemId',
-  validateRequest(commonValidation.locationAndItemId()),
+  validateRequest({
+    params: z.object({
+      locationId: z.string().uuid(),
+      itemId: z.string(),
+    }),
+  }),
   deleteItem
 );
 
 v1Router.patch(
   '/locations/:locationId/items/:itemId/status',
   validateRequest({
-    ...commonValidation.locationAndItemId(),
+    params: z.object({
+      locationId: z.string().uuid(),
+      itemId: z.string(),
+    }),
     body: itemSchema,
   }),
   toggleItemActiveStatus

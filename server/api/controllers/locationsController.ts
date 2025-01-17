@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { createSupabaseAdminClient } from '../../lib/supabase.ts';
-import { AuthenticatedRequest } from '../middleware/auth.ts';
+import { createSupabaseAdminClient } from '../../lib/supabase.js';
+import { AuthenticatedRequest } from '../middleware/auth.js';
 
 export const addLocation = async (req: Request, res: Response) => {
   const userId = (req as AuthenticatedRequest).user.id;
