@@ -27,7 +27,7 @@ const Home = () => {
           <div className='flex flex-col items-center mb-6'>
             <p className='text-sm text-muted-foreground text-center'>
               Thanks for visiting the app! <br />
-              Test drives are now available. Take it for a spin!
+              Feel free to take it for a spin with the test account.
             </p>
             <TestDriveButton />
           </div>

@@ -82,6 +82,7 @@ export const addItem = async (req: Request, res: Response) => {
         category: req.body.category,
         date_found: req.body.dateFound,
         brief_description: req.body.briefDescription,
+        staff_details: req.body.staffDetails,
         status: 'pending',
         is_public: false,
       })
@@ -118,6 +119,7 @@ export const updateItem = async (req: Request, res: Response) => {
         title: req.body.title,
         location_id: locationId,
         brief_description: req.body.briefDescription,
+        staff_details: req.body.staffDetails,
         found_at: req.body.foundAt,
         category: req.body.category,
         date_found: req.body.dateFound,
@@ -257,6 +259,7 @@ export const resetTestUserItems = async (req: Request, res: Response) => {
         added_by_user_id: userData.id,
         brief_description:
           'A utility belt with a few tools. It has a winged creature on the buckle.',
+        staff_details: 'I think this might be for the caped crusader.',
         category: 'clothing',
         date_found: new Date().toISOString(),
         found_at: 'Under the Batmobile',
@@ -269,6 +272,8 @@ export const resetTestUserItems = async (req: Request, res: Response) => {
         added_by_user_id: userData.id,
         brief_description:
           'A Joker playing card. It has a red and black pattern. And a note on the back.',
+        staff_details:
+          'I think I saw the guy with the green hair who is always laughing drop this. Beware!',
         category: 'other',
         date_found: new Date().toISOString(),
         found_at: 'In the Bat...levator',
@@ -286,6 +291,92 @@ export const resetTestUserItems = async (req: Request, res: Response) => {
     res.status(200).json({ message: 'Success' });
   } catch (error) {
     console.error('Error in clearTestUserItems:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+export const getPublicItems = async (req: Request, res: Response) => {
+  const locationId = req.params.locationId;
+
+  if (!locationId) {
+    res.status(400).json({ error: 'Location ID is required' });
+    return;
+  }
+
+  try {
+    const supabase = createSupabaseAdminClient();
+
+    const { data, error } = await supabase
+      .from('items')
+      .select(
+        `
+        id,
+        title,
+        brief_description,
+        category,
+        date_found,
+        found_at,
+        is_public,
+        location_id,
+        status,
+        created_at
+      `
+      )
+      .eq('location_id', locationId)
+      .eq('is_public', true)
+      .order('created_at', { ascending: true });
+
+    if (error) {
+      res.status(500).json({ error: error.message });
+      return;
+    }
+    res.json(data);
+  } catch (error) {
+    console.error('Error fetching public items:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+export const getPublicItem = async (req: Request, res: Response) => {
+  const itemId = req.params.itemId;
+  const locationId = req.params.locationId;
+
+  if (!itemId || !locationId) {
+    res.status(400).json({ error: 'Item ID and location ID are required' });
+    return;
+  }
+
+  try {
+    const supabase = createSupabaseAdminClient();
+    const { data, error } = await supabase
+      .from('items')
+      .select(
+        `
+        id,
+        title,
+        brief_description,
+        category,
+        date_found,
+        found_at,
+        is_public,
+        location_id,
+        status,
+        created_at
+      `
+      )
+      .eq('location_id', locationId)
+      .eq('id', itemId)
+      .eq('is_public', true)
+      .single();
+
+    if (error) {
+      console.error('Supabase error fetching public item:', error);
+      res.status(500).json({ error: error.message });
+      return;
+    }
+    res.json(data);
+  } catch (error) {
+    console.error('Error fetching public item:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 };

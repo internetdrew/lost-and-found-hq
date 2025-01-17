@@ -106,5 +106,9 @@ export const INPUT_LENGTHS = {
       min: 1,
       max: 150,
     },
+    staffDetails: {
+      min: 1,
+      max: 150,
+    },
   },
 };

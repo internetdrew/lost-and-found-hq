@@ -38,6 +38,7 @@ export type Database = {
           id: number
           is_public: boolean
           location_id: string
+          staff_details: string | null
           status: Database["public"]["Enums"]["ITEM_STATUSES"]
           title: string
         }
@@ -51,6 +52,7 @@ export type Database = {
           id?: number
           is_public?: boolean
           location_id: string
+          staff_details?: string | null
           status?: Database["public"]["Enums"]["ITEM_STATUSES"]
           title: string
         }
@@ -64,6 +66,7 @@ export type Database = {
           id?: number
           is_public?: boolean
           location_id?: string
+          staff_details?: string | null
           status?: Database["public"]["Enums"]["ITEM_STATUSES"]
           title?: string
         }

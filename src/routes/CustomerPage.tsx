@@ -1,7 +1,7 @@
 import CustomerItemDetailsCard from '@/components/CustomerItemDetailsCard';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
-import { useItemsAtLocation } from '@/hooks/useItemsAtLocation';
+import { usePublicItemsAtLocation } from '@/hooks/useItemsAtLocation';
 import { useLocationInfo } from '@/hooks/useLocationInfo';
 import { useLocationValidation } from '@/hooks/useLocationValidation';
 import { Navigate, useParams } from 'react-router-dom';
@@ -15,7 +15,7 @@ const CustomerPage = ({ preview }: CustomerPageProps) => {
   const { locationInfo, isLoading: loadingLocationInfo } = useLocationInfo(
     locationId ?? ''
   );
-  const { items } = useItemsAtLocation(locationId ?? '');
+  const { items } = usePublicItemsAtLocation(locationId ?? '');
   const { isValid, isLoading: validatingLocation } = useLocationValidation(
     locationId ?? ''
   );

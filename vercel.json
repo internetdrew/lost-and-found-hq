@@ -18,7 +18,7 @@
   ],
   "crons": [
     {
-      "path": "/api/cron/reset-test-items",
+      "path": "/api/public/cron/reset-test-items",
       "schedule": "25 14 * * *"
     }
   ]

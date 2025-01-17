@@ -30,7 +30,7 @@ export default function LocationInfoCard({
     : 'Preview Customer Page';
 
   return (
-    <div className='flex items-start gap-4 mt-4 ring-1 ring-gray-200 p-4 rounded-md max-w-sm'>
+    <div className='flex items-start gap-4 mt-6 ring-1 ring-gray-200 p-4 rounded-md max-w-sm'>
       {location ? (
         <div className='w-full'>
           <header className='flex justify-between items-center'>
@@ -42,7 +42,7 @@ export default function LocationInfoCard({
               >
                 <DotsHorizontalIcon />
               </DropdownMenuTrigger>
-              <DropdownMenuContent align='end' className='font-mono'>
+              <DropdownMenuContent align='end'>
                 <DropdownMenuLabel>Location Actions</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={() => setRenderLocationDialog(true)}>
@@ -61,7 +61,7 @@ export default function LocationInfoCard({
               </DropdownMenuContent>
             </DropdownMenu>
           </header>
-          <p className='text-sm mt-4'>{location.name}</p>
+          <p className='text-sm'>{location.name}</p>
           <p className='text-sm'>{location.address}</p>
           <p className='text-sm'>
             {location.city}, {location.state} {location.postal_code}

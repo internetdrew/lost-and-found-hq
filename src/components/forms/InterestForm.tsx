@@ -36,7 +36,7 @@ export const InterestForm = () => {
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     setIsSubmitting(true);
     try {
-      await axios.post('/api/interest', data);
+      await axios.post('/api/public/interest', data);
       toast.success('Submitted successfully');
     } catch (error) {
       console.error(error);
@@ -48,7 +48,7 @@ export const InterestForm = () => {
   };
 
   return (
-    <div className='ring-1 ring-gray-200 rounded-lg p-4 max-w-md'>
+    <div className='ring-1 ring-gray-200 rounded-lg p-4 w-full max-w-sm'>
       <h2 className='text-lg font-semibold'>Sign up for updates</h2>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>

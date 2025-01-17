@@ -33,6 +33,7 @@ export default function ItemDetailsCard({ item }: { item: Item }) {
     found_at: foundAt,
     date_found: dateFound,
     is_public: isActive,
+    staff_details: staffDetails,
   } = item;
 
   const toggleItemActiveStatus = async () => {
@@ -58,7 +59,7 @@ export default function ItemDetailsCard({ item }: { item: Item }) {
           <DropdownMenuTrigger className='self-start p-2 hover:bg-neutral-100 rounded-md'>
             <DotsHorizontalIcon />
           </DropdownMenuTrigger>
-          <DropdownMenuContent align='end' className='font-mono'>
+          <DropdownMenuContent align='end'>
             <DropdownMenuLabel>Item Actions</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={() => setRenderItemDialog(true)}>
@@ -77,8 +78,11 @@ export default function ItemDetailsCard({ item }: { item: Item }) {
         <p className='font-semibold'>Where it was found</p>
         <p className='text-sm text-neutral-500'>{foundAt}</p>
         <br />
-        <p className='font-semibold'>Additional details</p>
+        <p className='font-semibold'>Public details</p>
         <p className='text-sm text-neutral-500'>{briefDescription}</p>
+        <br />
+        <p className='font-semibold'>Staff details</p>
+        <p className='text-sm text-neutral-500'>{staffDetails}</p>
         <div className='flex items-center mt-auto gap-2 pt-4'>
           <Switch
             id='item-status'

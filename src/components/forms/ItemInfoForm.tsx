@@ -20,7 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '../ui/select';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import { Tables } from '@dbTypes';
@@ -32,6 +32,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import { format } from 'date-fns';
 import { CalendarIcon } from 'lucide-react';
 import { Calendar } from '../ui/calendar';
+import { PopoverClose } from '@radix-ui/react-popover';
 
 type ItemInfoFormProps = {
   onSuccess: () => void;
@@ -56,8 +57,15 @@ const formSchema = z.object({
     }),
   dateFound: z
     .string()
-    .date()
-    .min(1, { message: 'Please enter the date the item was found' }),
+    .refine(date => !isNaN(Date.parse(date)), {
+      message: 'Invalid date',
+    })
+    .refine(date => new Date(date) <= new Date(), {
+      message: 'Date cannot be in the future',
+    })
+    .refine(date => new Date(date) >= new Date('1900/01/01'), {
+      message: 'Date must be after 1900',
+    }),
   briefDescription: z
     .string()
     .min(INPUT_LENGTHS.item.briefDescription.min, {
@@ -66,12 +74,21 @@ const formSchema = z.object({
     .max(INPUT_LENGTHS.item.briefDescription.max, {
       message: `Description should not exceed ${INPUT_LENGTHS.item.briefDescription.max} characters`,
     }),
+  staffDetails: z
+    .string()
+    .min(INPUT_LENGTHS.item.staffDetails.min, {
+      message: 'Please add details for staff to help identify the item',
+    })
+    .max(INPUT_LENGTHS.item.staffDetails.max, {
+      message: `Staff details should not exceed ${INPUT_LENGTHS.item.staffDetails.max} characters`,
+    }),
 });
 
 const ItemInfoForm = ({ onSuccess: closeDialog, item }: ItemInfoFormProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { locationId } = useLocationId();
   const { mutate } = useItemsAtLocation(locationId);
+  const dateFoundPopoverRef = useRef<HTMLButtonElement | null>(null);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -79,8 +96,9 @@ const ItemInfoForm = ({ onSuccess: closeDialog, item }: ItemInfoFormProps) => {
       title: item?.title || '',
       category: item?.category || '',
       foundAt: item?.found_at || '',
-      dateFound: item?.date_found || '',
+      dateFound: item?.date_found || format(new Date(), 'yyyy-MM-dd'),
       briefDescription: item?.brief_description || '',
+      staffDetails: item?.staff_details || '',
     },
   });
 
@@ -159,7 +177,7 @@ const ItemInfoForm = ({ onSuccess: closeDialog, item }: ItemInfoFormProps) => {
                       <SelectValue placeholder='Select an item category' />
                     </SelectTrigger>
                   </FormControl>
-                  <SelectContent className='font-mono'>
+                  <SelectContent>
                     {itemCategoryOptions.map(({ value, label }) => (
                       <SelectItem key={value} value={value}>
                         {label}
@@ -200,64 +218,67 @@ const ItemInfoForm = ({ onSuccess: closeDialog, item }: ItemInfoFormProps) => {
           <FormField
             control={form.control}
             name='dateFound'
-            render={({ field }) => {
-              console.log(field);
-              return (
-                <FormItem>
-                  <FormLabel htmlFor='dateFound'>When was it found?</FormLabel>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <FormControl>
-                        <Button
-                          variant={'outline'}
-                          className={cn(
-                            'w-full pl-3 text-left font-normal',
-                            !field.value && 'text-muted-foreground'
-                          )}
-                        >
-                          {field.value ? (
-                            format(new Date(field.value), 'PPP')
-                          ) : (
-                            <span>Pick a date</span>
-                          )}
-                          <CalendarIcon className='ml-auto h-4 w-4 opacity-50' />
-                        </Button>
-                      </FormControl>
-                    </PopoverTrigger>
-                    <PopoverContent className='w-auto p-0' align='start'>
-                      <Calendar
-                        mode='single'
-                        selected={
-                          field.value ? new Date(field.value) : undefined
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel htmlFor='dateFound'>When was it found?</FormLabel>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <FormControl>
+                      <Button
+                        variant={'outline'}
+                        className={cn(
+                          'w-full pl-3 text-left font-normal',
+                          !field.value && 'text-muted-foreground'
+                        )}
+                      >
+                        {field.value ? (
+                          format(new Date(`${field.value}T12:00:00`), 'PPP')
+                        ) : (
+                          <span>Pick a date</span>
+                        )}
+                        <CalendarIcon className='ml-auto h-4 w-4 opacity-50' />
+                      </Button>
+                    </FormControl>
+                  </PopoverTrigger>
+                  <PopoverContent className='w-auto p-0' align='start'>
+                    <PopoverClose ref={dateFoundPopoverRef} />
+                    <Calendar
+                      mode='single'
+                      selected={
+                        field.value
+                          ? new Date(`${field.value}T12:00:00`)
+                          : undefined
+                      }
+                      onSelect={date => {
+                        if (date) {
+                          field.onChange(format(date, 'yyyy-MM-dd'));
+                          dateFoundPopoverRef.current?.click();
                         }
-                        onSelect={date => {
-                          if (date) {
-                            const formattedDate = format(date, 'yyyy/MM/dd');
-                            field.onChange(formattedDate);
-                          }
-                        }}
-                        disabled={date =>
-                          date > new Date() || date < new Date('1900-01-01')
-                        }
-                        style={{ pointerEvents: 'auto' }}
-                        initialFocus
-                      />
-                    </PopoverContent>
-                  </Popover>
-                  <FormMessage />
-                </FormItem>
-              );
-            }}
+                      }}
+                      disabled={date =>
+                        date > new Date() || date < new Date('1900-01-01')
+                      }
+                      style={{ pointerEvents: 'auto' }}
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
+                <FormMessage />
+              </FormItem>
+            )}
           />
           <FormField
             control={form.control}
             name='briefDescription'
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Brief Description</FormLabel>
+                <FormLabel htmlFor='briefDescription'>
+                  Brief Description
+                </FormLabel>
                 <FormControl>
                   <>
                     <Textarea
+                      id='briefDescription'
                       placeholder='E.g. It has a stripe and a logo on the front.'
                       className='resize-none h-32'
                       disabled={isSubmitting}
@@ -274,6 +295,37 @@ const ItemInfoForm = ({ onSuccess: closeDialog, item }: ItemInfoFormProps) => {
                 <FormDescription>
                   Some details can help discern between similar items. Avoid
                   giving away too much information.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name='staffDetails'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel htmlFor='staffDetails'>Staff Details</FormLabel>
+                <FormControl>
+                  <>
+                    <Textarea
+                      id='staffDetails'
+                      placeholder='E.g. The guy with the green hair who is always laughing dropped this.'
+                      className='resize-none h-32'
+                      disabled={isSubmitting}
+                      maxLength={INPUT_LENGTHS.item.staffDetails.max}
+                      {...field}
+                    />
+                    <small className='text-xs text-gray-500'>
+                      {INPUT_LENGTHS.item.briefDescription.max -
+                        (field.value?.length || 0)}{' '}
+                      characters remaining
+                    </small>
+                  </>
+                </FormControl>
+                <FormDescription>
+                  These details are only visible to staff. You can be as
+                  specific as you want here to help staff identify the item.
                 </FormDescription>
                 <FormMessage />
               </FormItem>

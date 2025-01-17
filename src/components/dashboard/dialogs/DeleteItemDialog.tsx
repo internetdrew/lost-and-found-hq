@@ -43,7 +43,7 @@ const DeleteItemDialog = (props: DeleteItemDialogProps) => {
 
   return (
     <Dialog open={renderDeleteDialog} onOpenChange={setRenderDeleteDialog}>
-      <DialogContent className='font-mono max-w-md'>
+      <DialogContent className='max-w-md'>
         <DialogHeader>
           <DialogTitle className='leading-normal'>
             Are you sure you want to delete the{' '}
