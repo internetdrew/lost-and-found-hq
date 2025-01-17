@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
-import { createSupabaseServerClient } from '../../lib/supabase';
+import { createSupabaseServerClient } from '../../lib/supabase.ts';
 import { EmailOtpType } from '@supabase/supabase-js';
-import { AuthenticatedRequest } from '../middleware/auth';
+import { AuthenticatedRequest } from '../middleware/auth.ts';
 
 export const signup = async (req: Request, res: Response) => {
   try {
