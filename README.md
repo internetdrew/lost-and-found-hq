@@ -28,6 +28,7 @@ After losing my wallet, I thought it might be great if the process was a little 
 - Allow users to create a public portal for customers to view items. [#25](https://github.com/internetdrew/lost-and-found-hq/pull/25)
 - Limit input lengths on dashboard. [#26](https://github.com/internetdrew/lost-and-found-hq/pull/26)
 - Add tests for the dashboard. [#28](https://github.com/internetdrew/lost-and-found-hq/pull/28)
+- Add important staff details to items. [#29](https://github.com/internetdrew/lost-and-found-hq/pull/29)
 - Add input validation to API layer.
 - Integrate Stripe checkout for subscription
 - Allow users (admin) to add a custom page slug once they're subscribed.
