@@ -29,3 +29,15 @@ export const useItemsAtLocation = (locationId: string) => {
     mutate,
   };
 };
+
+export const usePublicItemsAtLocation = (locationId: string) => {
+  const { data, isLoading } = useSWR(
+    `/api/public/locations/${locationId}/items`,
+    fetcher
+  );
+
+  return {
+    items: data,
+    isLoading,
+  };
+};
