@@ -159,7 +159,7 @@ const ItemInfoForm = ({ onSuccess: closeDialog, item }: ItemInfoFormProps) => {
                       <SelectValue placeholder='Select an item category' />
                     </SelectTrigger>
                   </FormControl>
-                  <SelectContent className='font-mono'>
+                  <SelectContent>
                     {itemCategoryOptions.map(({ value, label }) => (
                       <SelectItem key={value} value={value}>
                         {label}

@@ -205,7 +205,7 @@ const LocationInfoForm = ({
                         <SelectValue placeholder='Select state' />
                       </SelectTrigger>
                     </FormControl>
-                    <SelectContent className='font-mono'>
+                    <SelectContent>
                       {US_STATES.map(state => (
                         <SelectItem key={state.value} value={state.value}>
                           {state.label}

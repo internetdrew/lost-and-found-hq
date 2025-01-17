@@ -58,7 +58,7 @@ export default function ItemDetailsCard({ item }: { item: Item }) {
           <DropdownMenuTrigger className='self-start p-2 hover:bg-neutral-100 rounded-md'>
             <DotsHorizontalIcon />
           </DropdownMenuTrigger>
-          <DropdownMenuContent align='end' className='font-mono'>
+          <DropdownMenuContent align='end'>
             <DropdownMenuLabel>Item Actions</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={() => setRenderItemDialog(true)}>

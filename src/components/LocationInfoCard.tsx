@@ -42,7 +42,7 @@ export default function LocationInfoCard({
               >
                 <DotsHorizontalIcon />
               </DropdownMenuTrigger>
-              <DropdownMenuContent align='end' className='font-mono'>
+              <DropdownMenuContent align='end'>
                 <DropdownMenuLabel>Location Actions</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={() => setRenderLocationDialog(true)}>
