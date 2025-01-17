@@ -18,8 +18,10 @@ app.get('/api/health', (_, res) => {
 
 app.use('/auth', authRouter);
 app.use('/api/v1', requireAuth, v1Router);
-app.use('/api', publicRouter);
+app.use('/api/public', publicRouter);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
+
+export default app;
