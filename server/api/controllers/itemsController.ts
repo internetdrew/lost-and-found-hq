@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { createSupabaseAdminClient } from '../../lib/supabase';
-import { AuthenticatedRequest } from '../middleware/auth';
+import { createSupabaseAdminClient } from '../../lib/supabase.ts';
+import { AuthenticatedRequest } from '../middleware/auth.ts';
 
 export const getItems = async (req: Request, res: Response) => {
   const locationId = req.params.locationId;

@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { createSupabaseAdminClient } from '../../lib/supabase';
+import { createSupabaseAdminClient } from '../../lib/supabase.ts';
 
 export const addInterestedEmail = async (req: Request, res: Response) => {
   const { email } = req.body;

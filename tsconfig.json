@@ -9,7 +9,8 @@
     "paths": {
       "@/*": ["./src/*"],
       "@dbTypes": ["./server/database.types.ts"],
-      "@server/*": ["./server/*"]
+      "@server/*": ["./server/*"],
+      "@shared/*": ["./shared/*"]
     }
   }
 }

@@ -6,8 +6,8 @@ import {
   logout,
   signup,
   startTestDrive,
-} from '../controllers/authController';
-import { requireAuth } from '../middleware/auth';
+} from '../controllers/authController.ts';
+import { requireAuth } from '../middleware/auth.ts';
 
 const router = express.Router();
 

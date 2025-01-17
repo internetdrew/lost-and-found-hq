@@ -1,5 +1,5 @@
 import { User } from '@supabase/supabase-js';
-import { createSupabaseServerClient } from '../../lib/supabase';
+import { createSupabaseServerClient } from '../../lib/supabase.ts';
 import { Request, Response, NextFunction } from 'express';
 
 export interface AuthenticatedRequest extends Request {
