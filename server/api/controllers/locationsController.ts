@@ -50,7 +50,7 @@ export const getLocation = async (req: Request, res: Response) => {
     const { data, error } = await supabase
       .from('locations')
       .select('*')
-      .eq('id', req.params.id)
+      .eq('id', req.params.locationId)
       .eq('user_id', userId)
       .single();
 
@@ -78,7 +78,7 @@ export const updateLocation = async (req: Request, res: Response) => {
         state: req.body.state,
         postal_code: req.body.zipCode,
       })
-      .eq('id', req.params.id)
+      .eq('id', req.params.locationId)
       .eq('user_id', userId)
       .select('address, city, state, postal_code, name')
       .single();
@@ -103,7 +103,7 @@ export const deleteLocation = async (req: Request, res: Response) => {
     const { data, error } = await supabase
       .from('locations')
       .delete()
-      .eq('id', req.params.id)
+      .eq('id', req.params.locationId)
       .eq('user_id', userId)
       .select('id, name, address, city, state, postal_code')
       .single();
@@ -124,7 +124,7 @@ export const validateLocationId = async (req: Request, res: Response) => {
   const { data, error } = await supabase
     .from('locations')
     .select('id')
-    .eq('id', req.params.id)
+    .eq('id', req.params.locationId)
     .single();
 
   if (error) {
@@ -139,7 +139,7 @@ export const validateSubscription = async (req: Request, res: Response) => {
   const { data, error } = await supabase
     .from('locations')
     .select('has_active_subscription')
-    .eq('id', req.params.id)
+    .eq('id', req.params.locationId)
     .single();
 
   if (error) {
