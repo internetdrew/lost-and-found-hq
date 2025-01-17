@@ -20,7 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '../ui/select';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import { Tables } from '@dbTypes';
@@ -32,6 +32,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import { format } from 'date-fns';
 import { CalendarIcon } from 'lucide-react';
 import { Calendar } from '../ui/calendar';
+import { PopoverClose } from '@radix-ui/react-popover';
 
 type ItemInfoFormProps = {
   onSuccess: () => void;
@@ -73,12 +74,21 @@ const formSchema = z.object({
     .max(INPUT_LENGTHS.item.briefDescription.max, {
       message: `Description should not exceed ${INPUT_LENGTHS.item.briefDescription.max} characters`,
     }),
+  staffDetails: z
+    .string()
+    .min(INPUT_LENGTHS.item.staffDetails.min, {
+      message: 'Please add details for staff to help identify the item',
+    })
+    .max(INPUT_LENGTHS.item.staffDetails.max, {
+      message: `Staff details should not exceed ${INPUT_LENGTHS.item.staffDetails.max} characters`,
+    }),
 });
 
 const ItemInfoForm = ({ onSuccess: closeDialog, item }: ItemInfoFormProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { locationId } = useLocationId();
   const { mutate } = useItemsAtLocation(locationId);
+  const dateFoundPopoverRef = useRef<HTMLButtonElement | null>(null);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -88,6 +98,7 @@ const ItemInfoForm = ({ onSuccess: closeDialog, item }: ItemInfoFormProps) => {
       foundAt: item?.found_at || '',
       dateFound: item?.date_found || format(new Date(), 'yyyy-MM-dd'),
       briefDescription: item?.brief_description || '',
+      staffDetails: item?.staff_details || '',
     },
   });
 
@@ -230,6 +241,7 @@ const ItemInfoForm = ({ onSuccess: closeDialog, item }: ItemInfoFormProps) => {
                     </FormControl>
                   </PopoverTrigger>
                   <PopoverContent className='w-auto p-0' align='start'>
+                    <PopoverClose ref={dateFoundPopoverRef} />
                     <Calendar
                       mode='single'
                       selected={
@@ -240,6 +252,7 @@ const ItemInfoForm = ({ onSuccess: closeDialog, item }: ItemInfoFormProps) => {
                       onSelect={date => {
                         if (date) {
                           field.onChange(format(date, 'yyyy-MM-dd'));
+                          dateFoundPopoverRef.current?.click();
                         }
                       }}
                       disabled={date =>
@@ -279,6 +292,36 @@ const ItemInfoForm = ({ onSuccess: closeDialog, item }: ItemInfoFormProps) => {
                 <FormDescription>
                   Some details can help discern between similar items. Avoid
                   giving away too much information.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name='staffDetails'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Staff Details</FormLabel>
+                <FormControl>
+                  <>
+                    <Textarea
+                      placeholder='E.g. The guy with the green hair who is always laughing dropped this.'
+                      className='resize-none h-32'
+                      disabled={isSubmitting}
+                      maxLength={INPUT_LENGTHS.item.staffDetails.max}
+                      {...field}
+                    />
+                    <small className='text-xs text-gray-500'>
+                      {INPUT_LENGTHS.item.briefDescription.max -
+                        (field.value?.length || 0)}{' '}
+                      characters remaining
+                    </small>
+                  </>
+                </FormControl>
+                <FormDescription>
+                  These details are only visible to staff. You can be as
+                  specific as you want here to help staff identify the item.
                 </FormDescription>
                 <FormMessage />
               </FormItem>

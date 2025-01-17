@@ -82,6 +82,7 @@ export const addItem = async (req: Request, res: Response) => {
         category: req.body.category,
         date_found: req.body.dateFound,
         brief_description: req.body.briefDescription,
+        staff_details: req.body.staffDetails,
         status: 'pending',
         is_public: false,
       })
@@ -118,6 +119,7 @@ export const updateItem = async (req: Request, res: Response) => {
         title: req.body.title,
         location_id: locationId,
         brief_description: req.body.briefDescription,
+        staff_details: req.body.staffDetails,
         found_at: req.body.foundAt,
         category: req.body.category,
         date_found: req.body.dateFound,
@@ -257,6 +259,7 @@ export const resetTestUserItems = async (req: Request, res: Response) => {
         added_by_user_id: userData.id,
         brief_description:
           'A utility belt with a few tools. It has a winged creature on the buckle.',
+        staff_details: 'I think this might be for the caped crusader.',
         category: 'clothing',
         date_found: new Date().toISOString(),
         found_at: 'Under the Batmobile',
@@ -269,6 +272,8 @@ export const resetTestUserItems = async (req: Request, res: Response) => {
         added_by_user_id: userData.id,
         brief_description:
           'A Joker playing card. It has a red and black pattern. And a note on the back.',
+        staff_details:
+          'I think I saw the guy with the green hair who is always laughing drop this. Beware!',
         category: 'other',
         date_found: new Date().toISOString(),
         found_at: 'In the Bat...levator',

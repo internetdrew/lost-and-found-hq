@@ -48,7 +48,7 @@ export const InterestForm = () => {
   };
 
   return (
-    <div className='ring-1 ring-gray-200 rounded-lg p-4 max-w-md'>
+    <div className='ring-1 ring-gray-200 rounded-lg p-4 w-full max-w-sm'>
       <h2 className='text-lg font-semibold'>Sign up for updates</h2>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
