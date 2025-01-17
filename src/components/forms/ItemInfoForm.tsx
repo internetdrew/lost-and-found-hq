@@ -56,8 +56,15 @@ const formSchema = z.object({
     }),
   dateFound: z
     .string()
-    .date()
-    .min(1, { message: 'Please enter the date the item was found' }),
+    .refine(date => !isNaN(Date.parse(date)), {
+      message: 'Invalid date',
+    })
+    .refine(date => new Date(date) <= new Date(), {
+      message: 'Date cannot be in the future',
+    })
+    .refine(date => new Date(date) >= new Date('1900/01/01'), {
+      message: 'Date must be after 1900',
+    }),
   briefDescription: z
     .string()
     .min(INPUT_LENGTHS.item.briefDescription.min, {
@@ -79,7 +86,7 @@ const ItemInfoForm = ({ onSuccess: closeDialog, item }: ItemInfoFormProps) => {
       title: item?.title || '',
       category: item?.category || '',
       foundAt: item?.found_at || '',
-      dateFound: item?.date_found || '',
+      dateFound: item?.date_found || format(new Date(), 'yyyy-MM-dd'),
       briefDescription: item?.brief_description || '',
     },
   });
@@ -200,54 +207,52 @@ const ItemInfoForm = ({ onSuccess: closeDialog, item }: ItemInfoFormProps) => {
           <FormField
             control={form.control}
             name='dateFound'
-            render={({ field }) => {
-              console.log(field);
-              return (
-                <FormItem>
-                  <FormLabel htmlFor='dateFound'>When was it found?</FormLabel>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <FormControl>
-                        <Button
-                          variant={'outline'}
-                          className={cn(
-                            'w-full pl-3 text-left font-normal',
-                            !field.value && 'text-muted-foreground'
-                          )}
-                        >
-                          {field.value ? (
-                            format(new Date(field.value), 'PPP')
-                          ) : (
-                            <span>Pick a date</span>
-                          )}
-                          <CalendarIcon className='ml-auto h-4 w-4 opacity-50' />
-                        </Button>
-                      </FormControl>
-                    </PopoverTrigger>
-                    <PopoverContent className='w-auto p-0' align='start'>
-                      <Calendar
-                        mode='single'
-                        selected={
-                          field.value ? new Date(field.value) : undefined
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel htmlFor='dateFound'>When was it found?</FormLabel>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <FormControl>
+                      <Button
+                        variant={'outline'}
+                        className={cn(
+                          'w-full pl-3 text-left font-normal',
+                          !field.value && 'text-muted-foreground'
+                        )}
+                      >
+                        {field.value ? (
+                          format(new Date(`${field.value}T12:00:00`), 'PPP')
+                        ) : (
+                          <span>Pick a date</span>
+                        )}
+                        <CalendarIcon className='ml-auto h-4 w-4 opacity-50' />
+                      </Button>
+                    </FormControl>
+                  </PopoverTrigger>
+                  <PopoverContent className='w-auto p-0' align='start'>
+                    <Calendar
+                      mode='single'
+                      selected={
+                        field.value
+                          ? new Date(`${field.value}T12:00:00`)
+                          : undefined
+                      }
+                      onSelect={date => {
+                        if (date) {
+                          field.onChange(format(date, 'yyyy-MM-dd'));
                         }
-                        onSelect={date => {
-                          if (date) {
-                            const formattedDate = format(date, 'yyyy/MM/dd');
-                            field.onChange(formattedDate);
-                          }
-                        }}
-                        disabled={date =>
-                          date > new Date() || date < new Date('1900-01-01')
-                        }
-                        style={{ pointerEvents: 'auto' }}
-                        initialFocus
-                      />
-                    </PopoverContent>
-                  </Popover>
-                  <FormMessage />
-                </FormItem>
-              );
-            }}
+                      }}
+                      disabled={date =>
+                        date > new Date() || date < new Date('1900-01-01')
+                      }
+                      style={{ pointerEvents: 'auto' }}
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
+                <FormMessage />
+              </FormItem>
+            )}
           />
           <FormField
             control={form.control}
