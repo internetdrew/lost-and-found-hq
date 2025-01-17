@@ -1,14 +1,21 @@
 {
   "compilerOptions": {
     "target": "ES2020",
-    "module": "commonjs",
+    "module": "ESNext",
     "outDir": "./dist",
-    "rootDir": ".",
+    "rootDir": "../",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
+    "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "bundler",
+    "baseUrl": "../",
+    "paths": {
+      "@shared/*": ["shared/*"]
+    }
   },
-  "include": ["api/**/*", "lib/**/*"],
-  "exclude": ["node_modules"]
+  "include": ["api/**/*", "lib/**/*", "../shared/**/*"],
+  "exclude": ["node_modules", "dist"]
 }
