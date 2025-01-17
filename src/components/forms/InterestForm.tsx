@@ -36,7 +36,7 @@ export const InterestForm = () => {
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     setIsSubmitting(true);
     try {
-      await axios.post('/api/interest', data);
+      await axios.post('/api/public/interest', data);
       toast.success('Submitted successfully');
     } catch (error) {
       console.error(error);

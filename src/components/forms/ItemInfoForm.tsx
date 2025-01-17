@@ -272,10 +272,13 @@ const ItemInfoForm = ({ onSuccess: closeDialog, item }: ItemInfoFormProps) => {
             name='briefDescription'
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Brief Description</FormLabel>
+                <FormLabel htmlFor='briefDescription'>
+                  Brief Description
+                </FormLabel>
                 <FormControl>
                   <>
                     <Textarea
+                      id='briefDescription'
                       placeholder='E.g. It has a stripe and a logo on the front.'
                       className='resize-none h-32'
                       disabled={isSubmitting}
@@ -302,10 +305,11 @@ const ItemInfoForm = ({ onSuccess: closeDialog, item }: ItemInfoFormProps) => {
             name='staffDetails'
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Staff Details</FormLabel>
+                <FormLabel htmlFor='staffDetails'>Staff Details</FormLabel>
                 <FormControl>
                   <>
                     <Textarea
+                      id='staffDetails'
                       placeholder='E.g. The guy with the green hair who is always laughing dropped this.'
                       className='resize-none h-32'
                       disabled={isSubmitting}

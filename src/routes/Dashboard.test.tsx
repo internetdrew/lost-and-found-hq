@@ -5,6 +5,7 @@ import { server } from '@/test/mocks/node';
 import { http, HttpResponse } from 'msw';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
+import { format } from 'date-fns';
 
 beforeAll(() => server.listen());
 afterEach(() => {
@@ -258,7 +259,7 @@ describe('Dashboard', () => {
     expect(await screen.findByText('456 Update St')).toBeInTheDocument();
     expect(await screen.findByText('New City, CA 54321')).toBeInTheDocument();
   });
-  it.skip('allows users to add an item to a location', async () => {
+  it('allows users to add an item to a location', async () => {
     let postedItemData: unknown = null;
     const location = {
       id: 169,
@@ -276,13 +277,39 @@ describe('Dashboard', () => {
       }),
       http.get('/api/v1/locations/169/items', () => {
         return postedItemData
-          ? HttpResponse.json([postedItemData])
+          ? HttpResponse.json([
+              {
+                id: 1,
+                title: 'Lost Wallet',
+                category: 'clothing',
+                found_at: 'Main Lobby',
+                date_found: format(new Date(), 'yyyy-MM-dd'),
+                brief_description: 'Brown leather wallet',
+                staff_details:
+                  'This thing is packed with receipts and ketchup packets!',
+                created_at: new Date().toISOString(),
+                status: 'pending',
+                is_public: false,
+                location_id: 169,
+              },
+            ])
           : HttpResponse.json([]);
       }),
       http.post('/api/v1/locations/169/items', async ({ request }) => {
         postedItemData = await request.json();
         return HttpResponse.json({
-          rave: 'hello',
+          id: 1,
+          title: 'Lost Wallet',
+          category: 'clothing',
+          found_at: 'Main Lobby',
+          date_found: format(new Date(), 'yyyy-MM-dd'),
+          brief_description: 'Brown leather wallet',
+          staff_details:
+            'This thing is packed with receipts and ketchup packets!',
+          created_at: new Date().toISOString(),
+          status: 'pending',
+          is_public: false,
+          location_id: 169,
         });
       })
     );
@@ -314,19 +341,14 @@ describe('Dashboard', () => {
       'Main Lobby'
     );
 
-    await user.click(screen.getByRole('button', { name: /pick a date/i }));
-
-    // Find today's date button by just its text content (the day number)
-    const today = new Date();
-    const dayNumber = today.getDate().toString();
-
-    await user.click(
-      screen.getByRole('button', { name: new RegExp(`^${dayNumber}$`) })
-    );
-
     await user.type(
       screen.getByRole('textbox', { name: /brief description/i }),
       'Brown leather wallet'
+    );
+
+    await user.type(
+      screen.getByRole('textbox', { name: /staff details/i }),
+      'This thing is packed with receipts and ketchup packets!'
     );
 
     await user.click(screen.getByRole('button', { name: /add/i }));
@@ -335,8 +357,10 @@ describe('Dashboard', () => {
       title: 'Lost Wallet',
       category: 'clothing',
       foundAt: 'Main Lobby',
-      dateFound: '2024-03-20',
+      dateFound: format(new Date(), 'yyyy-MM-dd'),
       briefDescription: 'Brown leather wallet',
+      staffDetails: 'This thing is packed with receipts and ketchup packets!',
+      locationId: 169,
     });
 
     expect(
@@ -346,6 +370,11 @@ describe('Dashboard', () => {
     expect(await screen.findByText('Lost Wallet')).toBeInTheDocument();
     expect(await screen.findByText('Main Lobby')).toBeInTheDocument();
     expect(await screen.findByText('Brown leather wallet')).toBeInTheDocument();
+    expect(
+      await screen.findByText(
+        'This thing is packed with receipts and ketchup packets!'
+      )
+    ).toBeInTheDocument();
   });
   it('allows users to edit an item', async () => {});
   it('allows users to delete an item', async () => {});
