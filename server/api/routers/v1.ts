@@ -16,10 +16,10 @@ import {
   getItem,
   toggleItemActiveStatus,
   updateItem,
-} from '../controllers/itemsController.ts';
-import { validateRequest } from '../middleware/validate.ts';
-import { locationSchema } from '../../../shared/schemas/location.ts';
-import { itemSchema } from '../../../shared/schemas/item.ts';
+} from '../controllers/itemsController.js';
+import { validateRequest } from '../middleware/validate.js';
+import { locationSchema } from '../../../shared/schemas/location.js';
+import { itemSchema } from '../../../shared/schemas/item.js';
 
 const v1Router = express.Router();
 
