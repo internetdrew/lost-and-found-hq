@@ -1,4 +1,3 @@
-import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
@@ -26,63 +25,20 @@ import { toast } from 'react-hot-toast';
 import { Tables } from '@dbTypes';
 import { useItemsAtLocation } from '@/hooks/useItemsAtLocation';
 import { useLocationId } from '@/hooks/useLocationId';
-import { INPUT_LENGTHS, itemCategoryOptions } from '@/constants';
+import { itemCategoryOptions } from '@/constants';
 import { cn } from '@/lib/utils';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import { format } from 'date-fns';
 import { CalendarIcon } from 'lucide-react';
 import { Calendar } from '../ui/calendar';
 import { PopoverClose } from '@radix-ui/react-popover';
+import { INPUT_LENGTHS } from '@shared/constants';
+import { ItemInput, itemSchema } from '@shared/schemas/item';
 
 type ItemInfoFormProps = {
   onSuccess: () => void;
   item: Tables<'items'> | null;
 };
-
-const formSchema = z.object({
-  title: z
-    .string()
-    .min(INPUT_LENGTHS.item.name.min, { message: 'Please enter a title' })
-    .max(INPUT_LENGTHS.item.name.max, {
-      message: `Title cannot exceed ${INPUT_LENGTHS.item.name.max} characters`,
-    }),
-  category: z.string().min(1, { message: 'Please select a category' }),
-  foundAt: z
-    .string()
-    .min(INPUT_LENGTHS.item.foundAt.min, {
-      message: 'Please enter where the item was found',
-    })
-    .max(INPUT_LENGTHS.item.foundAt.max, {
-      message: `Location cannot exceed ${INPUT_LENGTHS.item.foundAt.max} characters`,
-    }),
-  dateFound: z
-    .string()
-    .refine(date => !isNaN(Date.parse(date)), {
-      message: 'Invalid date',
-    })
-    .refine(date => new Date(date) <= new Date(), {
-      message: 'Date cannot be in the future',
-    })
-    .refine(date => new Date(date) >= new Date('1900/01/01'), {
-      message: 'Date must be after 1900',
-    }),
-  briefDescription: z
-    .string()
-    .min(INPUT_LENGTHS.item.briefDescription.min, {
-      message: 'Please add a brief description of the item',
-    })
-    .max(INPUT_LENGTHS.item.briefDescription.max, {
-      message: `Description should not exceed ${INPUT_LENGTHS.item.briefDescription.max} characters`,
-    }),
-  staffDetails: z
-    .string()
-    .min(INPUT_LENGTHS.item.staffDetails.min, {
-      message: 'Please add details for staff to help identify the item',
-    })
-    .max(INPUT_LENGTHS.item.staffDetails.max, {
-      message: `Staff details should not exceed ${INPUT_LENGTHS.item.staffDetails.max} characters`,
-    }),
-});
 
 const ItemInfoForm = ({ onSuccess: closeDialog, item }: ItemInfoFormProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -90,8 +46,8 @@ const ItemInfoForm = ({ onSuccess: closeDialog, item }: ItemInfoFormProps) => {
   const { mutate } = useItemsAtLocation(locationId);
   const dateFoundPopoverRef = useRef<HTMLButtonElement | null>(null);
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<ItemInput>({
+    resolver: zodResolver(itemSchema),
     defaultValues: {
       title: item?.title || '',
       category: item?.category || '',
@@ -102,7 +58,7 @@ const ItemInfoForm = ({ onSuccess: closeDialog, item }: ItemInfoFormProps) => {
     },
   });
 
-  const onSubmit = async (data: z.infer<typeof formSchema>) => {
+  const onSubmit = async (data: ItemInput) => {
     setIsSubmitting(true);
     const method = item ? 'put' : 'post';
     const endpoint = item
