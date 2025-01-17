@@ -294,3 +294,89 @@ export const resetTestUserItems = async (req: Request, res: Response) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 };
+
+export const getPublicItems = async (req: Request, res: Response) => {
+  const locationId = req.params.locationId;
+
+  if (!locationId) {
+    res.status(400).json({ error: 'Location ID is required' });
+    return;
+  }
+
+  try {
+    const supabase = createSupabaseAdminClient();
+
+    const { data, error } = await supabase
+      .from('items')
+      .select(
+        `
+        id,
+        title,
+        brief_description,
+        category,
+        date_found,
+        found_at,
+        is_public,
+        location_id,
+        status,
+        created_at
+      `
+      )
+      .eq('location_id', locationId)
+      .eq('is_public', true)
+      .order('created_at', { ascending: true });
+
+    if (error) {
+      res.status(500).json({ error: error.message });
+      return;
+    }
+    res.json(data);
+  } catch (error) {
+    console.error('Error fetching public items:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+export const getPublicItem = async (req: Request, res: Response) => {
+  const itemId = req.params.itemId;
+  const locationId = req.params.locationId;
+
+  if (!itemId || !locationId) {
+    res.status(400).json({ error: 'Item ID and location ID are required' });
+    return;
+  }
+
+  try {
+    const supabase = createSupabaseAdminClient();
+    const { data, error } = await supabase
+      .from('items')
+      .select(
+        `
+        id,
+        title,
+        brief_description,
+        category,
+        date_found,
+        found_at,
+        is_public,
+        location_id,
+        status,
+        created_at
+      `
+      )
+      .eq('location_id', locationId)
+      .eq('id', itemId)
+      .eq('is_public', true)
+      .single();
+
+    if (error) {
+      console.error('Supabase error fetching public item:', error);
+      res.status(500).json({ error: error.message });
+      return;
+    }
+    res.json(data);
+  } catch (error) {
+    console.error('Error fetching public item:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
