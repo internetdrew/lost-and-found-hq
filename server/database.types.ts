@@ -7,6 +7,31 @@ export type Json =
   | Json[]
 
 export type Database = {
+  graphql_public: {
+    Tables: {
+      [_ in never]: never
+    }
+    Views: {
+      [_ in never]: never
+    }
+    Functions: {
+      graphql: {
+        Args: {
+          operationName?: string
+          query?: string
+          variables?: Json
+          extensions?: Json
+        }
+        Returns: Json
+      }
+    }
+    Enums: {
+      [_ in never]: never
+    }
+    CompositeTypes: {
+      [_ in never]: never
+    }
+  }
   public: {
     Tables: {
       interested_parties: {
@@ -38,7 +63,7 @@ export type Database = {
           id: number
           is_public: boolean
           location_id: string
-          staff_details: string | null
+          staff_details: string
           status: Database["public"]["Enums"]["ITEM_STATUSES"]
           title: string
         }
@@ -52,7 +77,7 @@ export type Database = {
           id?: number
           is_public?: boolean
           location_id: string
-          staff_details?: string | null
+          staff_details: string
           status?: Database["public"]["Enums"]["ITEM_STATUSES"]
           title: string
         }
@@ -66,7 +91,7 @@ export type Database = {
           id?: number
           is_public?: boolean
           location_id?: string
-          staff_details?: string | null
+          staff_details?: string
           status?: Database["public"]["Enums"]["ITEM_STATUSES"]
           title?: string
         }
@@ -277,3 +302,4 @@ export type CompositeTypes<
   : PublicCompositeTypeNameOrOptions extends keyof PublicSchema["CompositeTypes"]
     ? PublicSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
     : never
+
