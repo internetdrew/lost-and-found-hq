@@ -7,5 +7,6 @@ if [ -z "$PROJECT_ID" ]; then
     exit 1
 fi
 
-
+echo "Generating types for project: $PROJECT_ID"
 supabase gen types typescript --project-id $PROJECT_ID > database.types.ts
+echo "Types generated successfully"
