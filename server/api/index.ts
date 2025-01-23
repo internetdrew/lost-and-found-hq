@@ -11,10 +11,7 @@ import helmet from 'helmet';
 const app = express();
 
 const corsOptions = {
-  origin:
-    process.env.NODE_ENV === 'production'
-      ? process.env.CLIENT_URL
-      : ['http://localhost:5173', 'http://localhost:3000'],
+  origin: process.env.CLIENT_URL,
   credentials: true,
 };
 
