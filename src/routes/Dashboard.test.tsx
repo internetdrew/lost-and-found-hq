@@ -376,6 +376,105 @@ describe('Dashboard', () => {
       )
     ).toBeInTheDocument();
   });
-  it('allows users to edit an item', async () => {});
+  it('allows users to edit an item', async () => {
+    let putItemData: unknown = null;
+
+    const location = {
+      id: 169,
+      name: 'Test Location',
+      address: '123 Test St',
+      city: 'Test City',
+      state: 'TX',
+      postal_code: '12345',
+      has_active_subscription: false,
+    };
+
+    server.use(
+      http.get('/api/v1/locations', () => {
+        return HttpResponse.json([location]);
+      }),
+      http.get('/api/v1/locations/169/items', () => {
+        return putItemData
+          ? HttpResponse.json([
+              {
+                id: 1,
+                title: 'Lost Wallet',
+                category: 'clothing',
+                found_at: 'Main Lobby',
+                date_found: format(new Date(), 'yyyy-MM-dd'),
+                brief_description: 'Brown leather wallet',
+                staff_details:
+                  'This thing is packed with receipts and ketchup packets!',
+                created_at: new Date().toISOString(),
+                status: 'pending',
+                is_public: false,
+                location_id: 169,
+              },
+            ])
+          : HttpResponse.json([]);
+      }),
+      http.put('/api/v1/locations/169/items/1', async ({ request }) => {
+        putItemData = await request.json();
+        return HttpResponse.json({
+          id: 1,
+          title: 'Lost Wallet XYZL',
+          category: 'clothing',
+          found_at: 'On the dance floor',
+          date_found: format(new Date(), 'yyyy-MM-dd'),
+          brief_description: 'Brown leather wallet',
+          staff_details:
+            'This thing is packed with receipts and ketchup packets!',
+          created_at: new Date().toISOString(),
+          status: 'pending',
+          is_public: true,
+          location_id: 169,
+        });
+      })
+    );
+
+    const user = userEvent.setup();
+    render(
+      <MemoryRouter>
+        <Dashboard />
+      </MemoryRouter>
+    );
+
+    await screen.findByText('Lost Wallet');
+    await user.click(screen.getByLabelText('item-actions-1'));
+    await user.click(screen.getByRole('menuitem', { name: /edit/i }));
+
+    expect(
+      screen.queryByRole('dialog', { name: /edit item/i })
+    ).toBeInTheDocument();
+
+    await user.clear(screen.getByRole('textbox', { name: /title/i }));
+    await user.type(
+      screen.getByRole('textbox', { name: /title/i }),
+      'Lost Wallet XYZL'
+    );
+    await user.clear(
+      screen.getByRole('textbox', { name: /where was it found?/i })
+    );
+    await user.type(
+      screen.getByRole('textbox', { name: /where was it found?/i }),
+      'On the dance floor'
+    );
+
+    await user.click(screen.getByRole('button', { name: /update/i }));
+
+    expect(putItemData).toEqual({
+      title: 'Lost Wallet XYZL',
+      foundAt: 'On the dance floor',
+      briefDescription: 'Brown leather wallet',
+      staffDetails: 'This thing is packed with receipts and ketchup packets!',
+      locationId: 169,
+      category: 'clothing',
+      dateFound: format(new Date(), 'yyyy-MM-dd'),
+    });
+
+    expect(
+      screen.queryByRole('dialog', { name: /edit item/i })
+    ).not.toBeInTheDocument();
+  });
   it('allows users to delete an item', async () => {});
 });
