@@ -56,7 +56,10 @@ export default function ItemDetailsCard({ item }: { item: Item }) {
       <header className='flex justify-between items-center'>
         <h3 className='font-semibold'>{title}</h3>
         <DropdownMenu>
-          <DropdownMenuTrigger className='self-start p-2 hover:bg-neutral-100 rounded-md'>
+          <DropdownMenuTrigger
+            aria-label={`item-actions-${item.id}`}
+            className='self-start p-2 hover:bg-neutral-100 rounded-md'
+          >
             <DotsHorizontalIcon />
           </DropdownMenuTrigger>
           <DropdownMenuContent align='end'>
