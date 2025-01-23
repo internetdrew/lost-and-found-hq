@@ -115,7 +115,7 @@ v1Router.patch(
       locationId: z.string().uuid(),
       itemId: z.string(),
     }),
-    body: itemSchema,
+    body: z.object({ isPublic: z.boolean() }),
   }),
   toggleItemActiveStatus
 );
