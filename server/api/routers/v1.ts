@@ -20,6 +20,8 @@ import {
 import { validateRequest } from '../middleware/validate.js';
 import { locationSchema } from '../../../shared/schemas/location.js';
 import { itemSchema } from '../../../shared/schemas/item.js';
+import { createCheckoutSession } from '../controllers/stripeController.js';
+// import { createCheckoutSession } from '../controllers/stripeController.js';
 
 const v1Router = express.Router();
 
@@ -118,6 +120,15 @@ v1Router.patch(
     body: z.object({ isPublic: z.boolean() }),
   }),
   toggleItemActiveStatus
+);
+
+/* Stripe */
+v1Router.post(
+  '/stripe/create-checkout-session',
+  validateRequest({
+    body: z.object({ lookup_key: z.string(), locationId: z.string().uuid() }),
+  }),
+  createCheckoutSession
 );
 
 export default v1Router;
