@@ -57,7 +57,6 @@ export const createPortalSession = async (req: Request, res: Response) => {
   try {
     const { sessionId } = req.body;
     const checkoutSession = await stripe.checkout.sessions.retrieve(sessionId);
-    console.log('checkoutSession', checkoutSession);
 
     const returnUrl = `${APP_DOMAIN}/dashboard`;
 
