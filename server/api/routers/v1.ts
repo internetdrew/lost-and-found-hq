@@ -20,8 +20,10 @@ import {
 import { validateRequest } from '../middleware/validate.js';
 import { locationSchema } from '../../../shared/schemas/location.js';
 import { itemSchema } from '../../../shared/schemas/item.js';
-import { createCheckoutSession } from '../controllers/stripeController.js';
-// import { createCheckoutSession } from '../controllers/stripeController.js';
+import {
+  createCheckoutSession,
+  createPortalSession,
+} from '../controllers/stripeController.js';
 
 const v1Router = express.Router();
 
@@ -129,6 +131,12 @@ v1Router.post(
     body: z.object({ lookup_key: z.string(), locationId: z.string().uuid() }),
   }),
   createCheckoutSession
+);
+
+v1Router.post(
+  '/stripe/create-portal-session',
+  validateRequest({ body: z.object({ sessionId: z.string() }) }),
+  createPortalSession
 );
 
 export default v1Router;
