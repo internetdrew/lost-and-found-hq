@@ -1,11 +1,15 @@
 import { Request, Response } from 'express';
+import { createSupabaseAdminClient } from '../../lib/supabase.js';
 import Stripe from 'stripe';
 
 if (!process.env.STRIPE_SECRET_KEY) {
   throw new Error('STRIPE_SECRET_KEY must be defined');
 }
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
+  apiVersion: '2024-12-18.acacia',
+  typescript: true,
+});
 
 const APP_DOMAIN = process.env.CLIENT_URL;
 
@@ -70,4 +74,69 @@ export const createPortalSession = async (req: Request, res: Response) => {
     console.error('Error creating portal session:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
+};
+
+export const createWebhook = async (req: Request, res: Response) => {
+  const sig = req.headers['stripe-signature'];
+
+  let event;
+
+  const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
+
+  if (!sig || !endpointSecret) {
+    res.status(400).send('Webhook Error: Missing signature or endpoint secret');
+    return;
+  }
+
+  try {
+    event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
+  } catch (err) {
+    console.error('Error constructing event: ', err);
+    if (err instanceof Error) {
+      res.status(400).send(`Webhook Error: ${err.message}`);
+      return;
+    }
+    res.status(400).send(`Webhook Error: Unknown error occurred`);
+    return;
+  }
+
+  let subscription;
+  let status;
+
+  switch (event.type) {
+    case 'customer.subscription.updated':
+      subscription = event.data.object;
+      status = subscription.status;
+
+      if (status === 'active') {
+        console.log('subscription data: ', subscription);
+        const supabase = createSupabaseAdminClient();
+        // const periodStart = new Date(subscription.current_period_start * 1000);
+        // const periodEnd = new Date(subscription.current_period_end * 1000);
+
+        const { error } = await supabase
+          .from('locations')
+          .update({ has_active_subscription: true })
+          .eq('id', subscription.metadata.location_id);
+
+        if (error) {
+          console.error('Error updating location subscription: ', error);
+        }
+      }
+      break;
+    case 'customer.subscription.deleted':
+      subscription = event.data.object;
+      status = subscription.status;
+      console.log(`Subscription status is ${status}.`);
+      // Then define and call a method to handle the subscription deleted.
+      // handleSubscriptionDeleted(subscriptionDeleted);
+      break;
+    default:
+    // Unexpected event type
+  }
+
+  console.log('current event type: ', event.type);
+
+  res.sendStatus(200);
+  return;
 };
