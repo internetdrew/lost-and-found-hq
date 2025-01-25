@@ -2,8 +2,10 @@ import { Request, Response } from 'express';
 import { createSupabaseAdminClient } from '../../lib/supabase.js';
 import Stripe from 'stripe';
 
-if (!process.env.STRIPE_SECRET_KEY) {
-  throw new Error('STRIPE_SECRET_KEY must be defined');
+if (!process.env.STRIPE_SECRET_KEY || !process.env.STRIPE_WEBHOOK_SECRET) {
+  throw new Error(
+    'STRIPE_SECRET_KEY and STRIPE_WEBHOOK_SECRET must be defined'
+  );
 }
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
@@ -111,13 +113,33 @@ export const createWebhook = async (req: Request, res: Response) => {
       if (status === 'active') {
         console.log('subscription data: ', subscription);
         const supabase = createSupabaseAdminClient();
-        // const periodStart = new Date(subscription.current_period_start * 1000);
-        // const periodEnd = new Date(subscription.current_period_end * 1000);
+        const periodStart = new Date(
+          subscription.current_period_start * 1000
+        ).toISOString();
+        const periodEnd = new Date(
+          subscription.current_period_end * 1000
+        ).toISOString();
+        const canceledAt = subscription.canceled_at
+          ? new Date(subscription.canceled_at * 1000).toISOString()
+          : null;
 
         const { error } = await supabase
-          .from('locations')
-          .update({ has_active_subscription: true })
-          .eq('id', subscription.metadata.location_id);
+          .from('subscriptions')
+          .upsert(
+            {
+              location_id: subscription.metadata.location_id,
+              stripe_customer_id: subscription.customer as string,
+              stripe_subscription_id: subscription.id,
+              stripe_price_id: subscription.items.data[0].price.id,
+              current_period_start: periodStart,
+              current_period_end: periodEnd,
+              canceled_at: canceledAt,
+            },
+            {
+              onConflict: 'location_id',
+            }
+          )
+          .select();
 
         if (error) {
           console.error('Error updating location subscription: ', error);
