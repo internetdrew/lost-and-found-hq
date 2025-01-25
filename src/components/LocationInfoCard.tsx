@@ -12,6 +12,7 @@ import {
 } from './ui/dropdown-menu';
 import { DotsHorizontalIcon } from '@radix-ui/react-icons';
 import { Link } from 'react-router-dom';
+import { useSubscriptionValidation } from '@/hooks/useSubscriptionValidation';
 
 type Location = Tables<'locations'>;
 
@@ -21,11 +22,12 @@ export default function LocationInfoCard({
   location: Location | null;
 }) {
   const [renderLocationDialog, setRenderLocationDialog] = useState(false);
+  const { subscriptionValid } = useSubscriptionValidation(location?.id || null);
 
-  const customerPageUrl = location?.has_active_subscription
+  const customerPageUrl = subscriptionValid
     ? `/location/${location?.id}`
     : `/preview/${location?.id}`;
-  const customerPageLabel = location?.has_active_subscription
+  const customerPageLabel = subscriptionValid
     ? 'Visit Customer Page'
     : 'Preview Customer Page';
 

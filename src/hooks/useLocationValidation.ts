@@ -14,9 +14,9 @@ const fetcher = async (url: string) => {
   }
 };
 
-export const useLocationValidation = (locationId: string) => {
+export const useLocationValidation = (locationId: string | null) => {
   const { data, isLoading, mutate } = useSWR(
-    `/api/v1/locations/${locationId}/exists`,
+    locationId ? `/api/v1/locations/${locationId}/exists` : null,
     fetcher
   );
 
