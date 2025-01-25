@@ -117,7 +117,6 @@ export type Database = {
           address: string
           city: string
           created_at: string
-          has_active_subscription: boolean
           id: string
           name: string
           postal_code: string
@@ -128,7 +127,6 @@ export type Database = {
           address: string
           city: string
           created_at?: string
-          has_active_subscription?: boolean
           id?: string
           name: string
           postal_code: string
@@ -139,7 +137,6 @@ export type Database = {
           address?: string
           city?: string
           created_at?: string
-          has_active_subscription?: boolean
           id?: string
           name?: string
           postal_code?: string
@@ -152,6 +149,53 @@ export type Database = {
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      subscriptions: {
+        Row: {
+          canceled_at: string | null
+          created_at: string
+          current_period_end: string
+          current_period_start: string
+          id: number
+          location_id: string
+          stripe_customer_id: string
+          stripe_price_id: string
+          stripe_subscription_id: string
+          updated_at: string
+        }
+        Insert: {
+          canceled_at?: string | null
+          created_at?: string
+          current_period_end: string
+          current_period_start: string
+          id?: number
+          location_id: string
+          stripe_customer_id: string
+          stripe_price_id: string
+          stripe_subscription_id: string
+          updated_at?: string
+        }
+        Update: {
+          canceled_at?: string | null
+          created_at?: string
+          current_period_end?: string
+          current_period_start?: string
+          id?: number
+          location_id?: string
+          stripe_customer_id?: string
+          stripe_price_id?: string
+          stripe_subscription_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "subscriptions_location_id_fkey"
+            columns: ["location_id"]
+            isOneToOne: true
+            referencedRelation: "locations"
             referencedColumns: ["id"]
           },
         ]
