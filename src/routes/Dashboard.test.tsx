@@ -478,3 +478,16 @@ describe('Dashboard', () => {
   });
   it('allows users to delete an item', async () => {});
 });
+
+describe('Dashboard with Stripe Subscription', () => {
+  it('allows users to subscribe to a plan', async () => {});
+  it('shows success message after subscription', async () => {});
+  it('allows access to billing portal for active subscribers');
+  it('shows subscription end date for canceled subscriptions');
+  it('handles failed checkout session creation');
+  it('handles failed billing portal access');
+  it('maintains access until subscription period ends');
+  it('shows upgrade button for expired subscriptions');
+  it('shows different navigation options based on subscription status');
+  it('preserves subscription state across page reloads');
+});
