@@ -13,6 +13,9 @@ import {
 import { DotsHorizontalIcon } from '@radix-ui/react-icons';
 import { Link } from 'react-router-dom';
 import { useSubscriptionValidation } from '@/hooks/useSubscriptionValidation';
+import axios from 'axios';
+import toast from 'react-hot-toast';
+import { useSubscriptionDetails } from '@/hooks/useSubscriptionDetails';
 
 type Location = Tables<'locations'>;
 
@@ -23,6 +26,7 @@ export default function LocationInfoCard({
 }) {
   const [renderLocationDialog, setRenderLocationDialog] = useState(false);
   const { subscriptionValid } = useSubscriptionValidation(location?.id || null);
+  const { subscriptionDetails } = useSubscriptionDetails(location?.id || null);
 
   const customerPageUrl = subscriptionValid
     ? `/location/${location?.id}`
@@ -30,6 +34,20 @@ export default function LocationInfoCard({
   const customerPageLabel = subscriptionValid
     ? 'Visit Customer Page'
     : 'Preview Customer Page';
+
+  const openBillingPortal = async () => {
+    try {
+      const {
+        data: { url },
+      } = await axios.post('/api/v1/stripe/create-billing-portal-session', {
+        stripeCustomerId: subscriptionDetails?.stripeCustomerId,
+      });
+      window.location.href = url;
+    } catch (error) {
+      console.error(error);
+      toast.error('Something went wrong');
+    }
+  };
 
   return (
     <div className='flex items-start gap-4 mt-6 ring-1 ring-gray-200 p-4 rounded-md max-w-sm'>
@@ -50,6 +68,11 @@ export default function LocationInfoCard({
                 <DropdownMenuItem onClick={() => setRenderLocationDialog(true)}>
                   Edit
                 </DropdownMenuItem>
+                {subscriptionValid && (
+                  <DropdownMenuItem onClick={openBillingPortal}>
+                    Manage Billing
+                  </DropdownMenuItem>
+                )}
                 <DropdownMenuItem>
                   <Link
                     to={customerPageUrl}
