@@ -74,12 +74,7 @@ export default function LocationInfoCard({
                   </DropdownMenuItem>
                 )}
                 <DropdownMenuItem>
-                  <Link
-                    to={customerPageUrl}
-                    target='_blank'
-                    rel='noopener noreferrer'
-                    className='w-full'
-                  >
+                  <Link to={customerPageUrl} className='w-full'>
                     {customerPageLabel}
                   </Link>
                 </DropdownMenuItem>
