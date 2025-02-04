@@ -19,6 +19,7 @@ export const requireAuth = async (
     } = await supabase.auth.getUser();
 
     if (error) {
+      console.error('Auth middleware error:', error);
       res.status(401).json({ error: 'Unauthorized' });
       return;
     }
