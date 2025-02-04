@@ -34,7 +34,7 @@ const SuccessfulSubscriptionAlert = ({
       } = await axios.post('/api/v1/stripe/create-portal-session', {
         sessionId,
       });
-      window.open(url, '_blank', 'noopener,noreferrer');
+      window.location.href = url;
     } catch (error) {
       console.error(error);
       toast.error('Something went wrong');
