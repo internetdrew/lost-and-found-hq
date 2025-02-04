@@ -16,6 +16,7 @@ import { useSubscriptionValidation } from '@/hooks/useSubscriptionValidation';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { useSubscriptionDetails } from '@/hooks/useSubscriptionDetails';
+import { format, parseISO } from 'date-fns';
 
 type Location = Tables<'locations'>;
 
@@ -86,6 +87,16 @@ export default function LocationInfoCard({
           <p className='text-sm'>
             {location.city}, {location.state} {location.postal_code}
           </p>
+          {subscriptionValid && subscriptionDetails?.canceledAt && (
+            <p className='text-sm mt-4 font-semibold'>
+              Subscription ends on{' '}
+              {subscriptionDetails?.currentPeriodEnd &&
+                format(
+                  parseISO(subscriptionDetails.currentPeriodEnd),
+                  'MMM d, yyyy'
+                )}
+            </p>
+          )}
         </div>
       ) : (
         <>
