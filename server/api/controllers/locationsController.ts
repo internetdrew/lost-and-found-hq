@@ -140,7 +140,7 @@ export const validateSubscription = async (req: Request, res: Response) => {
     .from('subscriptions')
     .select('current_period_end, canceled_at')
     .eq('location_id', req.params.locationId)
-    .single();
+    .maybeSingle();
 
   if (error) {
     res.status(500).json({ error: error.message });
@@ -159,7 +159,7 @@ export const getSubscriptionDetails = async (req: Request, res: Response) => {
     .from('subscriptions')
     .select('*')
     .eq('location_id', req.params.locationId)
-    .single();
+    .maybeSingle();
 
   if (error) {
     res.status(500).json({ error: error.message });
