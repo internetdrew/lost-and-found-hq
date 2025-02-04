@@ -152,3 +152,18 @@ export const validateSubscription = async (req: Request, res: Response) => {
 
   res.json(isValid);
 };
+
+export const getSubscriptionDetails = async (req: Request, res: Response) => {
+  const supabase = createSupabaseAdminClient();
+  const { data, error } = await supabase
+    .from('subscriptions')
+    .select('*')
+    .eq('location_id', req.params.locationId)
+    .single();
+
+  if (error) {
+    res.status(500).json({ error: error.message });
+    return;
+  }
+  res.json(data);
+};
