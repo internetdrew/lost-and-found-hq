@@ -17,7 +17,7 @@ const fetcher = async (url: string) => {
 };
 
 export const useSubscriptionDetails = (locationId: string | null) => {
-  const { data, isLoading, mutate } = useSWR(
+  const { data, isLoading, error, mutate } = useSWR(
     locationId ? `/api/v1/locations/${locationId}/subscription-details` : null,
     fetcher
   );
@@ -34,6 +34,7 @@ export const useSubscriptionDetails = (locationId: string | null) => {
       canceledAt: data?.canceled_at,
     },
     isLoading,
+    error,
     mutate,
   };
 };
