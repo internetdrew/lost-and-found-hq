@@ -148,3 +148,17 @@ export const createWebhook = async (req: Request, res: Response) => {
   res.sendStatus(200);
   return;
 };
+
+export const createBillingPortalSession = async (
+  req: Request,
+  res: Response
+) => {
+  const { stripeCustomerId } = req.body;
+
+  const portalSession = await stripe.billingPortal.sessions.create({
+    customer: stripeCustomerId,
+    return_url: `${APP_DOMAIN}/dashboard`,
+  });
+
+  res.json({ url: portalSession.url });
+};
