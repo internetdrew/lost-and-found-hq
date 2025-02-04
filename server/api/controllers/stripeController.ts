@@ -103,15 +103,12 @@ export const createWebhook = async (req: Request, res: Response) => {
   }
 
   let subscription;
-  let status;
 
   switch (event.type) {
     case 'customer.subscription.updated':
-      subscription = event.data.object;
-      status = subscription.status;
+      {
+        subscription = event.data.object;
 
-      if (status === 'active') {
-        console.log('subscription data: ', subscription);
         const supabase = createSupabaseAdminClient();
         const periodStart = new Date(
           subscription.current_period_start * 1000
@@ -146,18 +143,7 @@ export const createWebhook = async (req: Request, res: Response) => {
         }
       }
       break;
-    case 'customer.subscription.deleted':
-      subscription = event.data.object;
-      status = subscription.status;
-      console.log(`Subscription status is ${status}.`);
-      // Then define and call a method to handle the subscription deleted.
-      // handleSubscriptionDeleted(subscriptionDeleted);
-      break;
-    default:
-    // Unexpected event type
   }
-
-  console.log('current event type: ', event.type);
 
   res.sendStatus(200);
   return;
