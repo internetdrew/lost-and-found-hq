@@ -21,10 +21,5 @@
       "path": "/api/public/cron/reset-test-items",
       "schedule": "25 14 * * *"
     }
-  ],
-  "functions": {
-    "api/**/*": {
-      "bodyParser": false
-    }
-  }
+  ]
 }
