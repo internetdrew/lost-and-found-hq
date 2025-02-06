@@ -89,8 +89,7 @@ export const createWebhook = async (req: Request, res: Response) => {
     res.status(400).send('Webhook Error: Missing signature or endpoint secret');
     return;
   }
-  console.log(sig, endpointSecret);
-
+  console.log('request body: ', req.body);
   try {
     event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
   } catch (err) {
