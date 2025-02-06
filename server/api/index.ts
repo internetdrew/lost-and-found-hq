@@ -18,10 +18,7 @@ const corsOptions = {
 app.use(compression());
 app.use(helmet());
 app.use(cors(corsOptions));
-app.use(
-  '/api/public/stripe/webhook',
-  express.raw({ type: 'application/json' })
-);
+app.use('/api/public/stripe/webhook', express.raw({ type: '*/*' }));
 app.use((req, res, next) => {
   if (req.path === '/api/public/stripe/webhook') {
     next();
