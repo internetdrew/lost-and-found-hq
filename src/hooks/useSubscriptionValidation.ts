@@ -14,9 +14,9 @@ const fetcher = async (url: string) => {
   }
 };
 
-export const useSubscriptionValidation = (locationId: string) => {
+export const useSubscriptionValidation = (locationId: string | null) => {
   const { data, isLoading, mutate } = useSWR(
-    `/api/v1/locations/${locationId}/subscription`,
+    locationId ? `/api/v1/locations/${locationId}/subscription` : null,
     fetcher
   );
 

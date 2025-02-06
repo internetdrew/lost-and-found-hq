@@ -7,6 +7,31 @@ export type Json =
   | Json[]
 
 export type Database = {
+  graphql_public: {
+    Tables: {
+      [_ in never]: never
+    }
+    Views: {
+      [_ in never]: never
+    }
+    Functions: {
+      graphql: {
+        Args: {
+          operationName?: string
+          query?: string
+          variables?: Json
+          extensions?: Json
+        }
+        Returns: Json
+      }
+    }
+    Enums: {
+      [_ in never]: never
+    }
+    CompositeTypes: {
+      [_ in never]: never
+    }
+  }
   public: {
     Tables: {
       interested_parties: {
@@ -38,7 +63,7 @@ export type Database = {
           id: number
           is_public: boolean
           location_id: string
-          staff_details: string | null
+          staff_details: string
           status: Database["public"]["Enums"]["ITEM_STATUSES"]
           title: string
         }
@@ -52,7 +77,7 @@ export type Database = {
           id?: number
           is_public?: boolean
           location_id: string
-          staff_details?: string | null
+          staff_details: string
           status?: Database["public"]["Enums"]["ITEM_STATUSES"]
           title: string
         }
@@ -66,7 +91,7 @@ export type Database = {
           id?: number
           is_public?: boolean
           location_id?: string
-          staff_details?: string | null
+          staff_details?: string
           status?: Database["public"]["Enums"]["ITEM_STATUSES"]
           title?: string
         }
@@ -92,7 +117,6 @@ export type Database = {
           address: string
           city: string
           created_at: string
-          has_active_subscription: boolean
           id: string
           name: string
           postal_code: string
@@ -103,7 +127,6 @@ export type Database = {
           address: string
           city: string
           created_at?: string
-          has_active_subscription?: boolean
           id?: string
           name: string
           postal_code: string
@@ -114,7 +137,6 @@ export type Database = {
           address?: string
           city?: string
           created_at?: string
-          has_active_subscription?: boolean
           id?: string
           name?: string
           postal_code?: string
@@ -127,6 +149,53 @@ export type Database = {
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      subscriptions: {
+        Row: {
+          canceled_at: string | null
+          created_at: string
+          current_period_end: string
+          current_period_start: string
+          id: number
+          location_id: string
+          stripe_customer_id: string
+          stripe_price_id: string
+          stripe_subscription_id: string
+          updated_at: string
+        }
+        Insert: {
+          canceled_at?: string | null
+          created_at?: string
+          current_period_end: string
+          current_period_start: string
+          id?: number
+          location_id: string
+          stripe_customer_id: string
+          stripe_price_id: string
+          stripe_subscription_id: string
+          updated_at?: string
+        }
+        Update: {
+          canceled_at?: string | null
+          created_at?: string
+          current_period_end?: string
+          current_period_start?: string
+          id?: number
+          location_id?: string
+          stripe_customer_id?: string
+          stripe_price_id?: string
+          stripe_subscription_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "subscriptions_location_id_fkey"
+            columns: ["location_id"]
+            isOneToOne: true
+            referencedRelation: "locations"
             referencedColumns: ["id"]
           },
         ]
@@ -277,3 +346,4 @@ export type CompositeTypes<
   : PublicCompositeTypeNameOrOptions extends keyof PublicSchema["CompositeTypes"]
     ? PublicSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
     : never
+

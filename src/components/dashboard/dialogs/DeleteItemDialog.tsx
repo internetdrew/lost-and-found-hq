@@ -45,7 +45,7 @@ const DeleteItemDialog = (props: DeleteItemDialogProps) => {
     <Dialog open={renderDeleteDialog} onOpenChange={setRenderDeleteDialog}>
       <DialogContent className='max-w-md'>
         <DialogHeader>
-          <DialogTitle className='leading-normal'>
+          <DialogTitle className='leading-normal max-w-sm'>
             Are you sure you want to delete the{' '}
             <span className='text-neutral-500'>{item.title}</span>?
           </DialogTitle>

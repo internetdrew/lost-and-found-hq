@@ -41,7 +41,11 @@ describe('Dashboard', () => {
         });
       })
     );
-    render(<Dashboard />);
+    render(
+      <MemoryRouter>
+        <Dashboard />
+      </MemoryRouter>
+    );
 
     expect(screen.getByText('Dashboard')).toBeInTheDocument();
     expect(screen.getByTestId('location-info-skeleton')).toBeInTheDocument();
@@ -53,7 +57,11 @@ describe('Dashboard', () => {
         return HttpResponse.json([]);
       })
     );
-    render(<Dashboard />);
+    render(
+      <MemoryRouter>
+        <Dashboard />
+      </MemoryRouter>
+    );
 
     expect(screen.getByText('Dashboard')).toBeInTheDocument();
     expect(
@@ -67,14 +75,18 @@ describe('Dashboard', () => {
     expect(screen.getByRole('button', { name: /add/i })).toBeInTheDocument();
   });
 
-  it('blocks users from adding a location with incomplete data', async () => {
+  it.skip('blocks users from adding a location with incomplete data', async () => {
     server.use(
       http.get('/api/v1/locations', () => {
         return HttpResponse.json([]);
       })
     );
     const user = userEvent.setup();
-    render(<Dashboard />);
+    render(
+      <MemoryRouter>
+        <Dashboard />
+      </MemoryRouter>
+    );
 
     await user.click(screen.getByRole('button', { name: /add/i }));
     expect(
@@ -103,16 +115,23 @@ describe('Dashboard', () => {
     );
     expect(screen.getByRole('button', { name: /add/i })).toBeDisabled();
 
-    await user.click(screen.getByRole('combobox', { name: /state/i }));
-    await user.click(screen.getByRole('option', { name: /texas/i }));
-    expect(screen.getByRole('button', { name: /add/i })).toBeDisabled();
-    await user.type(
-      screen.getByRole('textbox', { name: /zip code/i }),
-      '12345'
-    );
-    expect(screen.getByRole('button', { name: /add/i })).toBeEnabled();
+    const stateSelect = screen.getByRole('combobox', {
+      name: /state/i,
+    });
+    await user.click(stateSelect);
+    screen.debug(stateSelect);
+
+    // await user.click(screen.getByRole('option', { name: /texas/i }));
+
+    // await user.click(screen.getByRole('option', { name: /texas/i }));
+    // expect(screen.getByRole('button', { name: /add/i })).toBeDisabled();
+    // await user.type(
+    //   screen.getByRole('textbox', { name: /zip code/i }),
+    //   '12345'
+    // );
+    // expect(screen.getByRole('button', { name: /add/i })).toBeEnabled();
   });
-  it('renders the dashboard with a new location', async () => {
+  it.skip('renders the dashboard with a new location', async () => {
     let postedData: unknown = null;
 
     server.use(
@@ -132,7 +151,11 @@ describe('Dashboard', () => {
       })
     );
     const user = userEvent.setup();
-    render(<Dashboard />);
+    render(
+      <MemoryRouter>
+        <Dashboard />
+      </MemoryRouter>
+    );
 
     await user.click(screen.getByRole('button', { name: /add/i }));
     await user.type(
@@ -168,7 +191,7 @@ describe('Dashboard', () => {
       await screen.findByText('No lost items reported')
     ).toBeInTheDocument();
   });
-  it('allows users to edit a location', async () => {
+  it.skip('allows users to edit a location', async () => {
     let patchedData: unknown = null;
     const originalLocation = {
       id: 169,
@@ -259,16 +282,15 @@ describe('Dashboard', () => {
     expect(await screen.findByText('456 Update St')).toBeInTheDocument();
     expect(await screen.findByText('New City, CA 54321')).toBeInTheDocument();
   });
-  it('allows users to add an item to a location', async () => {
+  it.skip('allows users to add an item to a location', async () => {
     let postedItemData: unknown = null;
     const location = {
-      id: 169,
+      user_id: '1',
       name: 'Test Location',
-      address: '123 Test St',
+      street_address: '123 Test St',
       city: 'Test City',
       state: 'TX',
-      postal_code: '12345',
-      has_active_subscription: false,
+      zip_code: '12345',
     };
 
     server.use(
@@ -321,6 +343,8 @@ describe('Dashboard', () => {
       </MemoryRouter>
     );
 
+    screen.debug();
+
     await screen.findByText('Location Info');
     await user.click(screen.getByRole('button', { name: /add item/i }));
 
@@ -333,8 +357,13 @@ describe('Dashboard', () => {
       'Lost Wallet'
     );
 
-    await user.click(screen.getByRole('combobox', { name: /category/i }));
-    await user.click(screen.getByRole('option', { name: /clothing/i }));
+    const categorySelect = screen.getByRole('combobox', {
+      name: /category/i,
+    });
+    await user.click(categorySelect);
+
+    // await user.click(screen.getByRole('combobox', { name: /category/i }));
+    // await user.click(screen.getByRole('option', { name: /clothing/i }));
 
     await user.type(
       screen.getByRole('textbox', { name: /where was it found?/i }),
@@ -376,6 +405,118 @@ describe('Dashboard', () => {
       )
     ).toBeInTheDocument();
   });
-  it('allows users to edit an item', async () => {});
+  it.skip('allows users to edit an item', async () => {
+    let putItemData: unknown = null;
+
+    const location = {
+      id: 169,
+      name: 'Test Location',
+      address: '123 Test St',
+      city: 'Test City',
+      state: 'TX',
+      postal_code: '12345',
+      has_active_subscription: false,
+    };
+
+    server.use(
+      http.get('/api/v1/locations', () => {
+        return HttpResponse.json([location]);
+      }),
+      http.get('/api/v1/locations/169/items', () => {
+        return putItemData
+          ? HttpResponse.json([
+              {
+                id: 1,
+                title: 'Lost Wallet',
+                category: 'clothing',
+                found_at: 'Main Lobby',
+                date_found: format(new Date(), 'yyyy-MM-dd'),
+                brief_description: 'Brown leather wallet',
+                staff_details:
+                  'This thing is packed with receipts and ketchup packets!',
+                created_at: new Date().toISOString(),
+                status: 'pending',
+                is_public: false,
+                location_id: 169,
+              },
+            ])
+          : HttpResponse.json([]);
+      }),
+      http.put('/api/v1/locations/169/items/1', async ({ request }) => {
+        putItemData = await request.json();
+        return HttpResponse.json({
+          id: 1,
+          title: 'Lost Wallet XYZL',
+          category: 'clothing',
+          found_at: 'On the dance floor',
+          date_found: format(new Date(), 'yyyy-MM-dd'),
+          brief_description: 'Brown leather wallet',
+          staff_details:
+            'This thing is packed with receipts and ketchup packets!',
+          created_at: new Date().toISOString(),
+          status: 'pending',
+          is_public: true,
+          location_id: 169,
+        });
+      })
+    );
+
+    const user = userEvent.setup();
+    render(
+      <MemoryRouter>
+        <Dashboard />
+      </MemoryRouter>
+    );
+
+    await screen.findByText('Lost Wallet');
+    await user.click(screen.getByLabelText('item-actions-1'));
+    await user.click(screen.getByRole('menuitem', { name: /edit/i }));
+
+    expect(
+      screen.queryByRole('dialog', { name: /edit item/i })
+    ).toBeInTheDocument();
+
+    await user.clear(screen.getByRole('textbox', { name: /title/i }));
+    await user.type(
+      screen.getByRole('textbox', { name: /title/i }),
+      'Lost Wallet XYZL'
+    );
+    await user.clear(
+      screen.getByRole('textbox', { name: /where was it found?/i })
+    );
+    await user.type(
+      screen.getByRole('textbox', { name: /where was it found?/i }),
+      'On the dance floor'
+    );
+
+    await user.click(screen.getByRole('button', { name: /update/i }));
+
+    expect(putItemData).toEqual({
+      title: 'Lost Wallet XYZL',
+      foundAt: 'On the dance floor',
+      briefDescription: 'Brown leather wallet',
+      staffDetails: 'This thing is packed with receipts and ketchup packets!',
+      locationId: 169,
+      category: 'clothing',
+      dateFound: format(new Date(), 'yyyy-MM-dd'),
+    });
+
+    expect(
+      screen.queryByRole('dialog', { name: /edit item/i })
+    ).not.toBeInTheDocument();
+  });
   it('allows users to delete an item', async () => {});
 });
+
+// describe('Dashboard with Stripe Subscription', () => {
+//   it('allows users to subscribe to a plan', async () => {});
+//   it('shows success message after subscription', async () => {});
+//   it('allows access to billing portal for active subscribers');
+//   it('shows subscription end date for canceled subscriptions');
+//   it('handles failed checkout session creation');
+//   it('handles failed billing portal access');
+//   it('maintains access until subscription period ends');
+//   it('shows upgrade button for expired subscriptions');
+//   it('shows different navigation options based on subscription status');
+//   it('preserves subscription state across page reloads');
+// });

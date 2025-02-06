@@ -137,14 +137,33 @@ export const validateLocationId = async (req: Request, res: Response) => {
 export const validateSubscription = async (req: Request, res: Response) => {
   const supabase = createSupabaseAdminClient();
   const { data, error } = await supabase
-    .from('locations')
-    .select('has_active_subscription')
-    .eq('id', req.params.locationId)
-    .single();
+    .from('subscriptions')
+    .select('current_period_end, canceled_at')
+    .eq('location_id', req.params.locationId)
+    .maybeSingle();
 
   if (error) {
     res.status(500).json({ error: error.message });
     return;
   }
-  res.json(!!data?.has_active_subscription);
+  const isValid =
+    data &&
+    (!data.canceled_at || new Date(data.current_period_end) > new Date());
+
+  res.json(isValid);
+};
+
+export const getSubscriptionDetails = async (req: Request, res: Response) => {
+  const supabase = createSupabaseAdminClient();
+  const { data, error } = await supabase
+    .from('subscriptions')
+    .select('*')
+    .eq('location_id', req.params.locationId)
+    .maybeSingle();
+
+  if (error) {
+    res.status(500).json({ error: error.message });
+    return;
+  }
+  res.json(data);
 };

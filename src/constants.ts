@@ -53,7 +53,6 @@ export const US_STATES = [
   { value: 'WY', label: 'Wyoming' },
 ] as const;
 
-// Optional: Type for a US State
 export type USState = (typeof US_STATES)[number];
 
 type Item = Tables<'items'>;

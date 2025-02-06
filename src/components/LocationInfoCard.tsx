@@ -12,6 +12,11 @@ import {
 } from './ui/dropdown-menu';
 import { DotsHorizontalIcon } from '@radix-ui/react-icons';
 import { Link } from 'react-router-dom';
+import { useSubscriptionValidation } from '@/hooks/useSubscriptionValidation';
+import axios from 'axios';
+import toast from 'react-hot-toast';
+import { useSubscriptionDetails } from '@/hooks/useSubscriptionDetails';
+import { format, parseISO } from 'date-fns';
 
 type Location = Tables<'locations'>;
 
@@ -21,13 +26,29 @@ export default function LocationInfoCard({
   location: Location | null;
 }) {
   const [renderLocationDialog, setRenderLocationDialog] = useState(false);
+  const { subscriptionValid } = useSubscriptionValidation(location?.id || null);
+  const { subscriptionDetails } = useSubscriptionDetails(location?.id || null);
 
-  const customerPageUrl = location?.has_active_subscription
+  const customerPageUrl = subscriptionValid
     ? `/location/${location?.id}`
     : `/preview/${location?.id}`;
-  const customerPageLabel = location?.has_active_subscription
+  const customerPageLabel = subscriptionValid
     ? 'Visit Customer Page'
     : 'Preview Customer Page';
+
+  const openBillingPortal = async () => {
+    try {
+      const {
+        data: { url },
+      } = await axios.post('/api/v1/stripe/create-billing-portal-session', {
+        stripeCustomerId: subscriptionDetails?.stripeCustomerId,
+      });
+      window.location.href = url;
+    } catch (error) {
+      console.error(error);
+      toast.error('Something went wrong');
+    }
+  };
 
   return (
     <div className='flex items-start gap-4 mt-6 ring-1 ring-gray-200 p-4 rounded-md max-w-sm'>
@@ -48,13 +69,13 @@ export default function LocationInfoCard({
                 <DropdownMenuItem onClick={() => setRenderLocationDialog(true)}>
                   Edit
                 </DropdownMenuItem>
+                {subscriptionValid && (
+                  <DropdownMenuItem onClick={openBillingPortal}>
+                    Manage Billing
+                  </DropdownMenuItem>
+                )}
                 <DropdownMenuItem>
-                  <Link
-                    to={customerPageUrl}
-                    target='_blank'
-                    rel='noopener noreferrer'
-                    className='w-full'
-                  >
+                  <Link to={customerPageUrl} className='w-full'>
                     {customerPageLabel}
                   </Link>
                 </DropdownMenuItem>
@@ -66,6 +87,16 @@ export default function LocationInfoCard({
           <p className='text-sm'>
             {location.city}, {location.state} {location.postal_code}
           </p>
+          {subscriptionValid && subscriptionDetails?.canceledAt && (
+            <p className='text-sm mt-4 font-semibold'>
+              Subscription ends on{' '}
+              {subscriptionDetails?.currentPeriodEnd &&
+                format(
+                  parseISO(subscriptionDetails.currentPeriodEnd),
+                  'MMM d, yyyy'
+                )}
+            </p>
+          )}
         </div>
       ) : (
         <>

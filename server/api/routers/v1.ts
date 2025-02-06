@@ -8,6 +8,7 @@ import {
   deleteLocation,
   validateLocationId,
   validateSubscription,
+  getSubscriptionDetails,
 } from '../controllers/locationsController.js';
 import {
   addItem,
@@ -20,6 +21,11 @@ import {
 import { validateRequest } from '../middleware/validate.js';
 import { locationSchema } from '../../../shared/schemas/location.js';
 import { itemSchema } from '../../../shared/schemas/item.js';
+import {
+  createBillingPortalSession,
+  createCheckoutSession,
+  createPortalSession,
+} from '../controllers/stripeController.js';
 
 const v1Router = express.Router();
 
@@ -59,6 +65,11 @@ v1Router.get(
   '/locations/:locationId/subscription',
   validateRequest({ params: z.object({ locationId: z.string().uuid() }) }),
   validateSubscription
+);
+v1Router.get(
+  '/locations/:locationId/subscription-details',
+  validateRequest({ params: z.object({ locationId: z.string().uuid() }) }),
+  getSubscriptionDetails
 );
 
 /* Location's Items */
@@ -115,9 +126,30 @@ v1Router.patch(
       locationId: z.string().uuid(),
       itemId: z.string(),
     }),
-    body: itemSchema,
+    body: z.object({ isPublic: z.boolean() }),
   }),
   toggleItemActiveStatus
+);
+
+/* Stripe */
+v1Router.post(
+  '/stripe/create-checkout-session',
+  validateRequest({
+    body: z.object({ lookup_key: z.string(), locationId: z.string().uuid() }),
+  }),
+  createCheckoutSession
+);
+
+v1Router.post(
+  '/stripe/create-portal-session',
+  validateRequest({ body: z.object({ sessionId: z.string() }) }),
+  createPortalSession
+);
+
+v1Router.post(
+  '/stripe/create-billing-portal-session',
+  validateRequest({ body: z.object({ stripeCustomerId: z.string() }) }),
+  createBillingPortalSession
 );
 
 export default v1Router;

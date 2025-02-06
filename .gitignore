@@ -13,6 +13,7 @@ dist-ssr
 *.local
 
 # Editor directories and files
+.vscode
 .vscode/*
 !.vscode/extensions.json
 .idea
@@ -25,3 +26,4 @@ dist-ssr
 .env
 server/.env
 .vite
+config.toml

@@ -1,9 +1,11 @@
+import axios from 'axios';
 import CustomerItemDetailsCard from '@/components/CustomerItemDetailsCard';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { usePublicItemsAtLocation } from '@/hooks/useItemsAtLocation';
 import { useLocationInfo } from '@/hooks/useLocationInfo';
 import { useLocationValidation } from '@/hooks/useLocationValidation';
+import { toast } from 'react-hot-toast';
 import { Navigate, useParams } from 'react-router-dom';
 
 interface CustomerPageProps {
@@ -32,6 +34,24 @@ const CustomerPage = ({ preview }: CustomerPageProps) => {
     return <Navigate to='/404' replace />;
   }
 
+  const handleSubscribe = async () => {
+    toast.promise(
+      axios
+        .post('/api/v1/stripe/create-checkout-session', {
+          lookup_key: 'standard_monthly',
+          locationId,
+        })
+        .then(({ data: { url } }) => {
+          window.location.assign(url);
+        }),
+      {
+        loading: 'Redirecting to upgrade your plan...',
+        success: 'Redirected to upgrade your plan!',
+        error: 'Error creating checkout session',
+      }
+    );
+  };
+
   return (
     <div className='p-4 sm:px-8'>
       {preview && (
@@ -42,9 +62,11 @@ const CustomerPage = ({ preview }: CustomerPageProps) => {
           </p>
           <p>
             To make this live for your customers to access, you'll need to
-            subscribe.
+            upgrade to a Pro plan.
           </p>
-          <Button className='mt-4'>Subscribe</Button>
+          <Button className='mt-4' onClick={handleSubscribe}>
+            Upgrade to Pro
+          </Button>
         </article>
       )}
       <h1 className='text-2xl font-bold text-center'>
