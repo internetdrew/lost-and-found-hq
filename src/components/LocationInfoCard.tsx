@@ -28,7 +28,6 @@ export default function LocationInfoCard({
   const [renderLocationDialog, setRenderLocationDialog] = useState(false);
   const { subscriptionValid } = useSubscriptionValidation(location?.id || null);
   const { subscriptionDetails } = useSubscriptionDetails(location?.id || null);
-
   const customerPageUrl = subscriptionValid
     ? `/location/${location?.id}`
     : `/preview/${location?.id}`;
