@@ -32,8 +32,6 @@ After losing my wallet, I thought it might be great if the process was a little 
 - Make navigation sticky [#30](https://github.com/internetdrew/lost-and-found-hq/pull/30)
 - Add input validation to API layer [#31](https://github.com/internetdrew/lost-and-found-hq/pull/31)
 - Integrate Stripe checkout for subscription [#32](https://github.com/internetdrew/lost-and-found-hq/pull/32)
-- Allow users (admin) to add a custom page slug once they're subscribed.
-- Allow users (admin) to include a company logo for the public page view.
 - Allow users (searchers) to open claims on the items publicly viewable with a "This is mine" button.
 
 <!-- Claims -->
@@ -59,3 +57,6 @@ After losing my wallet, I thought it might be great if the process was a little 
     - Business questions
     - Text area for response
   - Submit → Updates claim status back to "pending"
+
+- Allow users (admin) to add a custom page slug once they're subscribed.
+- Allow users (admin) to include a company logo for the public page view.

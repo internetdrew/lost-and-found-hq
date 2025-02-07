@@ -1,5 +1,6 @@
 import { Tables } from '@dbTypes';
 import { Button } from './ui/button';
+import { Link } from 'react-router-dom';
 
 type Item = Tables<'items'>;
 
@@ -20,7 +21,9 @@ const CustomerItemDetailsCard = ({ item }: { item: Item }) => {
         <p className='text-sm text-neutral-500'>{item.brief_description}</p>
         <div className='flex items-center mt-auto gap-2 pt-4'></div>
       </div>
-      <Button>Claim this item</Button>
+      <Button asChild>
+        <Link to={`/items/${item.id}/new-claim`}>Claim this item</Link>
+      </Button>
     </li>
   );
 };
