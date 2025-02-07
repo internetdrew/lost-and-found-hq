@@ -24,6 +24,7 @@ type Item = Tables<'items'>;
 export default function ItemDetailsCard({ item }: { item: Item }) {
   const [renderItemDialog, setRenderItemDialog] = useState(false);
   const [renderDeleteDialog, setRenderDeleteDialog] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
   const { locationId } = useLocationId();
   const { mutate } = useItemsAtLocation(locationId);
 
@@ -55,7 +56,7 @@ export default function ItemDetailsCard({ item }: { item: Item }) {
     <li className='ring-1 ring-gray-200 p-4 rounded-md flex flex-col sm:max-w-md'>
       <header className='flex justify-between items-center'>
         <h3 className='font-semibold'>{title}</h3>
-        <DropdownMenu>
+        <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
           <DropdownMenuTrigger
             aria-label={`item-actions-${item.id}`}
             className='self-start p-2 hover:bg-neutral-100 rounded-md'
@@ -65,10 +66,20 @@ export default function ItemDetailsCard({ item }: { item: Item }) {
           <DropdownMenuContent align='end'>
             <DropdownMenuLabel>Item Actions</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => setRenderItemDialog(true)}>
+            <DropdownMenuItem
+              onClick={() => {
+                setDropdownOpen(false);
+                setRenderItemDialog(true);
+              }}
+            >
               Edit
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setRenderDeleteDialog(true)}>
+            <DropdownMenuItem
+              onClick={() => {
+                setDropdownOpen(false);
+                setRenderDeleteDialog(true);
+              }}
+            >
               Delete
             </DropdownMenuItem>
           </DropdownMenuContent>
