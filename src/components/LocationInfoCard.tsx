@@ -26,6 +26,8 @@ export default function LocationInfoCard({
   location: Location | null;
 }) {
   const [renderLocationDialog, setRenderLocationDialog] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+
   const { subscriptionValid } = useSubscriptionValidation(location?.id || null);
   const { subscriptionDetails } = useSubscriptionDetails(location?.id || null);
 
@@ -56,7 +58,7 @@ export default function LocationInfoCard({
         <div className='w-full'>
           <header className='flex justify-between items-center'>
             <p className='text-sm font-semibold'>Location Info</p>
-            <DropdownMenu>
+            <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
               <DropdownMenuTrigger
                 data-testid='location-info-card-dropdown-trigger'
                 className='self-start p-2 hover:bg-neutral-100 rounded-md'
@@ -66,11 +68,21 @@ export default function LocationInfoCard({
               <DropdownMenuContent align='end'>
                 <DropdownMenuLabel>Location Actions</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => setRenderLocationDialog(true)}>
+                <DropdownMenuItem
+                  onClick={() => {
+                    setDropdownOpen(false);
+                    setRenderLocationDialog(true);
+                  }}
+                >
                   Edit
                 </DropdownMenuItem>
                 {subscriptionValid && (
-                  <DropdownMenuItem onClick={openBillingPortal}>
+                  <DropdownMenuItem
+                    onClick={() => {
+                      setDropdownOpen(false);
+                      openBillingPortal();
+                    }}
+                  >
                     Manage Billing
                   </DropdownMenuItem>
                 )}
