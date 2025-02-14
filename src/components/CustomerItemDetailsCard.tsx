@@ -1,10 +1,21 @@
 import { Tables } from '@dbTypes';
-import { Button } from './ui/button';
-import { Link } from 'react-router-dom';
+
+import { useUser } from '@/hooks/useUser';
+import { Button, buttonVariants } from '@/components/ui/button';
 
 type Item = Tables<'items'>;
 
-const CustomerItemDetailsCard = ({ item }: { item: Item }) => {
+interface CustomerItemDetailsCardProps {
+  item: Item;
+  onClaimClick: (item: Item) => void;
+}
+
+const CustomerItemDetailsCard = ({
+  item,
+  onClaimClick: renderItemClaimDialog,
+}: CustomerItemDetailsCardProps) => {
+  const { data: user } = useUser();
+
   return (
     <li className='ring-1 ring-gray-200 p-4 rounded-md flex flex-col sm:max-w-md'>
       <header className='flex justify-between items-center'>
@@ -21,9 +32,14 @@ const CustomerItemDetailsCard = ({ item }: { item: Item }) => {
         <p className='text-sm text-neutral-500'>{item.brief_description}</p>
         <div className='flex items-center mt-auto gap-2 pt-4'></div>
       </div>
-      <Button asChild>
-        <Link to={`/items/${item.id}/new-claim`}>Claim this item</Link>
-      </Button>
+      {!user && (
+        <Button
+          className={buttonVariants({ variant: 'default' })}
+          onClick={() => renderItemClaimDialog(item)}
+        >
+          Claim this item
+        </Button>
+      )}
     </li>
   );
 };
