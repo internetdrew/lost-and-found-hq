@@ -34,6 +34,38 @@ export type Database = {
   }
   public: {
     Tables: {
+      claim_messages: {
+        Row: {
+          claim_id: number
+          created_at: string
+          id: number
+          message: string
+          sender_type: Database["public"]["Enums"]["SENDER_TYPE"]
+        }
+        Insert: {
+          claim_id: number
+          created_at?: string
+          id?: number
+          message: string
+          sender_type: Database["public"]["Enums"]["SENDER_TYPE"]
+        }
+        Update: {
+          claim_id?: number
+          created_at?: string
+          id?: number
+          message?: string
+          sender_type?: Database["public"]["Enums"]["SENDER_TYPE"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "claim_messages_claim_id_fkey"
+            columns: ["claim_id"]
+            isOneToOne: false
+            referencedRelation: "item_claims"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       interested_parties: {
         Row: {
           created_at: string
@@ -51,6 +83,66 @@ export type Database = {
           id?: number
         }
         Relationships: []
+      }
+      item_claims: {
+        Row: {
+          claim_details: string
+          claimant_email: string
+          claimant_first_name: string
+          claimant_last_name: string
+          created_at: string
+          denial_reason: string | null
+          id: number
+          item_id: number
+          location_id: string
+          pickup_code: string | null
+          status: Database["public"]["Enums"]["CLAIM_STATUS"]
+          updated_at: string
+        }
+        Insert: {
+          claim_details: string
+          claimant_email: string
+          claimant_first_name: string
+          claimant_last_name: string
+          created_at?: string
+          denial_reason?: string | null
+          id?: number
+          item_id: number
+          location_id: string
+          pickup_code?: string | null
+          status?: Database["public"]["Enums"]["CLAIM_STATUS"]
+          updated_at?: string
+        }
+        Update: {
+          claim_details?: string
+          claimant_email?: string
+          claimant_first_name?: string
+          claimant_last_name?: string
+          created_at?: string
+          denial_reason?: string | null
+          id?: number
+          item_id?: number
+          location_id?: string
+          pickup_code?: string | null
+          status?: Database["public"]["Enums"]["CLAIM_STATUS"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "claims_item_id_fkey"
+            columns: ["item_id"]
+            isOneToOne: false
+            referencedRelation: "items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "claims_location_id_fkey"
+            columns: ["location_id"]
+            isOneToOne: false
+            referencedRelation: "locations"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       items: {
         Row: {
@@ -226,6 +318,12 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
+      CLAIM_STATUS:
+        | "pending"
+        | "approved"
+        | "denied"
+        | "needs_info"
+        | "returned"
       ITEM_CATEGORIES:
         | "wallets"
         | "electronics"
@@ -243,6 +341,7 @@ export type Database = {
         | "donated"
         | "disposed"
         | "archived"
+      SENDER_TYPE: "admin" | "claimant"
     }
     CompositeTypes: {
       [_ in never]: never
