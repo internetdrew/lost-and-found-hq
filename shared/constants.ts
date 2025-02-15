@@ -31,4 +31,10 @@ export const INPUT_LENGTHS = {
       max: 150,
     },
   },
+  itemClaim: {
+    itemDetails: {
+      min: 1,
+      max: 250,
+    },
+  },
 };
