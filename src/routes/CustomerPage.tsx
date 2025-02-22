@@ -2,7 +2,7 @@ import axios from 'axios';
 import CustomerItemDetailsCard from '@/components/CustomerItemDetailsCard';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
-import { usePublicItemsAtLocation } from '@/hooks/useItemsAtLocation';
+import { usePublicItems } from '@/hooks/useData';
 import { useLocationInfo } from '@/hooks/useLocationInfo';
 import { useLocationValidation } from '@/hooks/useLocationValidation';
 import { toast } from 'react-hot-toast';
@@ -22,7 +22,7 @@ const CustomerPage = ({ preview }: CustomerPageProps) => {
   const { locationInfo, isLoading: loadingLocationInfo } = useLocationInfo(
     locationId ?? ''
   );
-  const { items } = usePublicItemsAtLocation(locationId ?? '');
+  const { items } = usePublicItems(locationId);
   const { isValid, isLoading: validatingLocation } = useLocationValidation(
     locationId ?? ''
   );
