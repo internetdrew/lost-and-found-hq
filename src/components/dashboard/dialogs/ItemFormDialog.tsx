@@ -10,12 +10,14 @@ import { Tables } from '@dbTypes';
 
 interface ItemFormDialogProps {
   item?: Tables<'items'> | null;
+  locationId: string;
   renderItemDialog: boolean;
   setRenderItemDialog: (value: boolean) => void;
 }
 
 const ItemFormDialog = ({
   item = null,
+  locationId,
   renderItemDialog,
   setRenderItemDialog,
 }: ItemFormDialogProps) => {
@@ -33,6 +35,7 @@ const ItemFormDialog = ({
         </DialogHeader>
         <ItemInfoForm
           item={item}
+          locationId={locationId}
           onSuccess={() => setRenderItemDialog(false)}
         />
       </DialogContent>
