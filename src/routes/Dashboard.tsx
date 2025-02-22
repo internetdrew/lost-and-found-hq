@@ -3,7 +3,7 @@ import SuccessfulSubscriptionAlert from '@/components/dashboard/alerts/Successfu
 import ItemList from '@/components/dashboard/ItemList';
 import LocationInfoCard from '@/components/LocationInfoCard';
 import { Skeleton } from '@/components/ui/skeleton';
-import { useLocations } from '@/hooks/useLocations';
+import { useLocations } from '@/hooks/useData';
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
@@ -16,7 +16,7 @@ export interface CompanyInfo {
 }
 
 const Dashboard = () => {
-  const { data: locations, isLoading: fetchingLocations } = useLocations();
+  const { locations, isLoading: fetchingLocations } = useLocations();
   const [searchParams, setSearchParams] = useSearchParams();
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
 
