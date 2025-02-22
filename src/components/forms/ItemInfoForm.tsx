@@ -35,9 +35,9 @@ import { ItemInput, itemSchema } from '@shared/schemas/item';
 import { useItems } from '@/hooks/useData';
 
 type ItemInfoFormProps = {
-  onSuccess: () => void;
   item: Tables<'items'> | null;
-  locationId: string;
+  locationId: string | null;
+  onSuccess: () => void;
 };
 
 const ItemInfoForm = ({
