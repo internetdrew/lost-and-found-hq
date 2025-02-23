@@ -24,8 +24,10 @@ import {
   createCheckoutSession,
   createPortalSession,
 } from '../controllers/stripeController.js';
+import { standardApiLimiter } from '../middleware/apiLimiter.js';
 
 const v1Router = express.Router();
+v1Router.use(standardApiLimiter);
 
 /* Locations */
 v1Router.get('/locations', getUserLocations);
