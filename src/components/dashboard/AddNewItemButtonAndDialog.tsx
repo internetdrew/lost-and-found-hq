@@ -16,6 +16,7 @@ const AddNewItemButtonAndDialog = () => {
         Add item
       </Button>
       <ItemFormDialog
+        locationId={locations?.[0]?.id ?? ''}
         renderItemDialog={renderItemDialog}
         setRenderItemDialog={setRenderItemDialog}
       />
