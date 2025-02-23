@@ -35,20 +35,20 @@ const Navbar = () => {
       <a href='/' className='font-semibold text-lg sm:text-xl'>
         Lost & Found HQ
       </a>
-      <div className='flex items-center gap-4'>
-        <ul className='flex items-center gap-4'>
-          <li>
-            <Link to='/claims' className='hover:underline underline-offset-4'>
-              Claims
-            </Link>
-          </li>
-        </ul>
-        {user && (
+      {user && (
+        <div className='flex items-center gap-4'>
+          <ul className='flex items-center gap-4'>
+            <li>
+              <Link to='/claims' className='hover:underline underline-offset-4'>
+                Claims
+              </Link>
+            </li>
+          </ul>
           <Button variant='outline' onClick={logout} disabled={loggingOut}>
             {loggingOut ? 'Logging out...' : 'Log out'}
           </Button>
-        )}
-      </div>
+        </div>
+      )}
     </nav>
   );
 };
