@@ -15,15 +15,16 @@ import {
 } from '../controllers/locationsController.js';
 import { z } from 'zod';
 import { addNewClaim } from '../controllers/claimsController.js';
+import { sensitiveRouteLimiter } from '../middleware/apiLimiter.js';
 
 const publicRouter = express.Router();
 
-publicRouter.post('/interest', addInterestedEmail);
+publicRouter.post('/interest', sensitiveRouteLimiter, addInterestedEmail);
 publicRouter.get('/cron/reset-test-items', resetTestUserItems);
 publicRouter.get('/locations/:locationId/items', getPublicItems);
 publicRouter.get('/locations/:locationId/items/:itemId', getPublicItem);
 
-publicRouter.post('/stripe/webhook', createWebhook);
+publicRouter.post('/stripe/webhook', sensitiveRouteLimiter, createWebhook);
 
 publicRouter.get(
   '/locations/:locationId',
@@ -64,6 +65,7 @@ publicRouter.post(
       itemDetails: z.string(),
     }),
   }),
+  sensitiveRouteLimiter,
   addNewClaim
 );
 
