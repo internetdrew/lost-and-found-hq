@@ -8,6 +8,7 @@ import AuthGuard from './components/AuthGuard.tsx';
 import Dashboard from './routes/Dashboard.tsx';
 import CustomerPage from './routes/CustomerPage.tsx';
 import SubscriptionGuard from './components/SubscriptionGuard.tsx';
+import ClaimsPage from './routes/ClaimsPage.tsx';
 
 const router = createBrowserRouter([
   {
@@ -43,6 +44,14 @@ const router = createBrowserRouter([
         element: (
           <AuthGuard requiresAuth>
             <CustomerPage preview />
+          </AuthGuard>
+        ),
+      },
+      {
+        path: '/claims',
+        element: (
+          <AuthGuard requiresAuth>
+            <ClaimsPage />
           </AuthGuard>
         ),
       },

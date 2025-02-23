@@ -11,20 +11,19 @@ import axios from 'axios';
 import { Tables } from '@dbTypes';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
-import { useItemsAtLocation } from '@/hooks/useItemsAtLocation';
-import { useLocationId } from '@/hooks/useLocationId';
+import { useItems } from '@/hooks/useData';
 
 interface DeleteItemDialogProps {
   item: Tables<'items'>;
+  locationId: string;
   renderDeleteDialog: boolean;
   setRenderDeleteDialog: (value: boolean) => void;
 }
 
 const DeleteItemDialog = (props: DeleteItemDialogProps) => {
-  const { item, renderDeleteDialog, setRenderDeleteDialog } = props;
+  const { item, locationId, renderDeleteDialog, setRenderDeleteDialog } = props;
   const [isDeleting, setIsDeleting] = useState(false);
-  const { locationId } = useLocationId();
-  const { mutate } = useItemsAtLocation(locationId);
+  const { mutate } = useItems(locationId);
 
   const deleteItem = async () => {
     setIsDeleting(true);

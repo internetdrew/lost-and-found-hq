@@ -11,22 +11,27 @@ import { DotsHorizontalIcon } from '@radix-ui/react-icons';
 import { Switch } from '../ui/switch';
 import { Label } from '../ui/label';
 import { useState } from 'react';
-import ItemFormDialog from './dialogs/ItemFormDialog';
 import axios from 'axios';
 import toast from 'react-hot-toast';
-import DeleteItemDialog from './dialogs/DeleteItemDialog';
-import { useItemsAtLocation } from '@/hooks/useItemsAtLocation';
-import { useLocationId } from '@/hooks/useLocationId';
 import { format, parseISO } from 'date-fns';
+import { useItems } from '@/hooks/useData';
 
 type Item = Tables<'items'>;
 
-export default function ItemDetailsCard({ item }: { item: Item }) {
-  const [renderItemDialog, setRenderItemDialog] = useState(false);
-  const [renderDeleteDialog, setRenderDeleteDialog] = useState(false);
+interface ItemDetailsCardProps {
+  item: Item;
+  onEditClick: (item: Item) => void;
+  onDeleteClick: (item: Item) => void;
+}
+
+export default function ItemDetailsCard({
+  item,
+  onEditClick,
+  onDeleteClick,
+}: ItemDetailsCardProps) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const { locationId } = useLocationId();
-  const { mutate } = useItemsAtLocation(locationId);
+  const locationId = item.location_id;
+  const { mutate } = useItems(locationId);
 
   const {
     title,
@@ -69,7 +74,7 @@ export default function ItemDetailsCard({ item }: { item: Item }) {
             <DropdownMenuItem
               onClick={() => {
                 setDropdownOpen(false);
-                setRenderItemDialog(true);
+                onEditClick(item);
               }}
             >
               Edit
@@ -77,7 +82,7 @@ export default function ItemDetailsCard({ item }: { item: Item }) {
             <DropdownMenuItem
               onClick={() => {
                 setDropdownOpen(false);
-                setRenderDeleteDialog(true);
+                onDeleteClick(item);
               }}
             >
               Delete
@@ -106,18 +111,6 @@ export default function ItemDetailsCard({ item }: { item: Item }) {
           <Label htmlFor='item-status'>Publicly visible</Label>
         </div>
       </div>
-
-      <ItemFormDialog
-        item={item}
-        renderItemDialog={renderItemDialog}
-        setRenderItemDialog={setRenderItemDialog}
-      />
-
-      <DeleteItemDialog
-        item={item}
-        renderDeleteDialog={renderDeleteDialog}
-        setRenderDeleteDialog={setRenderDeleteDialog}
-      />
     </li>
   );
 }

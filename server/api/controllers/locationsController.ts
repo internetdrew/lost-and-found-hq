@@ -21,7 +21,7 @@ export const addLocation = async (req: Request, res: Response) => {
   res.json(data);
 };
 
-export const getLocations = async (req: Request, res: Response) => {
+export const getUserLocations = async (req: Request, res: Response) => {
   try {
     const supabase = createSupabaseAdminClient();
     const userId = (req as AuthenticatedRequest).user.id;
@@ -45,13 +45,11 @@ export const getLocations = async (req: Request, res: Response) => {
 
 export const getLocation = async (req: Request, res: Response) => {
   try {
-    const userId = (req as AuthenticatedRequest).user.id;
     const supabase = createSupabaseAdminClient();
     const { data, error } = await supabase
       .from('locations')
       .select('*')
       .eq('id', req.params.locationId)
-      .eq('user_id', userId)
       .single();
 
     if (error) {

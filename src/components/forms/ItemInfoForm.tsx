@@ -23,8 +23,6 @@ import { useRef, useState } from 'react';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import { Tables } from '@dbTypes';
-import { useItemsAtLocation } from '@/hooks/useItemsAtLocation';
-import { useLocationId } from '@/hooks/useLocationId';
 import { itemCategoryOptions } from '@/constants';
 import { cn } from '@/lib/utils';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
@@ -34,16 +32,21 @@ import { Calendar } from '../ui/calendar';
 import { PopoverClose } from '@radix-ui/react-popover';
 import { INPUT_LENGTHS } from '@shared/constants';
 import { ItemInput, itemSchema } from '@shared/schemas/item';
+import { useItems } from '@/hooks/useData';
 
 type ItemInfoFormProps = {
-  onSuccess: () => void;
   item: Tables<'items'> | null;
+  locationId: string | null;
+  onSuccess: () => void;
 };
 
-const ItemInfoForm = ({ onSuccess: closeDialog, item }: ItemInfoFormProps) => {
+const ItemInfoForm = ({
+  onSuccess: closeDialog,
+  item,
+  locationId,
+}: ItemInfoFormProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { locationId } = useLocationId();
-  const { mutate } = useItemsAtLocation(locationId);
+  const { mutate } = useItems(locationId);
   const dateFoundPopoverRef = useRef<HTMLButtonElement | null>(null);
 
   const form = useForm<ItemInput>({

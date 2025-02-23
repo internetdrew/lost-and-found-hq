@@ -2,22 +2,27 @@ import axios from 'axios';
 import CustomerItemDetailsCard from '@/components/CustomerItemDetailsCard';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
-import { usePublicItemsAtLocation } from '@/hooks/useItemsAtLocation';
+import { usePublicItems } from '@/hooks/useData';
 import { useLocationInfo } from '@/hooks/useLocationInfo';
 import { useLocationValidation } from '@/hooks/useLocationValidation';
 import { toast } from 'react-hot-toast';
 import { Navigate, useParams } from 'react-router-dom';
+import { useState } from 'react';
+import { Tables } from '@dbTypes';
+import ItemClaimDialog from '@/components/ItemClaimDialog';
 
 interface CustomerPageProps {
   preview?: boolean;
 }
 
 const CustomerPage = ({ preview }: CustomerPageProps) => {
+  const [itemToClaim, setItemToClaim] = useState<Tables<'items'> | null>(null);
+  const [renderItemClaimDialog, setRenderItemClaimDialog] = useState(false);
   const { locationId } = useParams();
   const { locationInfo, isLoading: loadingLocationInfo } = useLocationInfo(
     locationId ?? ''
   );
-  const { items } = usePublicItemsAtLocation(locationId ?? '');
+  const { items } = usePublicItems(locationId);
   const { isValid, isLoading: validatingLocation } = useLocationValidation(
     locationId ?? ''
   );
@@ -50,6 +55,11 @@ const CustomerPage = ({ preview }: CustomerPageProps) => {
         error: 'Error creating checkout session',
       }
     );
+  };
+
+  const handleItemClaimClick = (item: Tables<'items'>) => {
+    setRenderItemClaimDialog(true);
+    setItemToClaim(item);
   };
 
   return (
@@ -86,10 +96,22 @@ const CustomerPage = ({ preview }: CustomerPageProps) => {
           {items
             ?.filter(item => item.is_public)
             .map(item => (
-              <CustomerItemDetailsCard key={item.id} item={item} />
+              <CustomerItemDetailsCard
+                key={item.id}
+                item={item}
+                onClaimClick={handleItemClaimClick}
+              />
             ))}
         </ul>
       </section>
+      {itemToClaim && (
+        <ItemClaimDialog
+          locationId={locationId}
+          item={itemToClaim}
+          open={renderItemClaimDialog}
+          onOpenChange={setRenderItemClaimDialog}
+        />
+      )}
     </div>
   );
 };

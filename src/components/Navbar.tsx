@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { Button } from './ui/button';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useUser } from '@/hooks/useUser';
 import toast from 'react-hot-toast';
 import { useState } from 'react';
@@ -36,9 +36,18 @@ const Navbar = () => {
         Lost & Found HQ
       </a>
       {user && (
-        <Button variant='outline' onClick={logout} disabled={loggingOut}>
-          {loggingOut ? 'Logging out...' : 'Log out'}
-        </Button>
+        <div className='flex items-center gap-4'>
+          <ul className='flex items-center gap-4'>
+            <li>
+              <Link to='/claims' className='hover:underline underline-offset-4'>
+                Claims
+              </Link>
+            </li>
+          </ul>
+          <Button variant='outline' onClick={logout} disabled={loggingOut}>
+            {loggingOut ? 'Logging out...' : 'Log out'}
+          </Button>
+        </div>
       )}
     </nav>
   );

@@ -22,11 +22,9 @@ import { US_STATES } from '@/constants';
 import toast from 'react-hot-toast';
 import axios from 'axios';
 import { Tables } from '@dbTypes';
-import { useLocations } from '@/hooks/useLocations';
-
 import { type LocationInput, locationSchema } from '@shared/schemas/location';
 import { INPUT_LENGTHS } from '@shared/constants';
-
+import { useLocations } from '@/hooks/useData';
 type LocationInfoFormProps = {
   location: Tables<'locations'> | null;
   onSuccess: () => void;

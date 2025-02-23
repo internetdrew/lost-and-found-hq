@@ -1,14 +1,12 @@
 import { z } from 'zod';
 import express from 'express';
 import {
-  getLocations,
-  getLocation,
   addLocation,
   updateLocation,
   deleteLocation,
-  validateLocationId,
   validateSubscription,
   getSubscriptionDetails,
+  getUserLocations,
 } from '../controllers/locationsController.js';
 import {
   addItem,
@@ -26,16 +24,14 @@ import {
   createCheckoutSession,
   createPortalSession,
 } from '../controllers/stripeController.js';
+import { standardApiLimiter } from '../middleware/apiLimiter.js';
 
 const v1Router = express.Router();
+v1Router.use(standardApiLimiter);
 
 /* Locations */
-v1Router.get('/locations', getLocations);
-v1Router.get(
-  '/locations/:locationId',
-  validateRequest({ params: z.object({ locationId: z.string().uuid() }) }),
-  getLocation
-);
+v1Router.get('/locations', getUserLocations);
+
 v1Router.post(
   '/locations',
   validateRequest({ body: locationSchema }),
@@ -55,12 +51,6 @@ v1Router.delete(
   deleteLocation
 );
 
-/* Location Validation */
-v1Router.get(
-  '/locations/:locationId/exists',
-  validateRequest({ params: z.object({ locationId: z.string().uuid() }) }),
-  validateLocationId
-);
 v1Router.get(
   '/locations/:locationId/subscription',
   validateRequest({ params: z.object({ locationId: z.string().uuid() }) }),

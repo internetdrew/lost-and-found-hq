@@ -3,8 +3,7 @@ import SuccessfulSubscriptionAlert from '@/components/dashboard/alerts/Successfu
 import ItemList from '@/components/dashboard/ItemList';
 import LocationInfoCard from '@/components/LocationInfoCard';
 import { Skeleton } from '@/components/ui/skeleton';
-import { LocationIdProvider } from '@/context/LocationIdContext';
-import { useLocations } from '@/hooks/useLocations';
+import { useLocations } from '@/hooks/useData';
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
@@ -17,7 +16,7 @@ export interface CompanyInfo {
 }
 
 const Dashboard = () => {
-  const { data: locations, isLoading: fetchingLocations } = useLocations();
+  const { locations, isLoading: fetchingLocations } = useLocations();
   const [searchParams, setSearchParams] = useSearchParams();
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
 
@@ -46,11 +45,7 @@ const Dashboard = () => {
         <header className='mt-6'>
           <div className='flex justify-between items-center'>
             <h1 className='text-lg'>Dashboard</h1>
-            {locations?.[0] && (
-              <LocationIdProvider locationId={locations[0].id}>
-                <AddNewItemButtonAndDialog />
-              </LocationIdProvider>
-            )}
+            <AddNewItemButtonAndDialog />
           </div>
           <p className='text-sm text-gray-600 max-w-md mt-2'>
             Here's where you can manage all of the items lost and found at your
@@ -63,11 +58,7 @@ const Dashboard = () => {
             <LocationInfoCard location={locations?.[0] || null} />
           )}
         </header>
-        {locations?.[0] && (
-          <LocationIdProvider locationId={locations[0].id}>
-            <ItemList />
-          </LocationIdProvider>
-        )}
+        <ItemList />
         <SuccessfulSubscriptionAlert
           open={showSuccessAlert}
           onOpenChange={handleAlertClose}
