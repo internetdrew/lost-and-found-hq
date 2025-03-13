@@ -2,11 +2,6 @@
 
 <div align="center"><strong>Lost & Found HQ</strong></div>
 <div align="center">Easily reunite your customers with their lost items.<br />A platform to streamline lost and found management with ease.</div>
-<br />
-<div align="center">
-<a href="https://www.lostandfoundhq.com">Website</a> 
-<span> · </span>
-<a href="https://github.com/internetdrew/lost-and-found-hq">GitHub</a> 
 </div>
 
 ## Introduction
