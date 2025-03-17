@@ -2,7 +2,6 @@
 
 <div align="center"><strong>Lost & Found HQ</strong></div>
 <div align="center">Easily reunite your customers with their lost items.<br />A platform to streamline lost and found management with ease.</div>
-</div>
 
 ## Introduction
 
